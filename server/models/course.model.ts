@@ -49,6 +49,7 @@ interface ICourseData extends Document {
   courseData: ICourseData[];
   ratings?: number;
   purchased: number;
+  isEvent: boolean; 
 }
 
 const reviewSchema = new Schema<IReview>({
@@ -143,6 +144,10 @@ const courseSchema = new Schema<ICourse>({
     required:true,
   
   },
+  isEvent: {
+    type: Boolean,
+    default: false, // Set to true if it should always be provided, or remove this line if it's optional
+  }
 },{timestamps: true});
 
 

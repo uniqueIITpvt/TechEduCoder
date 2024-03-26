@@ -159,13 +159,14 @@ const DashboardWidgets: FC<Props> = ({ open }) => {
         <div className="dark:bg-[#111c43] w-[94%] mt-[30px] h-[40vh] shadow-sm m-auto">
           <OrdersAnalytics isDashboard={true} />
         </div>
-        <div className="p-5">
+       
+      </div>
+      <div className="p-5">
           <h5 className="dark:text-[#fff] text-black text-[20px] font-[400] font-Poppins pb-3">
             Recent Transactions
           </h5>
           <AllInvoices isDashboard={true} />
         </div>
-      </div>
     </div>
   );
 };

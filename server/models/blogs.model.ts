@@ -14,7 +14,7 @@ export interface IBlog extends Document {
   authorName: string;
   Title: string;
   category: string;
-  subTitle: string;
+
   thumbnail: object;
 
   BlogContent: string;

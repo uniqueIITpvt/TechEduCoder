@@ -25,7 +25,7 @@ const Blogs = (props: Props) => {
       setBlog(data.blogs);
     }
   }, [data]);
-  console.log(blog);
+ 
 
   return (
     !isLoading && (

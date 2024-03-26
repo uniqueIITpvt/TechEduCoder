@@ -29,6 +29,7 @@ import { useTheme } from "next-themes";
 import { FaFileUpload } from "react-icons/fa";
 import { SiUploaded } from "react-icons/si";
 import { FaBloggerB } from "react-icons/fa6";
+import { RiLiveFill } from "react-icons/ri";
 
 interface itemProps {
   title: string;
@@ -124,8 +125,8 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Link href="/" className="block">
-                  <h3 className="text-[25px] font-Poppins uppercase dark:text-white text-black">
-                    ELearning
+                  <h3 className="text-[15px] font-Poppins uppercase dark:text-white text-black">
+                    TechEduCoder
                   </h3>
                 </Link>
                 <IconButton
@@ -232,7 +233,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-          
+
             <Item
               title="Uploaded Ebooks"
               to="/admin/AllEbooks"
@@ -247,11 +248,11 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-          
+
             <Item
               title="Published Blogs"
               to="/admin/AllBlogs"
-              icon={< FaBloggerB  />}
+              icon={<FaBloggerB />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -261,8 +262,44 @@ const Sidebar = () => {
               className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
               sx={{ m: "15px 0 5px 20px" }}
             >
+              {!isCollapsed && "Events"}
+            </Typography>
+            <Item
+              title="course-Create-Events"
+              to="/admin/Course-Create-Events"
+              icon={<RiLiveFill />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+              <Item
+              title="course-Live-Events"
+              to="/admin/Course-Live-Events"
+              icon={<OndemandVideoIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+             <Item
+              title="Books-Create-Events"
+              to="/admin/Books-Create-Events"
+              icon={<RiLiveFill  />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+             <Item
+              title="Books-Live-Events"
+              to="/admin/Books-Live-Events"
+              icon={<OndemandVideoIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Typography
+              variant="h5"
+              className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
+              sx={{ m: "15px 0 5px 20px" }}
+            >
               {!isCollapsed && "Customization"}
             </Typography>
+
             <Item
               title="Hero"
               to="/admin/hero"

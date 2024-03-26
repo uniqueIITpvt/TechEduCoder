@@ -13,6 +13,7 @@ import layoutRouter from './routes/layout.route';
 import { rateLimit } from 'express-rate-limit';
 import blogsRouter from './routes/blogs.route';
 import ebookRouter from './routes/ebook.route';
+import courseEventRouter from './routes/courseEvents.route';
 
 
 // body parser
@@ -50,6 +51,7 @@ app.use(
   layoutRouter,
   blogsRouter,
   ebookRouter,
+  courseEventRouter
  
 );
 
