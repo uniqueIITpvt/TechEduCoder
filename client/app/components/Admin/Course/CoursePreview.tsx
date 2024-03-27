@@ -20,8 +20,8 @@ const CoursePreview: FC<Props> = ({
   isEdit
 }) => {
   const dicountPercentenge =
-    ((courseData?.estimatedPrice - courseData?.price) /
-      courseData?.estimatedPrice) *
+    ((courseData?.discountPrice - courseData?.originalPrice) /
+      courseData?.discountPrice) *
     100;
 
   const discountPercentengePrice = dicountPercentenge.toFixed(0);

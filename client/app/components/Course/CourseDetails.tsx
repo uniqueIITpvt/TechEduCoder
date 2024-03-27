@@ -44,7 +44,7 @@ const CourseDetails = ({
   }, [userData]);
 
   const dicountPercentenge =
-    ((data?.discountPrice - data.originalPrice) / data?.discountPrice) * 100;
+    ((data?.originalPrice - data.discountPrice) / data?.originalPrice) * 100;
 
   const discountPercentengePrice = dicountPercentenge.toFixed(0);
 
@@ -142,10 +142,10 @@ const CourseDetails = ({
                     What will you learn ?{" "}
                   </h1>
 
-                  <div className="text-[17px] font-poppins  font-[400] mt-5 dark:text-white   text-black leading-7 flex-row flex gap-10">
+                  <div className="text-[17px] font-poppins  font-[400] mt-5 dark:text-white   text-black leading-7 ">
                     {data.benefits?.map((item: any, index: number) => (
                       <div
-                        className="w-full flex 800px:items-center py-2"
+                        className="w-full flex py-2"
                         key={index}
                       >
                         <div className="w-[15px] mr-1">
@@ -223,10 +223,10 @@ const CourseDetails = ({
                   <h3 className=" text-[18px] text-black dark:text-white font-[700] font-poppins mx-3 ">
                     {data.originalPrice === 0
                       ? "Free"
-                      : "₹" + data.originalPrice}{" "}
+                      : "₹" + data.discountPrice}{" "}
                   </h3>
                   <p className="text-[20px] line-through opacity-60 text-red-400 dark:text-white mx-3">
-                    {data.originalPrice === 0 ? " " : "₹" + data.discountPrice}
+                    {data.originalPrice === 0 ? " " : "₹" + data.originalPrice}
                   </p>
 
                   <p className="text-[16px] text-[#3539fa] dark:text-white  font-[500] ">
@@ -314,12 +314,12 @@ const CourseDetails = ({
               </h1>
               {data.prerequisites?.map((item: any, index: number) => (
                 <div
-                  className="w-full flex 800px:items-center py-2  font-[400] text-[17px]"
+                  className="w-full flex  py-2  font-[400] text-[17px]"
                   key={index}
                 >
                  <div><GoDotFill
                       size={20}
-                      className="text-black dark:text-white"
+                      className="text-black dark:text-white mt-1"
                     /></div>
                   <p className="pl-2 text-black dark:text-white flex item-center justify-center">
                    {item.title}

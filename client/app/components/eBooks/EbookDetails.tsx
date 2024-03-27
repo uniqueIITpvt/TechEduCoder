@@ -112,7 +112,7 @@ const EbookDetails = ({
               />
             </div>
             <div className="w-full p-4  flex items-center justify-start  border-b-2 border-[#e4e6ee]  backdrop-blur shadow-[bg-slate-700]  rounded shadow-inner">
-              {["Overview", "Reviews"].map((text, index) => (
+              {["Overview", ].map((text, index) => (
                 <h5
                   key={index}
                   className={`800px:text-[20px] cursor-pointer ${
@@ -138,7 +138,7 @@ const EbookDetails = ({
                 </div>
               </div>
             )}
-            {activeBar === 1 && (
+            {/* {activeBar === 1 && (
               <div>
                 {(data?.reviews && [...data.reviews].reverse()).map(
                   (item: any, index: number) => (
@@ -182,7 +182,7 @@ const EbookDetails = ({
                   )
                 )}
               </div>
-            )}
+            )} */}
           </div>
           <div className="lg:col-span-1">
             <div className="w-[80%] m-auto shadow-md rounded-xl ">
@@ -249,7 +249,7 @@ const EbookDetails = ({
                 </h1>
               </div>
             </div>
-            <div className="w-[80%] m-auto p-2 shadow-xl ">
+            <div className="w-[80%] m-auto ">
               <h1 className="text-[27px] font-[700]  dark:text-white text-black font-poppins m-4">
                 {/* Materials Included?{" "} */}
               </h1>

@@ -33,13 +33,15 @@ const CourseDetailsPage = ({ id }: Props) => {
       setStripePromise(loadStripe(publishablekey));
     }
     if (data && userData?.user) {
-      const amount = Math.round(data.course.price * 100);
+      const amount = Math.round(data.course.discountPrice * 100);
+      console.log(amount);
+      console.log(data)
       createPaymentIntent(amount);
     }
   }, [config, data, userData]);
 
   useEffect(() => {
-    if (paymentIntentData) {
+    if (paymentIntentData ) {
       setClientSecret(paymentIntentData?.client_secret);
     }
   }, [paymentIntentData]);
