@@ -54,7 +54,7 @@ app.use(
 );
 
 // testing api
-app.get('/test', (req: Request, res: Response, next: NextFunction) => {
+app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({
     succcess: true,
     message: 'API is working',
