@@ -9,9 +9,18 @@
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only server.ts",
-    "start": "server.js",
-    "build": "tsc"
-  },
+    "start": "node dist/server.js",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "pre-commit": [
+      "ts.check",
+      "build", 
+      "add-build"
+  ],
+  
   "author": "TechEduCoder",
   "license": "ISC",
   "dependencies": {
