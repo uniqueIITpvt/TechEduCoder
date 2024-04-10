@@ -10,7 +10,7 @@ import Blogs from "./components/Route/Blogs";
 import Book from "../app/components/Route/Book";
 
 interface Props {
-  item:any
+
 }
 
 const Page: FC<Props> = (props) => {
