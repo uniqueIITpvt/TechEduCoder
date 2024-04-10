@@ -3,64 +3,95 @@ import { Request, Response, NextFunction, response } from "express";
 import CourseModel from "../models/course.model";
 import ErrorHandler from "../utils/ErrorHandler";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
-import { redis } from "../utils/redis";
 import { CourseEvent } from "../models/courseEvents.model";
+import mongoose from "mongoose";
 
 export const createCourseEvent = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
-      const { filteredCourseId, eventsType, eventPercentage, id, eventsName } =
-        req.body;
+      const {
+        filteredCourseId,
+        eventsType,
+        eventPercentage,
+        id,
+        eventsName,
+        startDate,
+        endDate,
+      } = req.body;
 
       if (!req.body) {
-        return next(new ErrorHandler("data not found ", 400));
+        throw new ErrorHandler("data not found", 400);
       }
 
-      const updatedCourses = await Promise.all(
-        filteredCourseId.map(async ({ courseId }) => {
-          // Extract courseId from each object
-          // Find the course by ID
-          const course = await CourseModel.findById(courseId);
+      // Check courses existence and event status before any update
+      const coursesCheck = await Promise.all(
+        filteredCourseId.map(({ courseId }) =>
+          CourseModel.findById(courseId).session(session)
+        )
+      );
 
-          if (!course) {
-            throw new Error(`Course with ID ${courseId} not found`);
-          }
-          // if isEvent true then show error
-          if (course.isEvent) {
-            return next(
-              new ErrorHandler(`event already Running in this course`, 400)
-            );
-          }
-          // Calculate the new price based on the discount percentage
-          const percentage = eventPercentage;
-          const discountAmount = course.discountPrice * (percentage / 100);
+      const invalidCourses = coursesCheck.filter(
+        (course) => !course || course.isEvent
+      );
+      if (invalidCourses.length > 0) {
+        const errors = invalidCourses
+          .map((course) => {
+            if (!course) {
+              return "Some courses not found";
+            } else if (course.isEvent) {
+              return `Event already running in course with ID: ${course.id}`;
+            }
+          })
+          .join("; ");
+
+        return next(new ErrorHandler(errors, 400));
+      }
+
+      // Update courses if validations pass
+      await Promise.all(
+        filteredCourseId.map(({ courseId }) => {
+          const course = coursesCheck.find(
+            (course) => String(course._id) === courseId
+          );
+          const discountAmount = course.discountPrice * (eventPercentage / 100);
           const newPrice = course.discountPrice - discountAmount;
 
-          // Update the course with the new price and set isEvent to true
           return CourseModel.findByIdAndUpdate(
             courseId,
             { $set: { discountPrice: newPrice, isEvent: true } },
-            { new: true }
+            { new: true, session }
           );
         })
       );
 
-      // Construct the object to create a new CourseEvent
-      const courseEvent = await CourseEvent.create({
-        eventPercentage,
-        eventsType,
-        id,
-        eventsName,
-        filteredCourseId,
-        // Add any other fields that are required and present in the schema
-      });
+      const courseEvent = await CourseEvent.create(
+        [
+          {
+            eventPercentage,
+            eventsType,
+            id,
+            eventsName,
+            filteredCourseId,
+            startDate,
+            endDate,
+          },
+        ],
+        { session: session }
+      );
+
+      await session.commitTransaction();
 
       res.status(201).json({
         success: true,
-        courseEvent,
+        data: courseEvent,
       });
     } catch (error: any) {
-      return next(new ErrorHandler(error.message, 400));
+      await session.abortTransaction();
+      next(error);
+    } finally {
+      session.endSession();
     }
   }
 );
@@ -74,139 +105,256 @@ export const adminGetCourseEvent = CatchAsyncError(
         success: true,
         courseEvent,
       });
-    } catch (error) {}
+    } catch (error) {
+      return next(new ErrorHandler(`error is ${error}`, 400));
+    }
   }
-); 
-// delete the courseEvent 
-
-export const deleteCourseEvent = CatchAsyncError(
+);  
+// user get all events
+export const UserGetCourseEvent = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const courseEvent = await CourseEvent.find().sort({ id: -1 });
+      res.status(200).json({
+        success: true,
+        courseEvent,
+      });
+    } catch (error:any) {
+      
+      return next(new ErrorHandler(`error is ${error}`, 400));
+    }
+  }
+);
+
+
+// // delete the courseEvent
+export const deleteCourseEvent = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
       const { id } = req.params;
-      const courseEvent = await CourseEvent.findById(id);
+      const courseEvent = await CourseEvent.findById(id).session(session);
       if (!courseEvent) {
-        return next(new ErrorHandler("courseevent not found", 400));
+        throw new ErrorHandler("courseevent not found", 400);
       }
       const updatedCourses = await Promise.all(
         courseEvent.filteredCourseId.map(async ({ courseId }) => {
-          const courses = await CourseModel.findById(courseId);
+          const courses = await CourseModel.findById(courseId).session(session);
 
           if (!courses) {
-            return next(
-              new ErrorHandler(`Course with ID ${courseId} not found `, 400)
-            );
+            throw new ErrorHandler(`Course with ID ${courseId} not found`, 400);
           }
           if (!courses.isEvent) {
-            return next(
-              new ErrorHandler(
-                `course isevent with ID ${courseId} is not true `,
-                400
-              )
-            );
+            throw new ErrorHandler(`Course isevent with ID ${courseId} is not true`, 400);
           }
 
-          // calculate the discount price from percentage
           const percentage = courseEvent.eventPercentage;
           const discountAmount = courses.discountPrice;
-
           const originalPrice = discountAmount / (1 - percentage / 100);
+
           return CourseModel.findByIdAndUpdate(
             courseId,
             { $set: { discountPrice: originalPrice, isEvent: false } },
-            { new: true }
+            { new: true, session }
           );
         })
       );
-      await courseEvent.deleteOne({ id });
+      await courseEvent.deleteOne({ _id: id })
+
+      await session.commitTransaction();
+      session.endSession();
 
       res.status(200).json({
         success: true,
-        message: "delet events  successfully",
+        message: "Deleted events successfully",
+        data: updatedCourses
       });
     } catch (error: any) {
+      await session.abortTransaction();
+      session.endSession();
       return next(new ErrorHandler(error.message, 400));
     }
   }
 );
 
-// update the course Event 
-export const updateCourseEvent = CatchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      // Assuming the ID of the CourseEvent to update is passed in the URL as a parameter
-      const courseEventId = req.params.id;
-      const { eventsType, eventPercentage, eventsName, filteredCourseId } = req.body;
 
-      // Find the CourseEvent by ID
-      const courseEvent = await CourseEvent.findById(courseEventId);
-      if(!courseEvent){
-        return next(new ErrorHandler("course event id not found " , 400))
-      }
-     
+// export const deleteCourseEvent = CatchAsyncError(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const { id } = req.params;
+//       const courseEvent = await CourseEvent.findById(id);
+//       if (!courseEvent) {
+//         return next(new ErrorHandler("courseevent not found", 400));
+//       }
+//       const updatedCourses = await Promise.all(
+//         courseEvent.filteredCourseId.map(async ({ courseId }) => {
+//           const courses = await CourseModel.findById(courseId);
 
-      const updatedCourses = await Promise.all(
-        courseEvent.filteredCourseId.map(async ({ courseId }) => {
-          // Extract courseId from each object
-          // Find the course by ID
-          const course = await CourseModel.findById(courseId);
+//           if (!courses) {
+//             return next(
+//               new ErrorHandler(`Course with ID ${courseId} not found `, 400)
+//             );
+//           }
+//           if (!courses.isEvent) {
+//             return next(
+//               new ErrorHandler(
+//                 `course isevent with ID ${courseId} is not true `,
+//                 400
+//               )
+//             );
+//           }
 
-          if (!course) {
-            throw new Error(`Course with ID ${courseId} not found`);
-          }
-          if(!course.isEvent){
-            return next(new ErrorHandler(`course not found ${course}` ,400))
-          }
+//           // calculate the discount price from percentage
+//           const percentage = courseEvent.eventPercentage;
+//           const discountAmount = courses.discountPrice;
+
+//           const originalPrice = discountAmount / (1 - percentage / 100);
+//           return CourseModel.findByIdAndUpdate(
+//             courseId,
+//             { $set: { discountPrice: originalPrice, isEvent: false } },
+//             { new: true }
+//           );
+//         })
+//       );
+//       await courseEvent.deleteOne({ id });
+
+//       res.status(200).json({
+//         success: true,
+//         message: "delet events  successfully",
+//       });
+//     } catch (error: any) {
+//       return next(new ErrorHandler(error.message, 400));
+//     }
+//   }
+// );
+
+
+
+
+
+  //  hold on for next publish
+// update the course Event
+// export const updateCourseEvent = CatchAsyncError(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const courseEventId = req.params.id;
+//       const {
+//         eventsType,
+//         eventPercentage,
+//         eventsName,
+//         filteredCourseId,
+//         startDate,
+//         endDate,
+//       } = req.body;
+//       const  user = req.user
+   
+//       const existingCourseEvent = await CourseEvent.findById(courseEventId);
+//       if (!existingCourseEvent) {
+//         return next(new ErrorHandler("Course event id not found", 400));
+//       }
+//       const originalCourse = existingCourseEvent.filteredCourseId.map(
+//         (course) => course.courseId
+//       );
+
+//        const updatedCourse = filteredCourseId.map(( course:any)=> course.courseId)
+//       // Find courses that are no longer part of the event
+//       // const coursesToRemove =  originalCourse.filter(
+//       //   (course:any) => course
+//       // );
+             
+//         // Find courses that are no longer part of the event
+//         const coursesToRemove = originalCourse.filter(course => !updatedCourse.includes(course));
+    
+//       console.log( "filterCourse" ,updatedCourse)
+//       console.log( "course to remove" ,coursesToRemove)
+//       console.log("existingCourseEvent" , originalCourse)
+
+//           //  update courses that is removed by upadating time 
+//       //  const updatedCoursesToRemove = await Promise.all(
+//       //   coursesToRemove.map(async ({ courseId }) => {
+//       //     const course = await CourseModel.findById(courseId);
+
+//       //     if (!course) {
+//       //       throw new Error(`Course with ID ${courseId} not found`);
+//       //     }
+//       //     if (!course.isEvent) {
+//       //       return next(new ErrorHandler(`course not found ${course}`, 400));
+//       //     }
+
+//       //     // calculate the discount price from percentage  that what was the real price before given offer and the we will update blew
+//       //     const percentages = existingCourseEvent.eventPercentage;
+//       //     const discountPrice = course.discountPrice;
+
+//       //     const originalPrice = discountPrice / (1 - percentages / 100);
+
         
-          
-        
-          // calculate the discount price from percentage  that what was the real price before given offer and the we will update blew
-           const percentages = courseEvent.eventPercentage;
-           const discountPrice  = course.discountPrice;
+//       //     // Update the course with the new price and set isEvent to true
+//       //     return CourseModel.findByIdAndUpdate(
+//       //       courseId,
+//       //       { $set: { discountPrice: originalPrice, isEvent: false } },
+//       //       { new: true }
+//       //     );
+//       //   })
+//       // );
+//       // Find the CourseEvent by ID
 
-           const originalPrice = discountPrice  / (1 - percentages / 100);
-        
-        
-          // Calculate the new price based on the discount percentage for updated percentage 
-          const percentage = eventPercentage;
-          const discountAmount =  originalPrice  * (percentage / 100);
-          const newPrice =  originalPrice  - discountAmount;
+//       const updatedCourses = await Promise.all(
+//         existingCourseEvent.filteredCourseId.map(async ({ courseId }) => {
+//           const course = await CourseModel.findById(courseId);
 
-          // Update the course with the new price and set isEvent to true
-          return CourseModel.findByIdAndUpdate(
-            courseId,
-            { $set: { discountPrice: newPrice, isEvent: true } },
-            { new: true }
-          );
-        })
-      );
+//           if (!course) {
+//             throw new Error(`Course with ID ${courseId} not found`);
+//           }
+//           if (!course.isEvent) {
+//             return next(new ErrorHandler(`course not found ${course}`, 400));
+//           }
 
-      if (!courseEvent) {
-        return next(new ErrorHandler(`CourseEvent with ID ${courseEventId} not found`, 404));
-      }
+//           // calculate the discount price from percentage  that what was the real price before given offer and the we will update blew
+//           const percentages = existingCourseEvent.eventPercentage;
+//           const discountPrice = course.discountPrice;
 
-      const updatedCourseEvent = await CourseEvent.findByIdAndUpdate(
-        courseEventId,
-        {
-          $set: {
-            eventsType,
-            eventPercentage,
-            eventsName,
-            filteredCourseId,
-            // Include any other fields you want to update
-          },
-        },
-        { new: true } // Return the modified document rather than the original
-      );
+//           const originalPrice = discountPrice / (1 - percentages / 100);
 
-      res.status(200).json({
-        success: true,
-        message: 'CourseEvent updated successfully',
-        updatedCourseEvent,
-      });
-    } catch (error: any) {
-      return next(new ErrorHandler(error.message, 400));
-    }
-  }
-);
+//           // Calculate the new price based on the discount percentage for updated percentage
+//           const percentage = eventPercentage;
+//           const discountAmount = originalPrice * (percentage / 100);
+//           const newPrice = originalPrice - discountAmount;
 
+//           // Update the course with the new price and set isEvent to true
+//           return CourseModel.findByIdAndUpdate(
+//             courseId,
+//             { $set: { discountPrice: newPrice, isEvent: true } },
+//             { new: true }
+//           );
+//         })
+//       );
+
+    
+//       const updatedCourseEvent = await CourseEvent.findByIdAndUpdate(
+//         courseEventId,
+//         {
+//           $set: {
+//             eventsType,
+//             eventPercentage,
+//             eventsName,
+//             filteredCourseId,
+//             startDate,
+//             endDate,
+//             updatedBy:user?.name
+//           },
+//         },
+//         { new: true }
+//       );
+
+//       res.status(200).json({
+//         success: true,
+//         message: "CourseEvent updated successfully",
+//         updatedCourseEvent,
+//       });
+//     } catch (error: any) {
+//       return next(new ErrorHandler(error.message, 400));
+//     }
+//   }
+// );
 

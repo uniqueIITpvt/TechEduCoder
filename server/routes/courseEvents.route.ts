@@ -2,10 +2,10 @@ import express from "express";
 
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 import {
+  UserGetCourseEvent,
   adminGetCourseEvent,
   createCourseEvent,
   deleteCourseEvent,
-  updateCourseEvent,
 } from "../controllers/courseEvent.controller";
 const courseEventRouter = express.Router();
 
@@ -21,6 +21,8 @@ courseEventRouter.get(
   authorizeRoles("admin"),
   adminGetCourseEvent
 );
+courseEventRouter.get("/UserGetCourseEvent",
+ UserGetCourseEvent);
 
 courseEventRouter.delete(
   "/deleteCourseEvent/:id",
@@ -29,10 +31,10 @@ courseEventRouter.delete(
   deleteCourseEvent
 );
 
-courseEventRouter.put(
-  "/updateCourseEvent/:id",
-  isAutheticated,
-  authorizeRoles("admin"),
-  updateCourseEvent
-);
+// courseEventRouter.put(
+//   "/updateCourseEvent/:id",
+//   isAutheticated,
+//   authorizeRoles("admin"),
+
+// );
 export default courseEventRouter;

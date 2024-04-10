@@ -38,8 +38,10 @@ const Page: FC<Props> = (props) => {
       <Courses />
       <Book/>
       <Blogs/>
-     
-      
+      <br />
+      <br />
+      <br />
+      <Events/>
       <FAQ />
       <Footer />
     </div>

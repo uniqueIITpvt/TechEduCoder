@@ -10,6 +10,8 @@ export interface ICourseEvent extends Document {
   filteredCourseId: Array<{ courseId: string }>;
   startDate: Date;
   endDate: Date;
+  createdBy: string;
+  updatedBy: string;
 }
 const CourseEventSchema: Schema = new Schema(
   {
@@ -32,20 +34,28 @@ const CourseEventSchema: Schema = new Schema(
     },
     filteredCourseId: [
       {
-        courseId: String,
+        courseId: {
+          type: String, // Change type to String
+          required: true, // Optionally, add required validation
+        },
       },
     ],
-    startDate:{
+    startDate: {
       type: Date,
       // required: true
     },
-    endDate:{
+    endDate: {
       type: Date,
       // required: true
-    }
+    },
+    createdBy: {
+      type: String,
+    },
+    updatedBy: {
+      type: String,
+    },
   },
 
-  
   { timestamps: true }
 );
 

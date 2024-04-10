@@ -1,5 +1,4 @@
 "use client";
-import { ThemeSwitcher } from "@/app/utils/ThemeSwitcher";
 import {
   useGetAllNotificationsQuery,
   useUpdateNotificationStatusMutation,
@@ -58,7 +57,9 @@ const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
   };
 
   return (
-    <div className=" flex items-center justify-end p-6  right-0    dark:bg-opacity-50 bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c] shadow-xl transition duration-500">
+     <div
+      className=" flex items-center justify-end p-6  right-0    dark:bg-opacity-50 bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[40px] z-[80] border-b dark:border-[#ffffff1c] shadow-sm transition duration-500"
+     >
 
       <div
         className="relative cursor-pointer m-2"
@@ -99,7 +100,7 @@ const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
             ))}
         </div>
       )}
-    </div>
+ </div>
   );
 };
 
