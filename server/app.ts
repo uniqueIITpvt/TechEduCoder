@@ -25,9 +25,9 @@ app.use(cookieParser());
 // cors => cross origin resource sharing
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    // origin: ['http://localhost:3000'],
     // origin: ["https://e-learning-client-nine.vercel.app"],
-    credentials: true,
+    // credentials: true,
   })
 );
 
@@ -56,7 +56,7 @@ app.use(
 );
 
 // testing api
-app.get('/test', (req: Request, res: Response, next: NextFunction) => {
+app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({
     succcess: true,
     message: 'API is working',
