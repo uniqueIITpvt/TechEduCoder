@@ -25,8 +25,8 @@ app.use(cookieParser());
 app.use(
   cors({
     // origin: ['http://localhost:3000'],
-    // origin: ["https://e-learning-client-nine.vercel.app"],
-    // credentials: true,
+     origin: ["https://tech-edu-coder-client.vercel.app/"],
+     credentials: true,
   })
 );
 
