@@ -22,14 +22,19 @@ app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 
 // cors => cross origin resource sharing
-app.use(
-  cors({
-    // origin: ['http://localhost:3000'],
-     origin: ["https://tech-edu-coder-client.vercel.app/"],
-     methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
-     credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     // origin: ['http://localhost:3000'],
+//      origin: ["https://tech-edu-coder-client.vercel.app/"],
+//      methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
+//      credentials: true,
+//   })
+// );
+app.use(cors({
+  origin: ["https://tech-edu-coder-client.vercel.app"],
+  methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
+  credentials: true,
+}));
 
 
 // api requests limit
