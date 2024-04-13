@@ -13,6 +13,7 @@ import layoutRouter from './routes/layout.route';
 import { rateLimit } from 'express-rate-limit';
 import blogsRouter from './routes/blogs.route';
 import ebookRouter from './routes/ebook.route';
+// import courseEventRouter from './routes/courseEvents.route';
 
 
 // body parser
@@ -22,13 +23,19 @@ app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 
 // cors => cross origin resource sharing
-app.use(
-  cors({
-    origin: ['http://localhost:3000'],
-    // origin: ["https://e-learning-client-nine.vercel.app"],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     // origin: ['http://localhost:3000'],
+//      origin: ["https://tech-edu-coder-client.vercel.app/"],
+//      methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
+//      credentials: true,
+//   })
+// );
+app.use(cors({
+  origin: ["https://tech-edu-coder-client.vercel.app"],
+  methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
+  credentials: true,
+}));
 
 
 // api requests limit
@@ -50,18 +57,19 @@ app.use(
   layoutRouter,
   blogsRouter,
   ebookRouter,
+  // courseEventRouter
  
 );
 
 // testing api
-app.get('/test', (req: Request, res: Response, next: NextFunction) => {
+app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({
     succcess: true,
     message: 'API is working',
   });
 });
 
-// unknown route
+
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
   const err = new Error(`Route ${req.originalUrl} not found`) as any;
   err.statusCode = 404;
