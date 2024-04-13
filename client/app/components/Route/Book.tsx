@@ -38,7 +38,7 @@ const Book = (props: Props) => {
         <span className='text-gradient'>Uncover <br /> The Future with Our Tech Bookshelf</span>
       </h1>
       
-      <h2 className='800px:!text-[20px] text-[18px] text-black dark:text-white font-[700] font-Poppins text-center py-2 mx-5'>"Technology is not just a tool. It can give learners a voice that they may not have had before." - George Couros</h2>
+      <h2 className='800px:!text-[20px] text-[18px] text-black dark:text-white font-[700] font-Poppins text-center py-2 mx-5'>Technology is not just a tool. It can give learners a voice that they may not have had before - George Couros</h2>
 
       <br />
       <br />
