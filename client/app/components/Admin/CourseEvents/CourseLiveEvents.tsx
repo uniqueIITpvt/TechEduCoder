@@ -232,7 +232,7 @@ const CourseLiveEvents = (props: Props) => {
 
                {EventsCourse &&
                     EventsCourse.map((item:any) => (
-                <div className="flex p-4">
+                <div  key={item.id}  className="flex p-4">
                   
                   <p className="mr-[1rem] font-[17px]">{item.id}</p>
                   <p className=" mr-[1rem] font-[500]  border-b-2 text-[17px] shadow-sm  ">
