@@ -20,8 +20,8 @@ const CoursePreview: FC<Props> = ({
   isEdit
 }) => {
   const dicountPercentenge =
-    ((courseData?.estimatedPrice - courseData?.price) /
-      courseData?.estimatedPrice) *
+    ((courseData?.discountPrice - courseData?.originalPrice) /
+      courseData?.discountPrice) *
     100;
 
   const discountPercentengePrice = dicountPercentenge.toFixed(0);
@@ -45,14 +45,14 @@ const CoursePreview: FC<Props> = ({
         </div>
         <div className="flex items-center">
           <h1 className="pt-5 text-[25px]">
-            {courseData?.price === 0 ? "Free" : courseData?.price + "$"}
+            {courseData?.originalPrice === 0 ? "Free" : courseData?.discountPrice + ""}
           </h1>
           <h5 className="pl-3 text-[20px] mt-2 line-through opacity-80">
-            {courseData?.estimatedPrice}$
+            {courseData?.discountPrice}
           </h5>
 
           <h4 className="pl-5 pt-4 text-[22px]">
-            {discountPercentengePrice}% Off
+            {discountPercentengePrice + "% Off"}
           </h4>
         </div>
 
@@ -60,7 +60,7 @@ const CoursePreview: FC<Props> = ({
           <div
             className={`${styles.button} !w-[180px] my-3 font-Poppins !bg-[crimson] cursor-not-allowed`}
           >
-            Buy Now {courseData?.price}$
+            Buy Now {courseData?.discountPrice}$
           </div>
         </div>
 

@@ -8,6 +8,7 @@ import FAQ from "./components/FAQ/FAQ";
 import Footer from "./components/Footer";
 import Blogs from "./components/Route/Blogs";
 import Book from "../app/components/Route/Book";
+import Events from "./components/Route/events";
 
 interface Props {
 
@@ -37,7 +38,10 @@ const Page: FC<Props> = (props) => {
       <Courses />
       <Book/>
       <Blogs/>
-      
+      <br />
+      <br />
+      <br />
+      <Events/>
       <FAQ />
       <Footer />
     </>

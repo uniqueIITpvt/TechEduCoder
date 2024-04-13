@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridDeleteIcon } from "@mui/x-data-grid";
 import { Box, Button, Modal } from "@mui/material";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useTheme } from "next-themes";
@@ -15,6 +15,7 @@ import {
   useGetAdminAllBlogQuery,
 } from "@/redux/features/blogs/blogsApi";
 import MaterialTable from "@material-table/core";
+import { pink } from "@mui/material/colors";
 
 type Props = {};
 
@@ -27,50 +28,70 @@ const AllBlogs = (props: Props) => {
     { refetchOnMountOrArgChange: true }
   );
   const [deleteBlog, { isSuccess, error }] = useDeleteBlogMutation({});
+  const actions = [
+    {
+      icon: () => <GridDeleteIcon sx={{ color: pink[500] }} />,
+      tooltip: "Delete Blog",
+      onClick: (event: any, rowData: any) => {
+        setOpen(!open);
+        setEbookId(rowData.rId);
+      },
+      iconProps: {
+        style: {
+          margin: "0 2rem 0 2rem", // Add margin around the icon
+        },
+      },
+    },
+  ];
 
   const columns = [
-    { field: "id", title: "ID" },
     {
       field: "  ",
-      title: "Edit",
+      title: "",
 
       render: (params: any) => {
         return (
           <>
             <Link href={`/admin/edit-blog/${params.rId}`}>
-              <FiEdit2 className="dark:text-white text-black" size={20} />
+              <FiEdit2
+                className="dark:text-white text-black"
+                size={20}
+                color="#3343a7"
+              />
             </Link>
           </>
         );
       },
     },
-    {
-      field: " ",
-      title: "Delete",
+    { field: "id", title: "ID", width: "10%" },
 
-      render: (params: any) => {
-        return (
-          <>
-            <Button
-              onClick={() => {
-                setOpen(!open);
-                setEbookId(params.rId);
-              }}
-            >
-              <AiOutlineDelete
-                className="dark:text-white text-black"
-                size={20}
-              />
-            </Button>
-          </>
-        );
-      },
-    },
+    // {
+    //   field: " ",
+    //   title: "Delete",
 
-    { field: "title", title: "Course Title" },
-    { field: "ratings", title: "Ratings" },
+    //   render: (params: any) => {
+    //     return (
+    //       <>
+    //         <Button
+    //           onClick={() => {
+    //             setOpen(!open);
+    //             setEbookId(params.rId);
+    //           }}
+    //         >
+    //           <AiOutlineDelete
+    //             className="dark:text-white text-black"
+    //             size={20}
+    //           />
+    //         </Button>
+    //       </>
+    //     );
+    //   },
+    // },
 
-    { field: "created_at", title: "Created At" },
+    { field: "title", title: "Course Title", width: "50%" },
+    { field: "author", title: "Author", width: "10%" },
+
+    { field: "created_at", title: "Created At", width: "15%" },
   ];
 
   const rows: any = [];
@@ -81,7 +102,7 @@ const AllBlogs = (props: Props) => {
         rows.push({
           id: item.id,
           title: item.Title,
-          ratings: item.ratings,
+          author: item.authorName,
           created_at: format(item.createdAt),
           // real Id from mongo db extrected  for delte the blogs
           rId: item._id,
@@ -93,7 +114,7 @@ const AllBlogs = (props: Props) => {
     if (isSuccess) {
       setOpen(false);
       refetch();
-      toast.success("Ebooks Deleted Successfully");
+      toast.success("Blogs Deleted Successfully");
     }
     if (error) {
       if ("data" in error) {
@@ -117,31 +138,18 @@ const AllBlogs = (props: Props) => {
           <div className="w-full pt-1 mt-1 bg-white">
             {/* <ThemeProvider attribute="class" defaultTheme="system" enableSystem> */}
             <MaterialTable
+              actions={actions}
               title="Live Blogs"
               columns={columns}
-              // [
-              //   { title: 'Name', field: 'name' },
-              //   { title: 'Surname', field: 'surname' },
-              //   { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-              //   {
-              //     title: 'Birth Place',
-              //     field: 'birthCity',
-              //     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-              //   },
-              // ]
+            
               data={rows}
-              // [
-              //   { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-              //   { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
-              // ]
-
               options={{
                 sorting: true,
                 search: true,
                 searchFieldAlignment: "right",
                 searchAutoFocus: true,
                 searchFieldVariant: "standard",
-                filtering: true,
+                // filtering: true,
                 paging: true,
                 pageSizeOptions: [2, 5, 10, 20, 25, 50, 100],
                 pageSize: 10,
@@ -154,9 +162,14 @@ const AllBlogs = (props: Props) => {
                 addRowPosition: "first",
                 grouping: true,
                 columnsButton: true,
-                // rowStyle: {
-                //   backgroundColor: '#EEE',
-                // }
+                rowStyle: (data: any, index: any) =>
+                  index % 2 === 0 ? { background: "#f5f5f5" } : {},
+                headerStyle: {
+                  background: "red",
+                  color: "#fff",
+                  fontSize: "1rem",
+                  padding: "1rem",
+                },
               }}
               // components={{
               // Toolbar: (props) => (

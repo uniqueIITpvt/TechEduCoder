@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { Button , Box , Modal } from '@material-ui/core';
+import { DataGrid, GridDeleteIcon } from "@mui/x-data-grid";
+import { Button , Box , Modal, makeStyles } from '@material-ui/core';
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit2 } from "react-icons/fi";
 import {
@@ -14,12 +14,13 @@ import { toast } from "react-hot-toast";
 import Link from "next/link";
 import MaterialTable from '@material-table/core';
 import { CgDanger } from "react-icons/cg";
-
+// import { useNavigate } from 'react-router-dom';
+import { pink } from "@mui/material/colors";
 
 type Props = {};
 
 const AllCourses = (props: Props) => {
- 
+  // const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [courseId, setCourseId] = useState("");
   const { isLoading, data, refetch } = useGetAllCoursesQuery(
@@ -27,6 +28,8 @@ const AllCourses = (props: Props) => {
     { refetchOnMountOrArgChange: true }
   );
   const [deleteCourse, { isSuccess, error }] = useDeleteCourseMutation({});
+  
+
   const rows: any = [];
 
   {
@@ -42,48 +45,69 @@ const AllCourses = (props: Props) => {
         });
       });
   }
-  const columns = [
-    { field: "id", title: "ID", },
+  const actions = [
+   
     {
+      icon: () => <GridDeleteIcon sx={{ color: pink[500] }} />,
+      tooltip: 'Delete Course',
+      onClick: (event:any, rowData:any) => {
+        setOpen(!open);
+        setCourseId(rowData.realId);
+       
+      },
+      iconProps: {
+        style: {
+          margin: '0 2rem 0 2rem', // Add margin around the icon
+        }
+      }
+    },
+  ];
+
+
+
+  const columns = [
+     {
       field: "  ",
-      title: "Edit",
+    
     
       render: (params: any) => {
         return (
           <>
             <Link href={`/admin/edit-course/${params.realId}`}>
-              <FiEdit2 className="dark:text-white text-black" size={20} />
+              <FiEdit2 className="dark:text-white text-red" size={20} color='#3343a7'  />
             </Link>
           </>
         );
       },
     },
-    {
-      field: " ",
-      title: "Delete",
+    { field: "id", title: "ID",  width: '10%' },
+   
+    // {
+    //   field: " ",
+    //   title: "Delete",
       
-      render: (params: any) => {
-        return (
-          <>
-            <Button
-              onClick={() => {
-                setOpen(!open);
-                setCourseId(params.realId);
-              }}
-            >
-              <AiOutlineDelete
-                className="dark:text-white text-black"
-                size={20}
-              />
-            </Button>
-          </>
-        );
-      },
-    },
-    { field: "title", title: "Course Title",  },
-    { field: "ratings", title: "Ratings",  },
-    { field: "purchased", title: "Purchased", },
-    { field: "created_at", title: "Created At", },
+    //   render: (params: any) => {
+    //     return (
+    //       <>
+    //         <Button
+    //           onClick={() => {
+    //             setOpen(!open);
+    //             setCourseId(params.realId);
+    //           }}
+    //         >
+    //           <AiOutlineDelete
+    //             className="dark:text-white text-black"
+    //             size={20}
+    //           />
+    //         </Button>
+    //       </>
+    //     );
+    //   },
+    // },
+    { field: "title", title: "Course Title", width: '50%' },
+    { field: "ratings", title: "Ratings",width: '10%'  },
+    { field: "purchased", title: "Purchased",width: '5%' },
+    { field: "created_at", title: "Created At", width: '10%' },
    
   
   ];
@@ -111,35 +135,22 @@ const AllCourses = (props: Props) => {
 
   return (
    
-    <div className="mt-[120px]">
+    <div className="w-full mx-8 pt-1 mt-10 bg-white">
     {isLoading ? (
       <Loader />
     ) : (
-      <Box m="20px">
+      <>
+      {/* // <Box m="20px"> */}
 
-<div className='w-full pt-1 mt-1 bg-white'>
+<div className=''>
 {/* <ThemeProvider attribute="class" defaultTheme="system" enableSystem> */}
 <MaterialTable
 title="Live Courses"
+actions={actions}
 columns={columns}
-// [
-//   { title: 'Name', field: 'name' },
-//   { title: 'Surname', field: 'surname' },
-//   { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-//   {
-//     title: 'Birth Place',
-//     field: 'birthCity',
-//     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-//   },
-// ]
+
 data={rows
 }
-// [
-//   { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-//   { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
-// ]
-
-
 
 
 options={{
@@ -148,7 +159,7 @@ search: true,
 searchFieldAlignment: 'right',
 searchAutoFocus: true,
 searchFieldVariant: 'standard',
-filtering: true,
+// filtering: true,
 paging: true,
 pageSizeOptions: [2, 5, 10, 20, 25, 50, 100],
 pageSize: 10,
@@ -164,19 +175,14 @@ columnsButton: true,
 // rowStyle: {
 //   backgroundColor: '#EEE',
 // }
+rowStyle: (data: any, index: any) =>
+  index % 2 === 0 ? { background: '#f5f5f5' } : {},
+headerStyle: { background: 'red', color: '#fff', fontSize: '1rem', padding: '1rem'},
+
 
 
 }}
-// components={{
-// Toolbar: (props) => (
-//  <MTableToolbar {...props} /> // Add Material Table toolbar
-// ),
-// }}
-// options={{
-//   rowStyle: {
-//     backgroundColor: '#EEE',
-//   }
-// }}
+
 />
 {/* </ThemeProvider> */}
 </div>
@@ -214,7 +220,8 @@ columnsButton: true,
             </Box>
           </Modal>
         )}
-      </Box>
+        </>
+    
     )}
   </div>
           

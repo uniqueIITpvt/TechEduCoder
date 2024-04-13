@@ -1,0 +1,183 @@
+export const createCourseEvent = CatchAsyncError(async (req, res, next) => {
+    try {
+      const { filteredCourseId, eventPercentage } = req.body;
+  
+      if (!req.body) {
+        return next(new ErrorHandler("Data not found", 400));
+      }
+  
+      // Fetch all courses simultaneously to check if any course already has an event
+      const courses = await Promise.all(
+        filteredCourseId.map(({ courseId }) => CourseModel.findById(courseId))
+      );
+  
+      // Check if any course was not found or already has an event
+      const invalidCourses = courses.filter(course => !course || course.isEvent);
+      if (invalidCourses.length > 0) {
+        const errors = invalidCourses.map(course => {
+          if (!course) {
+            return "Some courses not found";
+          } else if (course.isEvent) {
+            return `Event already running in course with ID: ${course.id}`;
+          }
+        }).join("; ");
+        
+        return next(new ErrorHandler(errors, 400));
+      }
+  
+      // Update courses since none of them already have an event
+      const updatedCourses = await Promise.all(
+        filteredCourseId.map(({ courseId }) => {
+          const course = courses.find(course => course.id === courseId); // Find the course from the previously fetched courses
+          const discountAmount = course.discountPrice * (eventPercentage / 100);
+          const newPrice = course.discountPrice - discountAmount;
+          
+          return CourseModel.findByIdAndUpdate(
+            courseId,
+            { $set: { discountPrice: newPrice, isEvent: true } },
+            { new: true }
+          );
+        })
+      );
+  
+      // Proceed with creating the course event since all updates were successful
+      const courseEvent = await CourseEvent.create({ /* required fields */ });
+  
+      res.status(201).json({
+        success: true,
+        courseEvent,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  });
+
+
+//   const updatedCourses = await Promise.all(
+    //   filteredCourseId.map(async ({ courseId }) => {
+    //     const course = await CourseModel.findById(courseId);
+
+    //     if (!course) {
+    //       errors.push(`Course not found for ID: ${courseId}`);
+    //       return;
+    //     }
+
+    //     if (course.isEvent) {
+    //       errors.push(`Event already running in course with ID: ${course.id}`);
+    //       return;
+    //     }
+
+    //     const percentage = eventPercentage;
+    //     const discountAmount = course.discountPrice * (percentage / 100);
+    //     const newPrice = course.discountPrice - discountAmount;
+
+    //     return CourseModel.findByIdAndUpdate(
+    //       courseId,
+    //       { $set: { discountPrice: newPrice, isEvent: true } },
+    //       { new: true }
+    //     );
+    //   })
+    // );
+
+
+    export const updateCourseEvent = CatchAsyncError(async (req:Request, res:Response, next:NextFunction) => {
+      try {
+        // Assuming the ID of the CourseEvent to update is passed in the URL as a parameter
+        const courseEventId = req.params.id;
+        const { eventsType, eventPercentage, eventsName, filteredCourseId, startDate, endDate } = req.body;
+    
+        // Find the existing CourseEvent by ID
+        const existingCourseEvent = await CourseEvent.findById(courseEventId);
+        if (!existingCourseEvent) {
+          return next(new ErrorHandler("Course event id not found", 400));
+        }
+    
+        // Store the original course IDs before the update
+        const originalCourseIds = existingCourseEvent.filteredCourseId.map(course => course.toString());
+    
+       
+        // Find courses that are no longer part of the event
+        const coursesToRemove = originalCourseIds.filter(courseId => !filteredCourseId.includes(courseId));
+    
+        // Set isEvent to false for removed courses
+        await Promise.all(
+          coursesToRemove.map(courseId =>
+            CourseModel.findByIdAndUpdate(courseId, { $set: { isEvent: false } }, { new: true })
+          )
+        );
+    
+        // Update the courses that are still part of the event
+        const updatedCourses = await Promise.all(
+          filteredCourseId.map(async ({courseId}) => {
+            const course = await CourseModel.findById(courseId);
+            if (!course) {
+              throw new Error(`Course with ID ${courseId} not found`);
+            }
+            
+            const originalPrice = course.originalPrice || course.discountPrice / (1 - existingCourseEvent.eventPercentage / 100);
+            const newPrice = originalPrice * (1 - eventPercentage / 100);
+    
+            // Update the course with the new price and set isEvent to true
+            return CourseModel.findByIdAndUpdate(
+              courseId,
+              { $set: { discountPrice: newPrice, isEvent: true } },
+              { new: true }
+            );
+          })
+        );
+    
+        // Update the CourseEvent itself with the new information
+        const updatedCourseEvent = await CourseEvent.findByIdAndUpdate(
+          courseEventId,
+          {
+            $set: {
+              eventsType,
+              eventPercentage,
+              eventsName,
+              filteredCourseId,
+              startDate,
+              endDate
+            },
+          },
+          { new: true }
+        );
+    
+        // Return the updated CourseEvent
+        res.status(200).json({
+          success: true,
+          message: 'CourseEvent updated successfully',
+          data: updatedCourseEvent,
+          updatedCourses: updatedCourses
+        });
+      } catch (error:any) {
+        return next(new ErrorHandler(error.message, 400));
+      }
+    });
+
+
+    // Yeh aapka original courses array of objects hai
+const originalCourses = [
+  {
+    courseId: '6604f92579b76f0f51f76a41',
+    _id: new ObjectId("66099a1aef079cbb08501eae")
+  },
+  {
+    courseId: '660271b00ccaaa21dcdfb580',
+    _id: new ObjectId("66099a1aef079cbb08501eaf")
+  }
+];
+
+// Yeh filteredCourseIds hai jismein objects hain
+const filteredCourseIds = [
+  { courseId: '660271b00ccaaa21dcdfb580' }
+];
+
+// filteredCourseIds array se sirf courseId values extract karen
+const filteredIds = filteredCourseIds.map(course => course.courseId);
+
+// originalCourses se un courses ko find karen jo filtered list mein nahi hain
+const coursesToRemove = originalCourses.filter(course => !filteredIds.includes(course.courseId));
+
+console.log("Courses to Remove:", coursesToRemove);
+
+  

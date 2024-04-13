@@ -18,6 +18,7 @@ import { FaGraduationCap } from "react-icons/fa";
 import { MdOutlineWatchLater } from "react-icons/md";
 import { RxUpdate } from "react-icons/rx";
 import { AiOutlineUnorderedList } from "react-icons/ai";
+import { GoDotFill } from "react-icons/go";
 type Props = {
   data: any;
   stripePromise: any;
@@ -43,7 +44,7 @@ const CourseDetails = ({
   }, [userData]);
 
   const dicountPercentenge =
-    ((data?.estimatedPrice - data.price) / data?.estimatedPrice) * 100;
+    ((data?.originalPrice - data.discountPrice) / data?.originalPrice) * 100;
 
   const discountPercentengePrice = dicountPercentenge.toFixed(0);
 
@@ -141,14 +142,14 @@ const CourseDetails = ({
                     What will you learn ?{" "}
                   </h1>
 
-                  <div className="text-[17px] font-poppins  font-[400] mt-5 dark:text-white   text-black leading-7 flex-row flex gap-10">
+                  <div className="text-[17px] font-poppins  font-[400] mt-5 dark:text-white   text-black leading-7 ">
                     {data.benefits?.map((item: any, index: number) => (
                       <div
-                        className="w-full flex 800px:items-center py-2"
+                        className="w-full flex py-2"
                         key={index}
                       >
                         <div className="w-[15px] mr-1">
-                          <IoCheckmarkDoneOutline
+                          <GoDotFill
                             size={20}
                             className="text-black dark:text-white"
                           />
@@ -172,47 +173,46 @@ const CourseDetails = ({
             {activeBar === 1 && (
               <div>
                 {(data?.reviews && [...data.reviews].reverse()).map(
-                (item: any, index: number) => (
-                  <div className="w-full pb-4" key={index}>
-                    <div className="flex">
-                      <div className="w-[50px] h-[50px]">
-                        <Image
-                          src={
-                            item.user.avatar
-                              ? item.user.avatar.url
-                              : "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"
-                          }
-                          width={50}
-                          height={50}
-                          alt=""
-                          className="w-[50px] h-[50px] rounded-full object-cover"
-                        />
-                      </div>
-                      <div className="hidden 800px:block pl-2">
-                        <div className="flex items-center">
+                  (item: any, index: number) => (
+                    <div className="w-full pb-4" key={index}>
+                      <div className="flex">
+                        <div className="w-[50px] h-[50px]">
+                          <Image
+                            src={
+                              item.user.avatar
+                                ? item.user.avatar.url
+                                : "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"
+                            }
+                            width={50}
+                            height={50}
+                            alt=""
+                            className="w-[50px] h-[50px] rounded-full object-cover"
+                          />
+                        </div>
+                        <div className="hidden 800px:block pl-2">
+                          <div className="flex items-center">
+                            <h5 className="text-[18px] pr-2 text-black dark:text-white">
+                              {item.user.name}
+                            </h5>
+                            <Ratings rating={item.rating} />
+                          </div>
+                          <p className="text-black dark:text-white">
+                            {item.comment}
+                          </p>
+                          <small className="text-[#000000d1] dark:text-[#ffffff83]">
+                            {format(item.createdAt)} •
+                          </small>
+                        </div>
+                        <div className="pl-2 flex 800px:hidden items-center">
                           <h5 className="text-[18px] pr-2 text-black dark:text-white">
                             {item.user.name}
                           </h5>
                           <Ratings rating={item.rating} />
                         </div>
-                        <p className="text-black dark:text-white">
-                          {item.comment}
-                        </p>
-                        <small className="text-[#000000d1] dark:text-[#ffffff83]">
-                          {format(item.createdAt)} •
-                        </small>
-                      </div>
-                      <div className="pl-2 flex 800px:hidden items-center">
-                        <h5 className="text-[18px] pr-2 text-black dark:text-white">
-                          {item.user.name}
-                        </h5>
-                        <Ratings rating={item.rating} />
                       </div>
                     </div>
-                   
-                  </div>
-                )
-              )}
+                  )
+                )}
               </div>
             )}
           </div>
@@ -221,20 +221,24 @@ const CourseDetails = ({
               <div className=" w-full  border bg-[#d5e5fd] flex  flex-col  items-center p-16 rounded-t-xl">
                 <div className="  inline-flex ">
                   <h3 className=" text-[18px] text-black dark:text-white font-[700] font-poppins mx-3 ">
-                    {data.originalPrice === 0 ? "Free" :"₹"+ data.originalPrice }{" "}
+                    {data.originalPrice === 0
+                      ? "Free"
+                      : "₹" + data.discountPrice}{" "}
                   </h3>
                   <p className="text-[20px] line-through opacity-60 text-red-400 dark:text-white mx-3">
-                    {data.originalPrice===0? " " :"₹"+ data.discountPrice}
+                    {data.originalPrice === 0 ? " " : "₹" + data.originalPrice}
                   </p>
 
                   <p className="text-[16px] text-[#3539fa] dark:text-white  font-[500] ">
-                    { data.originalPrice ===0 ? "" : discountPercentengePrice}% Off
+                    {data.originalPrice === 0
+                      ? ""
+                      : discountPercentengePrice + "% Off"}
                   </p>
                 </div>
                 <div className="flex items-center mt-5">
                   {isPurchased ? (
                     <Link
-                    className={`${styles.button}`}
+                      className={`${styles.button}`}
                       // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
                       href={`/course-access/${data._id}`}
                     >
@@ -242,11 +246,11 @@ const CourseDetails = ({
                     </Link>
                   ) : (
                     <div
-                    className={`${styles.button}`}
-                    // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
-                    onClick={handleOrder}
+                      className={`${styles.button}`}
+                      // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
+                      onClick={handleOrder}
                     >
-                      Buy Now 
+                      Buy Now
                     </div>
                   )}
                 </div>
@@ -310,17 +314,15 @@ const CourseDetails = ({
               </h1>
               {data.prerequisites?.map((item: any, index: number) => (
                 <div
-                  className="w-full flex 800px:items-center py-2 font-[400] text-[17px]"
+                  className="w-full flex  py-2  font-[400] text-[17px]"
                   key={index}
                 >
-                  <div className="w-[15px] mr-1">
-                    <IoCheckmarkDoneOutline
+                 <div><GoDotFill
                       size={20}
-                      className="text-black dark:text-white"
-                    />
-                  </div>
-                  <p className="pl-2 text-black dark:text-white">
-                    {item.title}
+                      className="text-black dark:text-white mt-1"
+                    /></div>
+                  <p className="pl-2 text-black dark:text-white flex item-center justify-center">
+                   {item.title}
                   </p>
                 </div>
               ))}

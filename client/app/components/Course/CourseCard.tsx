@@ -46,11 +46,11 @@ const CourseCard: FC<Props> = ({ item, isProfile }) => {
           </div>
           <div className="w-full flex items-center justify-between pt-3">
             <div className="flex">
-              <h3 className="text-black dark:text-[#fff] font-poppins font-[700] text-[17px] ">
-                {item.originalPrice === 0 ? "Free" : "₹ " + item.originalPrice}
+              <h3 className="text-black dark:text-[#fff] font-poppins font-[700] text-[15px] ">
+                {item.originalPrice === 0 ? "Free" : "₹ " + item.discountPrice.toFixed(2)}
               </h3>
-              <h5 className="pl-3 text-[17px] mt-[-5px] line-through opacity-80  dark:text-[#fff] text-red-600">
-                {item.originalPrice === 0 ? " " : "₹ " + item.discountPrice}
+              <h5 className="pl-2 text-[15px] mt-[-5px] line-through opacity-80  dark:text-[#fff] text-red-600">
+                {item.originalPrice === 0 ? " " : "₹ " + item.originalPrice.toFixed(2)}
               </h5>
             </div>
             <div className="flex items-center pb-3">

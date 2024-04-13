@@ -58,7 +58,7 @@ const CourseData: FC<Props> = ({
     <div className="w-[80%] m-auto mt-24 block">
       <div>
         <label className={`${styles.label} text-[20px]`} htmlFor="email">
-          What are the benefits for students in this course?
+          What will learn students from this course?
         </label>
         <br />
         {benefits.map((benefit: any, index: number) => (
@@ -81,7 +81,7 @@ const CourseData: FC<Props> = ({
 
       <div>
         <label className={`${styles.label} text-[20px]`} htmlFor="email">
-        What are the prerequisites for starting this course?
+Materials Incluuded in this course 
         </label>
         <br />
         {prerequisites.map((prerequisites: any, index: number) => (

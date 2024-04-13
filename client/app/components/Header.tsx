@@ -131,7 +131,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           >
             <div className="w-[95%] 800px:w-[92%] m-auto h-full">
               <div className="w-full h-[80px] flex items-center justify-between">
-              <div className=" mt-3 w-[200px] ">
+              <div className=" mt-3 w-[200px]  sm:w-[130px]">
                   <Link
                     href={"/"}
                  
@@ -143,6 +143,17 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                     />
                   </Link>
                 </div>
+
+{/* <div className="mt-3">
+  <Link href="/">
+    <Image
+      src={logo}
+      alt="Logo"
+      className="w-32 sm:w-20 md:w-24 lg:w-28 xl:w-32 2xl:w-36 h-auto filter-invert"
+    />
+  </Link>
+</div> */}
+
 
                 <div className=" bg-transparent relative px-2 ">
                   <AiOutlineSearch

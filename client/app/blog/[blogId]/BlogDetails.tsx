@@ -23,12 +23,13 @@ const BlogDetails = ({ params }: paramsType) => {
   const [blogs, setBlogs] = useState<any[]>([]);
   // console.log(data)
   useEffect(() => {
-    if (allBlog) {
+    if (allBlog && data) {
       setBlogs(allBlog.blogs);
     }
-  }, [allBlog]);
+    
+  }, [allBlog , data]);
  
-
+  const body = blog?.BlogContent
   return (
     !isLoading && (
       <div className="w-[90%] m-auto mt-16">
@@ -47,7 +48,7 @@ const BlogDetails = ({ params }: paramsType) => {
                   <p className="text-[17px] text-black font-poppins font-[500]">
                     {format(blog.createdAt)}
                   </p>
-                  <p className="text-[18] font-[700] font-poppins">{blog.BlogContent.slice(0, 200)}</p>
+                  <p className="text-[18] font-[700] font-poppins">   <div  dangerouslySetInnerHTML={{__html: body.slice(0, 200)}} /></p>
                 </div>
 
                 <div className="flex space-x-2 mb-4">
@@ -61,7 +62,7 @@ const BlogDetails = ({ params }: paramsType) => {
                   className="w-full rounded-sm shadow-md mb-4"
                 ></Image>
 
-                <p className="text-black dark:text-white text-[17px] font-[500] font-poppins">{blog.BlogContent}</p>
+                <p className="text-black dark:text-white text-[17px] font-[500] font-poppins">   <div  dangerouslySetInnerHTML={{__html: body}} /></p>
               </div>
               {/* comment form  */}
               <CommentForm />

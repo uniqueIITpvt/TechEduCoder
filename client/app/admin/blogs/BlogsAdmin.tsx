@@ -21,7 +21,6 @@ const BlogsAdmin = () => {
     authorName: '',
     Title: '',
     category: '',
-    subTitle: '',
     thumbnail: '',
     BlogContent: '',
   };
@@ -199,10 +198,10 @@ const BlogsAdmin = () => {
                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
                       >
                         <option selected={true}>Select category</option>
-                        <option value='TV'>TV/Monitors</option>
-                        <option value='PC'>PC</option>
-                        <option value='GA'>Gaming/Console</option>
-                        <option value='PH'>Phones</option>
+                        <option value='Web'>Web</option>
+                        <option value='App'>App</option>
+                        <option value='AI'>AI</option>
+                        <option value='DevOPs'>DevOps</option>
                       </select>
                     </div>
                    
@@ -250,25 +249,10 @@ const BlogsAdmin = () => {
                       />
                     </div>
                    
-                    <div className='sm:col-span-2'>
-                      <label
-                        htmlFor='description'
-                        className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-                      >
-                       subTitle
-                      </label>
-                      <textarea
-                        name='subTitle'
-                        id='subTitle'
-                        rows={4}
-                        value={blogFormData.subTitle}
-                        onChange={handleBlogChange}
-                        className='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500'
-                        placeholder={`Write Blog's Short Description`}
-                      ></textarea>
-                    </div>
+                  
                    
                     <div className='sm:col-span-2 dark:bg-gray-700 rounded-xl'>
+                    <h1 className='text-[17px] p-2'>Blogs content </h1>
                       <TinyEditor
                         editorContent={editorContent}
                         setEditorContent={setEditorContent}
@@ -277,6 +261,7 @@ const BlogsAdmin = () => {
                   </div>
                  
                   <div className=' w-[60%] m-auto flex justify-between'>
+                
                   <button
                     onClick={handleBlogSubmit}
                     // type='submit'

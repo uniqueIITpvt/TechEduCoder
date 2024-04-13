@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
+import { DataGrid, GridDeleteIcon, GridToolbar } from "@mui/x-data-grid";
 import { useTheme } from "next-themes";
 import { useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
 import Loader from "../../Loader/Loader";
@@ -8,6 +7,9 @@ import { format } from "timeago.js";
 import { useGetAllOrdersQuery } from "@/redux/features/orders/ordersApi";
 import { useGetAllUsersQuery } from "@/redux/features/user/userApi";
 import { AiOutlineMail } from "react-icons/ai";
+import { pink } from "@mui/material/colors";
+import MaterialTable from "@material-table/core";
+
 
 type Props = {
   isDashboard?: boolean;
@@ -35,7 +37,7 @@ const AllInvoices = ({ isDashboard }: Props) => {
           userName: user?.name,
           userEmail: user?.email,
           title: course?.name,
-          price: "$" + course?.price,
+          price:  "M R P" +course?.discountPrice,
         };
       });
       setOrderData(temp);
@@ -43,34 +45,22 @@ const AllInvoices = ({ isDashboard }: Props) => {
   }, [data, usersData, coursesData]);
 
   const columns: any = [
-    { field: "id", headerName: "ID", flex: 0.3 },
-    { field: "userName", headerName: "Name", flex: isDashboard ? 0.6 : 0.5 },
+ 
+
+    { field: "userName", title: "Name", },
     ...(isDashboard
       ? []
       : [
-          { field: "userEmail", headerName: "Email", flex: 1 },
-          { field: "title", headerName: "Course Title", flex: 1 },
+          { field: "userEmail", title: "Email",  },
+          { field: "title", title: "Course Title",  },
         ]),
-    { field: "price", headerName: "Price", flex: 0.5 },
-    ...(isDashboard
-      ? [{ field: "created_at", headerName: "Created At", flex: 0.5 }]
-      : [
-          {
-            field: " ",
-            headerName: "Email",
-            flex: 0.2,
-            renderCell: (params: any) => {
-              return (
-                <a href={`mailto:${params.row.userEmail}`}>
-                  <AiOutlineMail
-                    className="dark:text-white text-black"
-                    size={20}
-                  />
-                </a>
-              );
-            },
-          },
-        ]),
+        ...(isDashboard
+          ? [{ field: "created_at", title: "Created At",  }]
+          : [
+           
+            ]),
+    { field: "price", title: "Price",  },
+    
   ];
 
   const rows: any = [];
@@ -86,74 +76,118 @@ const AllInvoices = ({ isDashboard }: Props) => {
         created_at: format(item.createdAt),
       });
     });
+    
+    const actions = [
+     
+      // {
+      //   icon: () => <GridDeleteIcon sx={{ color: pink[500] }} />,
+      //   tooltip: 'Delete users',
+      //   onClick: (event:any, rowData:any) => {
+      //     // handleDelete(rowData.id);
+      //     // setProductDeleteName(rowData.name);
+      //   },
+      // },
+      {
+        icon: () => <AiOutlineMail sx={{ color: pink[500] , padding: '10px'  }} />,
+        tooltip: 'Mail users',
+        cellStyle: {
+          backgroundColor: '#039be5',
+          color: '#FFF',
+          marginTop: '5rem'
+        },
+        onClick: (event:any, rowData:any) => {
+          
+         
+          window.location.href = `mailto:${rowData.userEmail}`;
+        
+        },
+      },
+
+
+      // {
+      //   field: " ",
+      //   title: "Email",
+      
+      //   render: (params: any) => {
+      //     return (
+      //       <a href={`mailto:${params.userEmail}`}>
+      //         <AiOutlineMail
+      //           className="dark:text-white text-black"
+      //           size={20}
+      //         />
+      //       </a>
+      //     );
+      //   },
+      // },
+
+    ];
+  
 
   return (
     <div className={!isDashboard ? "mt-[120px]" : "mt-[0px]"}>
       {isLoading ? (
         <Loader />
       ) : (
-        <Box m={isDashboard ? "0" : "40px"}>
-          <Box
-            m={isDashboard ? "0" : "40px 0 0 0"}
-            height={isDashboard ? "35vh" : "90vh"}
-            overflow={"hidden"}
-            sx={{
-              "& .MuiDataGrid-root": {
-                border: "none",
-                outline: "none",
-              },
-              "& .css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon": {
-                color: theme === "dark" ? "#fff" : "#000",
-              },
-              "& .MuiDataGrid-sortIcon": {
-                color: theme === "dark" ? "#fff" : "#000",
-              },
-              "& .MuiDataGrid-row": {
-                color: theme === "dark" ? "#fff" : "#000",
-                borderBottom:
-                  theme === "dark"
-                    ? "1px solid #ffffff30!important"
-                    : "1px solid #ccc!important",
-              },
-              "& .MuiTablePagination-root": {
-                color: theme === "dark" ? "#fff" : "#000",
-              },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "none!important",
-              },
-              "& .name-column--cell": {
-                color: theme === "dark" ? "#fff" : "#000",
-              },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
-                borderBottom: "none",
-                color: theme === "dark" ? "#fff" : "#000",
-              },
-              "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: theme === "dark" ? "#1F2A40" : "#F2F0F0",
-              },
-              "& .MuiDataGrid-footerContainer": {
-                color: theme === "dark" ? "#fff" : "#000",
-                borderTop: "none",
-                backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
-              },
-              "& .MuiCheckbox-root": {
-                color:
-                  theme === "dark" ? `#b7ebde !important` : `#000 !important`,
-              },
-              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `#fff !important`,
-              },
-            }}
-          >
-            <DataGrid
-              checkboxSelection={isDashboard ? false : true}
-              rows={rows}
-              columns={columns}
-              components={isDashboard ? {} : { Toolbar: GridToolbar }}
-            />
-          </Box>
-        </Box>
+        <>
+      <div className='w-full mx-8 pt-1 m-3 bg-white'>
+        <MaterialTable
+          title=''
+          actions={actions}
+          // columns={
+          //   [
+          //   {
+          //     render: (rowData) => (
+          //       <Button
+          //         className='cursor-pointer'
+          //         onClick={() => setOpen(rowData.id)}
+          //         style={{ color: 'D55B45' }}
+          //         title='Quick view'
+          //       >
+          //         <AiFillEye size={22} color='#D55B45' />
+          //       </Button>
+          //     ),
+          //   },
+          //   { title: 'Product Id', field: 'id' },
+          //   { title: 'Name', field: 'name' },
+          //   { title: 'Price', field: 'price' },
+          //   { title: 'Stock', field: 'Stock' },
+          //   { title: 'Sold out', field: 'sold' },
+          // ]}
+          columns={columns}
+          data={rows}
+          options={{
+            sorting: true,
+            search: true,
+            searchFieldAlignment: 'right',
+            searchAutoFocus: true,
+            searchFieldVariant: 'standard',
+            filtering: true,
+            paging: true,
+            pageSizeOptions: [2, 5, 10, 20, 25, 50, 100],
+            pageSize: 5,
+            paginationType: 'stepped',
+            showFirstLastPageButtons: false,
+            paginationPosition: 'both',
+            // exportButton: true,
+            exportAllData: true,
+            // exportFileName: 'Abo_Halal_AllProducts',
+            addRowPosition: 'first',
+            grouping: true,
+            columnsButton: true,
+            rowStyle: (data, index) =>
+              index % 2 === 0 ? { background: '#f5f5f5' } : {},
+            headerStyle: { background: 'red', color: '#fff' ,
+             fontSize:"1rem",
+             padding:"0.5rem"
+
+          
+          },
+          }}
+        />
+      
+      </div>
+ 
+    </>
       )}
     </div>
   );

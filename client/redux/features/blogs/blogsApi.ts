@@ -43,8 +43,8 @@ export const blogsApi = apiSlice.injectEndpoints({
       }),
     }),
     getBlog: builder.query({
-      query: (blogId: string) => ({
-        url: `blog-details/${blogId}`,
+      query: (id: string) => ({
+        url: `blog-details/${id}`,
         method: 'GET',
         credentials: 'include' as const,
       }),
