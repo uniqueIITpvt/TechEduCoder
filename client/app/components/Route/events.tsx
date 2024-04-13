@@ -7,7 +7,9 @@ import EventsCount from '../events/eventsCount';
 import EventsCard from "../events/eventsCard";
 
 
-type Props = {};
+type Props = {
+
+};
 
 const Events = (props: Props) => {
   const { data, isLoading } = useGetUsersAllCoursesQuery({});
@@ -26,15 +28,14 @@ const Events = (props: Props) => {
   useEffect(() => {
     // Calculate the total count of matching courses across all events
     const totalMatchingCourses = event.reduce((total, currentItem) => {
-      const matchingCoursesForCurrentItem = currentItem.filteredCourseId.filter(i =>
-        courses.some(course => course._id === i.courseId)
-      );
+      const matchingCoursesForCurrentItem = currentItem.filteredCourseId.filter( (i:any)=> courses.some(course => course._id === i.courseId));
       return total + matchingCoursesForCurrentItem.length;
     }, 0);
 
     setMatchingCoursesCount(totalMatchingCourses);
   }, [courses, event]); // Recalculate whenever courses or event data changes
 
+  
   return (
     <div className="pb-10 ">
       <div className="w-full relative">
