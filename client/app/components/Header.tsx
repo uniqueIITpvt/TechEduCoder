@@ -126,23 +126,14 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           >
             <div className="w-[95%] 800px:w-[92%] m-auto h-full">
               <div className="w-full h-[80px] flex items-center justify-between px-3">
-                <div className=" w-[200px]  sm:w-[130px]">
+                <div className="w-[5rem] md:w-[10rem]">
                   <Link href={"/"}>
                     <Image src={logo} alt="" />
                   </Link>
                 </div>
 
-                {/* <div className="mt-3">
-  <Link href="/">
-    <Image
-      src={logo}
-      alt="Logo"
-      className="w-32 sm:w-20 md:w-24 lg:w-28 xl:w-32 2xl:w-36 h-auto filter-invert"
-    />
-  </Link>
-</div> */}
 
-                <div className=" bg-transparent relative px-2 ">
+                <div className=" bg-transparent relative px-2  w-[18rem]  md:w-[30rem] ">
                   <AiOutlineSearch
                     size={20}
                     className="absolute right-4 top-2 cursor-pointer text-black"
@@ -151,7 +142,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                     type="search"
                     placeholder="Search Courses..."
                     onChange={handleSearch}
-                    className="bg-gray-100  text-black  placeholder:text-[17px]  placeholder:text-slate-900  rounded-[7px] p-2 w-[300px] h-[40px] outline-none font-[400] font-poppins"
+                    className="bg-gray-100  text-black  placeholder:text-[17px]  w-full  placeholder:text-slate-900  rounded-[7px] p-2  h-[40px] outline-none font-[400] font-poppins"
                   />
 
                   {activeSearch?.length > 0 && (
