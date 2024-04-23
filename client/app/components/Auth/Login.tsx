@@ -109,7 +109,7 @@ const Login: FC<Props> = ({ setRoute, setOpen,refetch }) => {
           <input type="submit" value="Login" className={`${styles.button} 800px:!w-full   !text-center !flex !items-center !justify-center `} />
         </div>
         
-        <h5 className="text-center pt-4 font-Poppins text-[14px]">
+        <h5 className="text-center pt-4 font-Poppins text-[14px] text-black">
           Not have any account?{" "}
           <span
             className="text-[#2190ff] pl-1 cursor-pointer"
