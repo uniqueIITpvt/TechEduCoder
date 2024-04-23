@@ -58,7 +58,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
 
   return (
     <div className="w-full">
-     <h1 className={`${styles.title} 800px:!text-[45px] text-gradient`}>
+     <h1 className={`${styles.title} 800px:!text-[45px]  leading-11 text-gradient`}>
      Create Your Account
       </h1>
       <form onSubmit={handleSubmit}>
@@ -131,7 +131,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
           <span className="text-red-500 pt-2 block">{errors.password}</span>
         )}
         <div className="w-full mt-5">
-          <input type="submit" value="Sign Up" className={`${styles.button}`} />
+          <input type="submit" value="Sign Up" className={`${styles.button} 800px:!w-full   !text-center !flex !items-center !justify-center `} />
         </div>
         <br />
         <h5 className="text-center pt-4 font-Poppins text-[14px]">

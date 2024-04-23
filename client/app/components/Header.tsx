@@ -162,7 +162,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                   <NavItems activeItem={activeItem} isMobile={false} />
                   <Dropdown />
 
-                  {/* only for mobile */}
+               
                   <div className="800px:hidden">
                     <HiOutlineMenuAlt3
                       size={25}
@@ -208,7 +208,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               >
                 <div className="w-[70%] fixed z-[999999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0">
                   <NavItems activeItem={activeItem} isMobile={true} />
-                  {userData?.user ? (
+                 <div className="ml-5"> {userData?.user ? (
                     <Link href={"/profile"}>
                       <Image
                         src={
@@ -229,14 +229,14 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                   ) : (
                     <HiOutlineUserCircle
                       size={25}
-                      className="hidden 800px:block cursor-pointer dark:text-white text-black"
+                      className="800px:block cursor-pointer dark:text-white text-black"
                       onClick={() => setOpen(true)}
                     />
-                  )}
+                  )}</div>
                   <br />
                   <br />
                   <p className="text-[17px] px-2 pl-5 text-black dark:text-white">
-                    Copyright © 2024 UniqueIIT
+                    Copyright @2024  By UniqueIIT
                   </p>
                 </div>
               </div>

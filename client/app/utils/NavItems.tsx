@@ -85,7 +85,7 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
                     activeItem === index
                       ? "dark:text-[#37a39a] text-[#3914dc] "
                       : "dark:text-white text-black"
-                  } block py-3   text-[17px] px-4  font-poppins font-[500] leading-2   
+                  } block py-2   text-[17px] px-4  font-poppins font-[500]   
                   hover:text-[#3914dc]  `}
                 >
                   {i.name}
