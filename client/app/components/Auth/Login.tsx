@@ -5,13 +5,10 @@ import * as Yup from "yup";
 import {
   AiOutlineEye,
   AiOutlineEyeInvisible,
-  AiFillGithub,
 } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
 import { styles } from "../../../app/styles/style";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { toast } from "react-hot-toast";
-import {signIn} from "next-auth/react";
 
 type Props = {
   setRoute: (route: string) => void;
@@ -55,7 +52,9 @@ const Login: FC<Props> = ({ setRoute, setOpen,refetch }) => {
 
   return (
     <div className="w-full">
-      <h1 className={`${styles.title} text-gradient`}>Login with UniqueIIT</h1>
+     <h1 className={`${styles.title} 800px:!text-[45px] text-gradient`}>
+     Login
+      </h1>
       <form onSubmit={handleSubmit}>
         <label className={`${styles.label}`} htmlFor="email">
           Enter your Email
@@ -106,19 +105,10 @@ const Login: FC<Props> = ({ setRoute, setOpen,refetch }) => {
             <span className="text-red-500 pt-2 block">{errors.password}</span>
           )}
         </div>
-        <div className="w-full mt-5">
-          <input type="submit" value="Login" className={`${styles.button}`} />
+        <div className="w-full  mt-5">
+          <input type="submit" value="Login" className={`${styles.button} 800px:!w-full   !text-center !flex !items-center !justify-center `} />
         </div>
-        <br />
-        <h5 className="text-center pt-4 font-Poppins text-[14px] text-black dark:text-white">
-          Or join with
-        </h5>
-        <div className="flex items-center justify-center my-3">
-          <FcGoogle size={30} className="cursor-pointer mr-2"
-          onClick={() => signIn("google")}
-          />
-          <AiFillGithub size={30} className="cursor-pointer ml-2" onClick={() => signIn("github")} />
-        </div>
+        
         <h5 className="text-center pt-4 font-Poppins text-[14px]">
           Not have any account?{" "}
           <span
