@@ -44,7 +44,7 @@ export default function DropDown() {
           {" "}
           <Link
             href={`/faq`}
-            className="text-[17px] px-5 py-5 hover:text-[#4c00ff] font-Poppins font-[400] dark:text-white text-black "
+            className="text-[17px] py-4 hover:text-[#4c00ff] px-5 font-Poppins font-[500] dark:text-white text-black"
           >
             FAQ
           </Link>

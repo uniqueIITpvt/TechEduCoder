@@ -8,7 +8,7 @@ import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
 import Verification from "../components/Auth/Verification";
 import Image from "next/image";
- import avatar from "../../public/assests/avatar.png";
+import avatar from "../../public/assests/avatar.png";
 import logo from "../../public/TEC logo By UniqueIIT (1500 x 500 px) (1).svg";
 import { useSession } from "next-auth/react";
 import {
@@ -22,7 +22,6 @@ import Dropdown from "../utils/DropDown";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useGetAllBlogsQuery } from "@/redux/features/blogs/blogsApi";
 import { useGetUsersAllCoursesQuery } from "@/redux/features/courses/coursesApi";
-
 
 type Props = {
   open: boolean;
@@ -44,9 +43,10 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     {},
     { refetchOnMountOrArgChange: true }
   );
-  const { data:course } = useGetUsersAllCoursesQuery({},  { refetchOnMountOrArgChange: true });
-  
-
+  const { data: course } = useGetUsersAllCoursesQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
 
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
@@ -92,12 +92,9 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     if (e.target.id === "screen") {
       {
         setOpenSidebar(false);
-       
       }
     }
   };
-
-
 
   const [activeSearch, setActiveSearch] = useState<string[]>([]);
 
@@ -109,9 +106,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     }
     setActiveSearch(
       course?.courses
-        .filter((course: any) =>
-          course.name.toLowerCase().includes(searchTerm)
-        )
+        .filter((course: any) => course.name.toLowerCase().includes(searchTerm))
         .slice(0, 8)
     );
   };
@@ -130,21 +125,14 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
             }`}
           >
             <div className="w-[95%] 800px:w-[92%] m-auto h-full">
-              <div className="w-full h-[80px] flex items-center justify-between">
-              <div className=" mt-3 w-[200px]  sm:w-[130px]">
-                  <Link
-                    href={"/"}
-                 
-                  >
-                    <Image
-                      src={logo}
-                      alt=""
-                      className="filter-invert" 
-                    />
+              <div className="w-full h-[80px] flex items-center justify-between px-3">
+                <div className=" w-[200px]  sm:w-[130px]">
+                  <Link href={"/"}>
+                    <Image src={logo} alt="" />
                   </Link>
                 </div>
 
-{/* <div className="mt-3">
+                {/* <div className="mt-3">
   <Link href="/">
     <Image
       src={logo}
@@ -154,30 +142,26 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   </Link>
 </div> */}
 
-
                 <div className=" bg-transparent relative px-2 ">
                   <AiOutlineSearch
                     size={20}
-                    className="absolute right-4 top-2 cursor-pointer"
+                    className="absolute right-4 top-2 cursor-pointer text-black"
                   />
                   <input
                     type="search"
                     placeholder="Search Courses..."
                     onChange={handleSearch}
-                    className="bg-gray-100 placeholder:text-[17px]  placeholder:text-slate-900  rounded-[7px] p-2 w-[300px] h-[40px] outline-none  scroll-y  dark:text-[#ffffffe6] dark:text-[16px] font-[400] font-poppins"
+                    className="bg-gray-100  text-black  placeholder:text-[17px]  placeholder:text-slate-900  rounded-[7px] p-2 w-[300px] h-[40px] outline-none font-[400] font-poppins"
                   />
 
-                  {activeSearch.length > 0 && (
-                    <div className="absolute w-full min-h-[30vh] bg-slate-50 shadow-sm-2 rounded-xl z-[9] p-4 "  
-                >
-                      {activeSearch.map((course: any) => (
-                        <Link href={`/course/${course._id}`} key={course._id}   
-                      >
+                  {activeSearch?.length > 0 && (
+                    <div className="absolute w-full  bg-slate-50 shadow-sm-2 rounded-xl z-[9] p-4 ">
+                      { activeSearch && activeSearch.map((course: any) => (
+                        <Link href={`/course/${course._id}`} key={course._id}>
                           <p className="cursor-pointer p-2 hover:bg-gray-300 text-black rounded-sm border-b-2 text-[16px]  shadow-sm leading-[1.2] ">
                             {course.name}
                           </p>
                         </Link>
-                      
                       ))}
                     </div>
                   )}
@@ -260,7 +244,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                   )}
                   <br />
                   <br />
-                  <p className="text-[16px] px-2 pl-5 text-black dark:text-white">
+                  <p className="text-[17px] px-2 pl-5 text-black dark:text-white">
                     Copyright © 2024 UniqueIIT
                   </p>
                 </div>

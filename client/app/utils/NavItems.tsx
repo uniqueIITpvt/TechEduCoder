@@ -14,7 +14,7 @@ export const navItemsData = [
     name: "Books",
     url: "/ebook",
   },
-  { name: "Blogs", url: "blogs" },
+  { name: "Blogs", url: "/blogs" },
 ];
 
 // for mobile  screen 
@@ -73,13 +73,13 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
               <span
                 className={`text-[25px] font-Poppins font-[500] text-black dark:text-white`}
               >
-               TexhEduCoder
+               TechEduCoder
               </span>
             </Link>
           </div>
           {navItemsDataMobile &&
             navItemsDataMobile.map((i, index) => (
-              <Link href="/" passHref key={index}>
+              <Link href={`${i.url}`} key={index} passHref >
                 <span
                   className={`${
                     activeItem === index
