@@ -32,8 +32,8 @@ const Hero: FC<Props> = (props) => {
             <Image src={logo2} alt="" layout="responsive" />
           </Carousel>
 
-          <div className="absolute bottom-0 left-0 top-0 h-full w-[60%] bg-gradient-to-r from-sky-500    md:pt-10 pl-2 md:pl-0">
-            <h1 className="text-white text-[25px] pl-8 pt-5 xl:pt-20 xl:pl-16  lg:text-[40px] lg:pl-10    md:text-[25px] font-[600] md:pl-4   sm:ml-[30px] sm:pl-[10px] sm:mb-[10px sm:font-[700]]   ">
+          <div className="absolute bottom-0 left-0 top-0 h-full w-[60%] bg-gradient-to-r from-sky-500 md:pt-10 pl-2 md:pl-0">
+            <h1 className="text-white text-[20px]  leading-7 pl-8 md:pt-5 pt-2 font-[700] xl:pt-20 xl:pl-16  lg:text-[40px] lg:pl-10    md:text-[25px]  md:pl-4   sm:ml-[30px] sm:pl-[10px] sm:mb-[10px sm:font-[700]]   ">
               Upgrade your learning <br /> Skills & Upgrade your life
             </h1>
             {/* Hidden on mobile, visible on md screens and up */}
