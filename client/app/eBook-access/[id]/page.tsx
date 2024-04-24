@@ -73,13 +73,7 @@ const Page = ({params}:any) => {
             }
             keywords={data?.ebook?.level}
           />
-          <Header
-            route={route}
-            setRoute={setRoute}
-            open={open}
-            setOpen={setOpen}
-            activeItem={2}
-          />
+         
        
 
             <ShowEbook
