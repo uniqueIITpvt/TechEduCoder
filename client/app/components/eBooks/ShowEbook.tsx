@@ -40,7 +40,17 @@ const ShowEbook = ({ data }: Props) => {
           file={data.ebookpdf.url}
           onLoadSuccess={onDocumentLoadSuccess}
         >
-           {Array.apply(null, Array(numPages))
+
+{Array.from(new Array(numPages), (el, index) => (
+          <Page
+            key={`page_${index + 1}`}
+            pageNumber={index + 1}
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+            scale={scale} 
+          />
+        ))}
+           {/* {Array.apply(null, Array(numPages))
           .map((x, i) => i + 1)
           .map((page) => {
             return (
@@ -50,7 +60,7 @@ const ShowEbook = ({ data }: Props) => {
                 renderAnnotationLayer={false}
               />
             );
-          })}
+          })} */}
           {/* <Page
             pageNumber={pageNumber}
             scale={scale}
