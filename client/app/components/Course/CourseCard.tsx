@@ -29,7 +29,7 @@ const CourseCard: FC<Props> = ({ item, isProfile }) => {
 
         <br />
         <div className="px-3">
-          <h1 className="mb-2 text-[18] font-[700] text-[#000000] dark:text-white truncate ... font-poppins leading-5">
+          <h1 className="mb-2 text-[18px] font-[700] text-[#000000] dark:text-white truncate ... font-poppins">
             {item.name.slice(0, 20)}
             {/* <span><BiDotsHorizontal/> </span> */}
             {/* Slice the name to display first 20 characters */}

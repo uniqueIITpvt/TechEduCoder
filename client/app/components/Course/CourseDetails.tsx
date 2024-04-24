@@ -223,7 +223,7 @@ const CourseDetails = ({
                   <h3 className=" text-[18px] text-black dark:text-white font-[700] font-poppins mx-3 ">
                     {data.originalPrice === 0
                       ? "Free"
-                      : "₹" + data.discountPrice}{" "}
+                      : "₹" + data.discountPrice.toFixed(2)}{" "}
                   </h3>
                   <p className="text-[20px] line-through opacity-60 text-red-400 dark:text-white mx-3">
                     {data.originalPrice === 0 ? " " : "₹" + data.originalPrice}
