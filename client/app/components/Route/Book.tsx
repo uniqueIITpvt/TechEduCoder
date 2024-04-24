@@ -47,8 +47,16 @@ const Book = (props: Props) => {
           <EbookCard key={item.id} item={item} />
         ))}
       </div>
-      <Link href={`/ebook`} className="absolute bottom-60  z-9999 right-10  hover:translate-x-2 hover:translate-y- transition duration-300"><IoIosArrowDroprightCircle  size={50}/></Link>
+      {/* <Link href={`/ebook`} className="absolute bottom-60  z-9999 right-10  hover:translate-x-2 hover:translate-y- transition duration-300"><IoIosArrowDroprightCircle  size={50}/></Link> */}
      
+      {ebooks.length > 4 && (
+          <Link
+            href={`/ebook`}
+            className="absolute bottom-40 z-9999 right-10 hover:translate-x hover:translate-x-1 transition duration-300 hidden md:inline-block"
+          >
+            <IoIosArrowDroprightCircle size={50} />
+          </Link>
+        )}
       </div>
 
     </div>

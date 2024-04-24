@@ -12,9 +12,11 @@ const Courses = (props: Props) => {
 
   useEffect(() => {
     if (data) {
-      // const filteredCourses = data?.courses.filter(item => !item.isEvent);
-      // console.log(filteredCourses); // Check the filtered array
-      setCourses(data?.courses);
+      const filteredCourses = data?.courses.filter(
+        (course: any) => !course.isEvent
+      );
+      // console.log(filteredCourses);
+      setCourses(filteredCourses);
     }
   }, [data]);
 
@@ -47,12 +49,14 @@ const Courses = (props: Props) => {
               // you must return null or undefined
             })}
         </div>
-        <Link
-          href={`/courses`}
-          className="absolute bottom-40  z-9999 right-10  hover:translate-x hover:translate-x-1 transition duration-300"
-        >
-          <IoIosArrowDroprightCircle size={50} />
-        </Link>
+        {courses.length > 4 && (
+          <Link
+            href={`/courses`}
+            className="absolute bottom-40 z-9999 right-10 hover:translate-x hover:translate-x-1 transition duration-300 hidden md:inline-block"
+          >
+            <IoIosArrowDroprightCircle size={50} />
+          </Link>
+        )}
       </div>
     </div>
   );
