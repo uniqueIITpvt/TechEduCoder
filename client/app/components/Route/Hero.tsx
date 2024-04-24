@@ -33,7 +33,7 @@ const Hero: FC<Props> = (props) => {
           </Carousel>
 
           <div className="absolute bottom-0 left-0 top-0 h-full w-[60%] bg-gradient-to-r from-sky-500 md:pt-10 pl-2 md:pl-0">
-            <h1 className="text-white text-[20px]  leading-7 pl-8 md:pt-5 pt-2 font-[700] xl:pt-20 xl:pl-16  lg:text-[40px] lg:pl-10    md:text-[25px]  md:pl-4   sm:ml-[30px] sm:pl-[10px] sm:mb-[10px sm:font-[700]]   ">
+            <h1 className="text-white text-[20px]  leading-7 md:leading-normal pl-8 md:pt-5 pt-2 font-[700] xl:pt-20 xl:pl-16  lg:text-[40px] lg:pl-10    md:text-[25px]  md:pl-4   sm:ml-[30px] sm:pl-[10px] sm:mb-[10px sm:font-[700]]   ">
               Upgrade your learning <br /> Skills & Upgrade your life
             </h1>
             {/* Hidden on mobile, visible on md screens and up */}
@@ -52,7 +52,7 @@ const Hero: FC<Props> = (props) => {
               </div>
               <div className="p-2 md:p-3">
                 <Link
-                  href={``}
+                  href={`/`}
                   className="hidden md:inline-flex bg-gradient-to-r from-blue-500 to-[#521088] items-center justify-center md:justify-start px-4 py-2 md:px-5 md:py-4 text-[17px] md:text-[18px] font-[500] text-center text-white rounded-lg hover:bg-gradient-to-br hover:text-white transition-all ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300"
                 >
                   Start Learning
