@@ -21,10 +21,9 @@ const ShowEbook = ({ data }: Props) => {
   }
 
   return (
-
-    < >
+    <>
       <div className="flex flex-col items-center w-full bg-black border-2 sm:flex-col sm:items-center sm:justify-start ">
-      <ControlPdf
+        <ControlPdf
           scale={scale}
           setScale={setScale}
           numPages={numPages}
@@ -34,23 +33,22 @@ const ShowEbook = ({ data }: Props) => {
         />
       </div>
       <div className="flex flex-col items-center w-full bg-black border-2  p-4 sm:flex-col sm:items-center sm:justify-start ">
-       
         <Document
           className=" border-2 border-red-400 bg-black"
           file={data.ebookpdf.url}
           onLoadSuccess={onDocumentLoadSuccess}
         >
-
-{Array.from(new Array(numPages), (el, index) => (
-          <Page
-            key={`page_${index + 1}`}
-            pageNumber={index + 1}
-            renderTextLayer={false}
-            renderAnnotationLayer={false}
-            scale={scale} 
-          />
-        ))}
-           {/* {Array.apply(null, Array(numPages))
+          {Array.from(new Array(numPages), (el, index) => (
+            <Page
+            className={`p-4`}
+              key={`page_${index + 1}`}
+              pageNumber={index + 1}
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+              scale={scale}
+            />
+          ))}
+          {/* {Array.apply(null, Array(numPages))
           .map((x, i) => i + 1)
           .map((page) => {
             return (
@@ -69,11 +67,8 @@ const ShowEbook = ({ data }: Props) => {
           /> */}
         </Document>
       </div>
-  
-  
     </>
-  
-    );
+  );
 };
 
 export default ShowEbook;
