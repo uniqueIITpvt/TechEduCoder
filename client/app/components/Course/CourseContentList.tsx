@@ -11,8 +11,9 @@ type Props = {
 
 const CourseContentList: FC<Props> = (props) => {
   const [visibleSections, setVisibleSections] = useState<Set<string>>(
-    new Set<string>()
+    new Set<string>(props.data?.length > 0 ? [props.data[0].videoSection] : [])
   );
+  
 
   // Find unique video sections
   const videoSections: string[] = [
