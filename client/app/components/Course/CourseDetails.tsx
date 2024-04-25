@@ -3,18 +3,17 @@ import CoursePlayer from "@/app/utils/CoursePlayer";
 import Ratings from "@/app/utils/Ratings";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { IoCheckmarkDoneOutline, IoCloseOutline } from "react-icons/io5";
+import {  IoCloseOutline } from "react-icons/io5";
 import { format } from "timeago.js";
 import CourseContentList from "../Course/CourseContentList";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckOutForm from "../Payment/CheckOutForm";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import Image from "next/image";
-import { VscVerifiedFilled } from "react-icons/vsc";
 import { IoIosShareAlt } from "react-icons/io";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { SiLevelsdotfyi } from "react-icons/si";
-import { FaGraduationCap } from "react-icons/fa";
+import { FaGraduationCap, FaMinus, FaPlus } from "react-icons/fa";
 import { MdOutlineWatchLater } from "react-icons/md";
 import { RxUpdate } from "react-icons/rx";
 import { AiOutlineUnorderedList } from "react-icons/ai";
@@ -37,6 +36,8 @@ const CourseDetails = ({
   const { data: userData, refetch } = useLoadUserQuery(undefined, {});
   const [user, setUser] = useState<any>();
   const [open, setOpen] = useState(false);
+  const [showMore, setShowMore] = useState(false);
+  const [readMore, setReadMore] = useState(false);
   const [activeBar, setactiveBar] = useState(0);
 
   useEffect(() => {
@@ -71,15 +72,15 @@ const CourseDetails = ({
 
   return (
     <div className=" w-full ">
-      <div className="w-[90%] m-auto mt-20 mb-10 ">
+      <div className="w-[90%] m-auto mt-10 mb-5 ">
         <div className="w-full  ">
           <div className="">
             {" "}
-            <h1 className="text-[26px] font-[700] font-poppins  leading-6  m-2 mb-10 truncate...">
+            <h1 className="text-[26px] font-[700] font-poppins   m-2 mb-10 truncate...">
               {data.name}
             </h1>
           </div>
-          <div className="flex justify-between font-poppins leading-6">
+          <div className="flex justify-between font-poppins ">
             <h3 className="m-2 text-[14px] font-poppins font-[400]">
               <span className="text-slate-700">category: </span>{" "}
               <Link href={``}>{data.categories}</Link>
@@ -112,7 +113,7 @@ const CourseDetails = ({
             <div className=" mb-10">
               <CoursePlayer videoUrl={data?.demoUrl} title={data?.title} />
             </div>
-            <div className="w-full p-4  flex items-center justify-start  border-b-2 border-[#e4e6ee]  backdrop-blur shadow-[bg-slate-700]  rounded shadow-inner">
+            <div className="w-full p-4  text-[17px] flex items-center justify-start  border-b-2 border-[#e4e6ee]  backdrop-blur shadow-[bg-slate-700]  rounded shadow-inner">
               {["Overview", "Reviews"].map((text, index) => (
                 <h5
                   key={index}
@@ -133,9 +134,28 @@ const CourseDetails = ({
                   <h1 className="text-[26px] font-[700] leading-7 dark:text-white text-black font-poppins">
                     About Course{" "}
                   </h1>
-                  <h2 className="text-[17px] font-poppins  font-[500] mt-5 dark:text-white   text-black leading-7">
-                    {data.description}
+                  <h2 className="text-[17px] font-poppins  font-[500] mt-5 dark:text-white   text-black ">
+                    {/* {data.description} */}
+                    {showMore
+                      ? data.description
+                      : `${data.description.substring(0, 250)}...`}
+                    <br />
                   </h2>
+                  <button
+                    className=" text-blue-600 font-medium text-[18px] flex  items-center justify-center  "
+                    onClick={() => setShowMore(!showMore)}
+                  >
+                    {" "}
+                    {showMore ? (
+                        <>
+                          <FaMinus className="mr-2" /> Read less
+                        </>
+                      ) : (
+                        <>
+                          <FaPlus className="mr-2" /> Read more
+                        </>
+                      )}
+                  </button>
                 </div>
                 <div className="w-full mt-7">
                   <h1 className="text-[26px] font-[700] leading-7 dark:text-white text-black font-poppins">
@@ -143,23 +163,50 @@ const CourseDetails = ({
                   </h1>
 
                   <div className="text-[17px] font-poppins  font-[400] mt-5 dark:text-white   text-black leading-7 ">
-                    {data.benefits?.map((item: any, index: number) => (
-                      <div
-                        className="w-full flex py-2"
-                        key={index}
-                      >
-                        <div className="w-[15px] mr-1">
-                          <GoDotFill
-                            size={20}
-                            className="text-black dark:text-white"
-                          />
-                        </div>
-                        <p className="pl-2 text-black dark:text-white">
-                          {item.title}
-                        </p>
-                      </div>
-                    ))}
-                    <br />
+                    {readMore
+                      ? data.benefits?.map((item: any, index: number) => (
+                          <div className="w-full flex py-2" key={index}>
+                            <div className="w-[15px] mr-1">
+                              <GoDotFill
+                                size={20}
+                                className="text-black dark:text-white"
+                              />
+                            </div>
+                            <p className="pl-2 text-black dark:text-white">
+                              {item.title}
+                            </p>
+                          </div>
+                        ))
+                      : data.benefits
+                          ?.slice(0, 2)
+                          .map((item: any, index: number) => (
+                            <div className="w-full flex py-2" key={index}>
+                              <div className="w-[15px] mr-1">
+                                <GoDotFill
+                                  size={20}
+                                  className="text-black dark:text-white"
+                                />
+                              </div>
+                              <p className="pl-2 text-black dark:text-white">
+                                {item.title}
+                              </p>
+                            </div>
+                          ))}
+
+                    <button
+                      className="text-blue-600 font-medium text-[18px] ml-8  flex items-center justify-center"
+                      onClick={() => setReadMore(!readMore)}
+                    >
+                      {readMore ? (
+                        <>
+                          <FaMinus className="mr-2" /> Read less
+                        </>
+                      ) : (
+                        <>
+                          <FaPlus /> Read more
+                        </>
+                      )}
+                    </button>
                   </div>
                   <div className="w-full ">
                     <h1 className="text-[27px] font-Poppins font-[700] text-black dark:text-white ">
@@ -171,49 +218,53 @@ const CourseDetails = ({
               </div>
             )}
             {activeBar === 1 && (
-              <div>
-                {(data?.reviews && [...data.reviews].reverse()).map(
-                  (item: any, index: number) => (
-                    <div className="w-full pb-4" key={index}>
-                      <div className="flex">
-                        <div className="w-[50px] h-[50px]">
-                          <Image
-                            src={
-                              item.user.avatar
-                                ? item.user.avatar.url
-                                : "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"
-                            }
-                            width={50}
-                            height={50}
-                            alt=""
-                            className="w-[50px] h-[50px] rounded-full object-cover"
-                          />
-                        </div>
-                        <div className="hidden 800px:block pl-2">
-                          <div className="flex items-center">
-                            <h5 className="text-[18px] pr-2 text-black dark:text-white">
-                              {item.user.name}
-                            </h5>
-                            <Ratings rating={item.rating} />
-                          </div>
-                          <p className="text-black dark:text-white">
-                            {item.comment}
-                          </p>
-                          <small className="text-[#000000d1] dark:text-[#ffffff83]">
-                            {format(item.createdAt)} •
-                          </small>
-                        </div>
-                        <div className="pl-2 flex 800px:hidden items-center">
-                          <h5 className="text-[18px] pr-2 text-black dark:text-white">
-                            {item.user.name}
-                          </h5>
-                          <Ratings rating={item.rating} />
-                        </div>
-                      </div>
-                    </div>
-                  )
-                )}
-              </div>
+             <div>
+             {data?.reviews?.length === 0 ? (
+               <p className="text-black dark:text-white items-center mt-10 ml-20  font-sans font-[600] text-[20px] ">No reviews given.</p>
+
+             ) : (
+               [...data.reviews].reverse().map((item: any, index: number) => (
+                 <div className="w-full pb-4" key={index}>
+                   <div className="flex">
+                     <div className="w-[50px] h-[50px]">
+                       <Image
+                         src={
+                           item.user.avatar
+                             ? item.user.avatar.url
+                             : "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"
+                         }
+                         width={50}
+                         height={50}
+                         alt=""
+                         className="w-[50px] h-[50px] rounded-full object-cover"
+                       />
+                     </div>
+                     <div className="hidden 800px:block pl-2">
+                       <div className="flex items-center">
+                         <h5 className="text-[18px] pr-2 text-black dark:text-white">
+                           {item.user.name}
+                         </h5>
+                         <Ratings rating={item.rating} />
+                       </div>
+                       <p className="text-black dark:text-white">
+                         {item.comment}
+                       </p>
+                       <small className="text-[#000000d1] dark:text-[#ffffff83]">
+                         {format(item.createdAt)} •
+                       </small>
+                     </div>
+                     <div className="pl-2 flex 800px:hidden items-center">
+                       <h5 className="text-[18px] pr-2 text-black dark:text-white">
+                         {item.user.name}
+                       </h5>
+                       <Ratings rating={item.rating} />
+                     </div>
+                   </div>
+                 </div>
+               ))
+             )}
+           </div>
+           
             )}
           </div>
           <div className="lg:col-span-1 ">
@@ -317,12 +368,14 @@ const CourseDetails = ({
                   className="w-full flex  py-2  font-[400] text-[17px]"
                   key={index}
                 >
-                 <div><GoDotFill
+                  <div>
+                    <GoDotFill
                       size={20}
                       className="text-black dark:text-white mt-1"
-                    /></div>
+                    />
+                  </div>
                   <p className="pl-2 text-black dark:text-white flex item-center justify-center">
-                   {item.title}
+                    {item.title}
                   </p>
                 </div>
               ))}

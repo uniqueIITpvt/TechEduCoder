@@ -1,6 +1,6 @@
 import { styles } from "@/app/styles/style";
 import React, { FC } from "react";
-import {AiOutlinePlusCircle} from "react-icons/ai";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 import { toast } from "react-hot-toast";
 
 type Props = {
@@ -20,7 +20,6 @@ const CourseData: FC<Props> = ({
   active,
   setActive,
 }) => {
-
   const handleBenefitChange = (index: number, value: any) => {
     const updatedBenefits = [...benefits];
     updatedBenefits[index].title = value;
@@ -43,16 +42,18 @@ const CourseData: FC<Props> = ({
 
   const prevButton = () => {
     setActive(active - 1);
-  }
+  };
 
   const handleOptions = () => {
-    if (benefits[benefits.length - 1]?.title !== "" && prerequisites[prerequisites.length - 1]?.title !== "") {
+    if (
+      benefits[benefits.length - 1]?.title !== "" &&
+      prerequisites[prerequisites.length - 1]?.title !== ""
+    ) {
       setActive(active + 1);
-    } else{
-        toast.error("Please fill the fields for go to next!")
+    } else {
+      toast.error("Please fill the fields for go to next!");
     }
   };
-  
 
   return (
     <div className="w-[80%] m-auto mt-24 block">
@@ -81,7 +82,7 @@ const CourseData: FC<Props> = ({
 
       <div>
         <label className={`${styles.label} text-[20px]`} htmlFor="email">
-Materials Incluuded in this course 
+          Materials Incluuded in this course
         </label>
         <br />
         {prerequisites.map((prerequisites: any, index: number) => (
@@ -98,12 +99,11 @@ Materials Incluuded in this course
         ))}
         <AiOutlinePlusCircle
           style={{ margin: "10px 0px", cursor: "pointer", width: "30px" }}
-
           onClick={handleAddPrerequisites}
         />
       </div>
       <div className="w-full flex items-center justify-between">
-      <div
+        <div
           className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
           onClick={() => prevButton()}
         >

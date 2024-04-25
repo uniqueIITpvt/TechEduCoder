@@ -32,9 +32,12 @@ const CourseContentList: FC<Props> = (props) => {
   };
 
   return (
-    <div className={`mt-[15px] w-full ${!props.isDemo && 'ml-[-30px] min-h-screen sticky top-24 left-0 z-30'}`}>
+    <div
+      className={`mt-[15px] w-full ${
+        !props.isDemo && "ml-[-30px] min-h-screen sticky top-24 left-0 z-30"
+      } border-[1px]  border-neutral-500`}
+    >
       {videoSections.map((section: string, sectionIndex: number) => {
-
         const isSectionVisible = visibleSections.has(section);
 
         // Filter videos by section
@@ -53,32 +56,42 @@ const CourseContentList: FC<Props> = (props) => {
         const sectionContentHours: number = sectionVideoLength / 60;
 
         return (
-          <div className={` ${!props.isDemo && 'border-b border-[#f1caca1c] rounded-lg dark:border-[#ffffff8e] pb-2'}`} key={section}>
-            <div className="w-full flex ">
+          <div
+            className={` ${
+              !props.isDemo &&
+              "border-b border-[#f1caca1c] rounded-lg dark:border-[#ffffff8e] "
+            }  bg-[#f7f9fa]`}
+            key={section}
+          >
+            <div className="w-full flex  p-2 border-[1px] border-b-neutral-500 ">
               {/* Render video section */}
-              <div className="w-full flex justify-between items-center"
-              >
-                <h2 className="text-[27px] font-[600] text-black dark:text-white">{section}</h2>
-                <button
-                  className="mr-4 cursor-pointer text-black dark:text-white"
-                  onClick={() => toggleSection(section)}
-                >
-                  {isSectionVisible ? (
-                    <BsChevronUp size={20} />
-                  ) : (
-                    <BsChevronDown size={20} />
-                  )}
-                </button>
+              <div className="w-full flex justify-between items-center  ">
+                <div className="flex">
+                  <button
+                    className="mr-4 cursor-pointer text-black dark:text-white"
+                    onClick={() => toggleSection(section)}
+                  >
+                    {isSectionVisible ? (
+                      <BsChevronUp size={20} />
+                    ) : (
+                      <BsChevronDown size={20} />
+                    )}
+                  </button>
+                  <h2 className="text-[16px] font-[600] text-black dark:text-white  ">
+                    {section}
+                  </h2>
+                </div>
+
+                <h5 className="text-black dark:text-white font-[500] text-[17px] font-poppins">
+                  {sectionVideoCount} Lessons ·{" "}
+                  {sectionVideoLength < 60
+                    ? sectionVideoLength
+                    : sectionContentHours.toFixed(2)}{" "}
+                  {sectionVideoLength > 60 ? "hours" : "minutes"}
+                </h5>
               </div>
             </div>
-            <h5 className="text-black dark:text-white font-[500] text-[17px] font-poppins">
-              {sectionVideoCount} Lessons ·{" "}
-              {sectionVideoLength < 60
-                ? sectionVideoLength
-                : sectionContentHours.toFixed(2)}{" "}
-              {sectionVideoLength > 60 ? "hours" : "minutes"}
-            </h5>
-            <br />
+
             {isSectionVisible && (
               <div className="w-full">
                 {sectionVideos.map((item: any, index: number) => {
@@ -86,17 +99,21 @@ const CourseContentList: FC<Props> = (props) => {
                   const contentLength: number = item.videoLength / 60;
                   return (
                     <div
-                      className={`w-full ${
-                        videoIndex === props.activeVideo ? "bg-slate-100 hover:text-blue-600" : ""
+                      className={`w-full  flex   justify-between  bg-white ${
+                        videoIndex === props.activeVideo
+                          ? "bg-slate-100 hover:text-blue-600"
+                          : ""
                       } cursor-pointer  rounded-lg p-2`}
                       key={item._id}
-                      onClick={() => props.isDemo ? null : props?.setActiveVideo(videoIndex)}
+                      onClick={() =>
+                        props.isDemo ? null : props?.setActiveVideo(videoIndex)
+                      }
                     >
                       <div className="flex items-start ">
                         <div>
                           <MdOutlineOndemandVideo
-                            size={25}
-                            className="mr-2"
+                            size={20}
+                            className="mr-2 mt-1"
                             color="#1cdada"
                           />
                         </div>
@@ -105,7 +122,9 @@ const CourseContentList: FC<Props> = (props) => {
                         </h1>
                       </div>
                       <h5 className="pl-8 text-black dark:text-white">
-                        {item.videoLength > 60 ? contentLength.toFixed(2) : item.videoLength}{" "}
+                        {item.videoLength > 60
+                          ? contentLength.toFixed(2)
+                          : item.videoLength}{" "}
                         {item.videoLength > 60 ? "hours" : "minutes"}
                       </h5>
                     </div>
