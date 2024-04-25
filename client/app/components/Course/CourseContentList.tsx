@@ -101,10 +101,10 @@ const CourseContentList: FC<Props> = (props) => {
                   const contentLength: number = item.videoLength / 60;
                   return (
                     <div
-                      className={`w-full  flex   justify-between  bg-white ${
+                      className={`w-full  flex   justify-between  ${
                         videoIndex === props.activeVideo
                           ? "bg-neutral-300"
-                          : ""
+                          : "bg-white "
                       } cursor-pointer p-2 hover:bg-neutral-300`}
                       key={item._id}
                       onClick={() =>
