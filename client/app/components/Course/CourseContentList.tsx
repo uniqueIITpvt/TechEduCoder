@@ -31,6 +31,7 @@ const CourseContentList: FC<Props> = (props) => {
     }
     setVisibleSections(newVisibleSections);
   };
+  
 
   return (
     <div
@@ -60,7 +61,7 @@ const CourseContentList: FC<Props> = (props) => {
           <div
             className={` ${
               !props.isDemo &&
-              "border-b border-[#f1caca1c] rounded-lg dark:border-[#ffffff8e] "
+              "border-b  rounded-lg  dark:border-[#ffffff8e] "
             }  bg-[#f7f9fa]`}
             key={section}
           >
@@ -102,9 +103,9 @@ const CourseContentList: FC<Props> = (props) => {
                     <div
                       className={`w-full  flex   justify-between  bg-white ${
                         videoIndex === props.activeVideo
-                          ? "bg-slate-100 hover:text-blue-600"
+                          ? "bg-neutral-300"
                           : ""
-                      } cursor-pointer  rounded-lg p-2`}
+                      } cursor-pointer p-2 hover:bg-neutral-300`}
                       key={item._id}
                       onClick={() =>
                         props.isDemo ? null : props?.setActiveVideo(videoIndex)
@@ -119,7 +120,7 @@ const CourseContentList: FC<Props> = (props) => {
                           />
                         </div>
                         <h1 className="text-[17px] inline-block break-words text-black dark:text-white  font-poppins font-[500]">
-                          {item.title}
+                          {item.title.slice(0, 14)}
                         </h1>
                       </div>
                       <h5 className="pl-8 text-black dark:text-white">
