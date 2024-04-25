@@ -32,7 +32,7 @@ app.use(cookieParser());
 //   })
 // );
 app.use(cors({
-  origin: ["https://tech-edu-coder-client.vercel.app ,http://localhost:3000"],
+  origin: ["https://tech-edu-coder-client.vercel.app"],
   methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
   credentials: true,
 }));
