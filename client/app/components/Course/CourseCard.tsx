@@ -13,11 +13,11 @@ type Props = {
 
 const CourseCard: FC<Props> = ({ item, isProfile }) => {
   return (
-    <div className="w-full  bg-white dark:bg-slate-500 dark:bg-opacity-20 backdrop-blur border dark:border-[#ffffff1d] border-[#00000015] dark:shadow-[bg-slate-700] rounded-md  shadow-2xl dark:shadow-inner  hover:-translate-y-1 hover:scale-70  duration-200">
+    <div className="w-full  bg-white dark:bg-slate-500 dark:bg-opacity-20 backdrop-blur border dark:border-[#ffffff1d] border-[#00000015] dark:shadow-[bg-slate-700] rounded-md  shadow-md dark:shadow-inner  hover:-translate-y-1 hover:scale-70  duration-200">
       <Link
         href={!isProfile ? `/course/${item._id}` : `course-access/${item._id}`}
       >
-        <div className="h-[9rem] overflow-hidden">
+        <div className="h-[9rem] overflow-hidden rounded-md">
           <Image
             src={item.thumbnail.url}
             width={500}
@@ -26,10 +26,8 @@ const CourseCard: FC<Props> = ({ item, isProfile }) => {
             alt=""
           />
         </div>
-
-        <br />
-        <div className="px-3">
-          <h1 className="mb-2 text-[18px] font-[700] text-[#000000] dark:text-white truncate ... font-poppins">
+        <div className="px-3 pt-[0.5rem]">
+          <h1 className="mb-2 text-[20px] font-[600] hover:text-blue-600 opacity-90 text-[#000000] dark:text-white truncate ... font-poppins">
             {item.name.slice(0, 20)}
             {/* <span><BiDotsHorizontal/> </span> */}
             {/* Slice the name to display first 20 characters */}
@@ -49,7 +47,7 @@ const CourseCard: FC<Props> = ({ item, isProfile }) => {
               <h3 className="text-black dark:text-[#fff] font-poppins font-[700] text-[15px] ">
                 {item.originalPrice === 0 ? "Free" : "₹ " + item.discountPrice.toFixed(2)}
               </h3>
-              <h5 className="pl-2 text-[15px] mt-[-5px] line-through opacity-80  dark:text-[#fff] text-red-600">
+              <h5 className="pl-2 text-[18px] mt-[-5px] line-through opacity-80  dark:text-[#fff] text-red-600">
                 {item.originalPrice === 0 ? " " : "₹ " + item.originalPrice.toFixed(2)}
               </h5>
             </div>

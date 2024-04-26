@@ -247,8 +247,8 @@ const CourseContentMedia = ({
             key={index}
             className={`800px:text-[20px] cursor-pointer ${
               activeBar === index
-                ? "text-red-500"
-                : "dark:text-white text-black"
+                ? "text-blue-500"
+                : "dark:text-white text-black opacity-80"
             }`}
             onClick={() => setactiveBar(index)}
           >

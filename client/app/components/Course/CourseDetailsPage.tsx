@@ -34,8 +34,7 @@ const CourseDetailsPage = ({ id }: Props) => {
     }
     if (data && userData?.user) {
       const amount = Math.round(data.course.discountPrice * 100);
-      console.log(amount);
-      console.log(data)
+      
       createPaymentIntent(amount);
     }
   }, [config, data, userData]);

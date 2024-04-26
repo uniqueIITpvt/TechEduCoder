@@ -36,7 +36,7 @@ const CourseContentList: FC<Props> = (props) => {
     <div
       className={`mt-[15px] w-full ${
         !props.isDemo && "ml-[-30px] min-h-screen sticky top-24 left-0 z-30"
-      } border-[1px]  border-neutral-500`}
+      } border-[1px]  border-neutral-500 rounded-md`}
     >
       {videoSections.map((section: string, sectionIndex: number) => {
         const isSectionVisible = visibleSections.has(section);
