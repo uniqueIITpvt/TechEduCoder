@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+import { IoLockClosedOutline } from "react-icons/io5";
 import { MdOutlineOndemandVideo } from "react-icons/md";
 
 type Props = {
@@ -13,7 +14,6 @@ const CourseContentList: FC<Props> = (props) => {
   const [visibleSections, setVisibleSections] = useState<Set<string>>(
     new Set<string>(props.data?.length > 0 ? [props.data[0].videoSection] : [])
   );
-  
 
   // Find unique video sections
   const videoSections: string[] = [
@@ -31,7 +31,6 @@ const CourseContentList: FC<Props> = (props) => {
     }
     setVisibleSections(newVisibleSections);
   };
-  
 
   return (
     <div
@@ -60,8 +59,7 @@ const CourseContentList: FC<Props> = (props) => {
         return (
           <div
             className={` ${
-              !props.isDemo &&
-              "border-b  rounded-lg  dark:border-[#ffffff8e] "
+              !props.isDemo && "border-b  rounded-lg  dark:border-[#ffffff8e] "
             }  bg-[#f7f9fa]`}
             key={section}
           >
@@ -123,12 +121,16 @@ const CourseContentList: FC<Props> = (props) => {
                           {item.title.slice(0, 14)}
                         </h1>
                       </div>
-                      <h5 className="pl-8 text-black dark:text-white">
-                        {item.videoLength > 60
+                      <div className={` text-black dark:text-white flex  ${props.isDemo? "flex items-center justify-center":""}`}>
+                      <h2>  {item.videoLength > 60
                           ? contentLength.toFixed(2)
-                          : item.videoLength}{" "}
-                        {item.videoLength > 60 ? "hours" : "minutes"}
-                      </h5>
+                          : item.videoLength.toFixed(2)}{" "}</h2>
+                        <p className={`${props.isDemo? "px-5": "px-3"}`}>{props.isDemo
+                          ? <IoLockClosedOutline  size={20}/>
+                          : item.videoLength > 60
+                          ? "hours"
+                          : "minutes"}</p>
+                      </div>
                     </div>
                   );
                 })}

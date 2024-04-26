@@ -38,6 +38,7 @@ const CourseDetails = ({
   const [open, setOpen] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [readMore, setReadMore] = useState(false);
+  const [seeMore , setSeeMore] = useState(false)
   const [activeBar, setactiveBar] = useState(0);
 
   useEffect(() => {
@@ -76,13 +77,13 @@ const CourseDetails = ({
         <div className="w-full  ">
           <div className="">
             {" "}
-            <h1 className="text-[26px] font-[700] font-poppins   m-2 mb-10 truncate...">
+            <h1 className="text-[26px] font-[700] font-poppins">
               {data.name}
             </h1>
           </div>
-          <div className="flex justify-between font-poppins ">
-            <h3 className="m-2 text-[14px] font-poppins font-[400]">
-              <span className="text-slate-700">category: </span>{" "}
+          <div className="flex justify-between font-poppins  w-[98%] items-start ">
+            <h3 className="m-2 text-[17px] font-poppins font-[500] items-start">
+              <span className="text-slate-400">category: </span>{" "}
               <Link href={``}>{data.categories}</Link>
             </h3>
             <div className="flex justify-between">
@@ -194,7 +195,7 @@ const CourseDetails = ({
                           ))}
 
                     <button
-                      className="text-blue-600 font-medium text-[18px] ml-8  flex items-center justify-center"
+                      className="text-blue-600 font-medium text-[18px]   flex items-center justify-center"
                       onClick={() => setReadMore(!readMore)}
                     >
                       {readMore ? (
@@ -203,7 +204,7 @@ const CourseDetails = ({
                         </>
                       ) : (
                         <>
-                          <FaPlus /> Read more
+                          <FaPlus className="mr-2" /> Read more
                         </>
                       )}
                     </button>
@@ -269,27 +270,27 @@ const CourseDetails = ({
           </div>
           <div className="lg:col-span-1 ">
             <div className="w-[80%] m-auto shadow-md rounded-xl ">
-              <div className=" w-full  border bg-[#d5e5fd] flex  flex-col  items-center p-16 rounded-t-xl">
-                <div className="  inline-flex ">
-                  <h3 className=" text-[18px] text-black dark:text-white font-[700] font-poppins mx-3 ">
+              <div className=" w-full  border bg-[#eaf0fa] flex  flex-col  justify-center items-center pt-16 pb-16 rounded-t-xl">
+                <div className="  flex  w-[70%] items-center  justify-between ">
+                  <h3 className=" text-[24px] text-black dark:text-white font-[700] font-poppins mx-3 ">
                     {data.originalPrice === 0
                       ? "Free"
                       : "₹" + data.discountPrice.toFixed(2)}{" "}
                   </h3>
-                  <p className="text-[20px] line-through opacity-60 text-red-400 dark:text-white mx-3">
+                  <p className="text-[16px] line-through opacity-80 text-[#383a3b] font-[600] dark:text-white mx-3">
                     {data.originalPrice === 0 ? " " : "₹" + data.originalPrice}
                   </p>
 
-                  <p className="text-[16px] text-[#3539fa] dark:text-white  font-[500] ">
+                  <p className="text-[16px] text-[#36393b] dark:text-white  font-[500] ">
                     {data.originalPrice === 0
                       ? ""
                       : discountPercentengePrice + "% Off"}
                   </p>
                 </div>
-                <div className="flex items-center mt-5">
+                <div className="flex items-center mt-5  w-[70%] ">
                   {isPurchased ? (
                     <Link
-                      className={`${styles.button}`}
+                      className={`${styles.button} !w-full !items-center !justify-center`}
                       // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
                       href={`/course-access/${data._id}`}
                     >
@@ -297,7 +298,7 @@ const CourseDetails = ({
                     </Link>
                   ) : (
                     <div
-                      className={`${styles.button}`}
+                      className={`${styles.button} !w-full !items-center !justify-center`}
                       // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
                       onClick={handleOrder}
                     >
@@ -363,7 +364,22 @@ const CourseDetails = ({
               <h1 className="text-[27px] font-[700]  dark:text-white text-black font-poppins m-4">
                 Materials Included?{" "}
               </h1>
-              {data.prerequisites?.map((item: any, index: number) => (
+              {seeMore ? data.prerequisites?.map((item: any, index: number) => (
+                <div
+                  className="w-full flex  py-2  font-[400] text-[17px]"
+                  key={index}
+                >
+                  <div>
+                    <GoDotFill
+                      size={20}
+                      className="text-black dark:text-white mt-1"
+                    />
+                  </div>
+                  <p className="pl-2 text-black dark:text-white flex item-center justify-center">
+                    {item.title}
+                  </p>
+                </div>
+              )):data.prerequisites?.slice(0,2).map((item: any, index: number) => (
                 <div
                   className="w-full flex  py-2  font-[400] text-[17px]"
                   key={index}
@@ -379,6 +395,20 @@ const CourseDetails = ({
                   </p>
                 </div>
               ))}
+                  <button
+                      className="text-blue-600 font-medium text-[18px] ml-8  flex items-center justify-center"
+                      onClick={() => setSeeMore(!seeMore)}
+                    >
+                      {seeMore ? (
+                        <>
+                          <FaMinus className="mr-2" /> Read less
+                        </>
+                      ) : (
+                        <>
+                          <FaPlus  className="mr-2"/> Read more
+                        </>
+                      )}
+                    </button>
             </div>
           </div>
         </div>
