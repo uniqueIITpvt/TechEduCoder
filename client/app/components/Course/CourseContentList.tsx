@@ -77,12 +77,12 @@ const CourseContentList: FC<Props> = (props) => {
                       <BsChevronDown size={20} />
                     )}
                   </button>
-                  <h2 className="text-[16px] font-[600] text-black dark:text-white  ">
+                  <h2 className="text-[17px] font-[600] text-black dark:text-white  opacity-80 ">
                     {section}
                   </h2>
                 </div>
 
-                <h5 className="text-black dark:text-white font-[500] text-[17px] font-poppins">
+                <h5 className="text-black dark:text-white font-[500] text-[17px] font-poppins opacity-80">
                   {sectionVideoCount} Lessons ·{" "}
                   {sectionVideoLength < 60
                     ? sectionVideoLength
@@ -103,7 +103,7 @@ const CourseContentList: FC<Props> = (props) => {
                         videoIndex === props.activeVideo
                           ? "bg-neutral-300"
                           : "bg-white "
-                      } cursor-pointer p-2 hover:bg-neutral-300`}
+                      } cursor-pointer p-2 hover:bg-neutral-300 text-black opacity-90`}
                       key={item._id}
                       onClick={() =>
                         props.isDemo ? null : props?.setActiveVideo(videoIndex)
@@ -113,11 +113,11 @@ const CourseContentList: FC<Props> = (props) => {
                         <div>
                           <MdOutlineOndemandVideo
                             size={20}
-                            className="mr-2 mt-1"
-                            color="#1cdada"
+                            className="mr-2 mt-1 opacity-70"
+                       
                           />
                         </div>
-                        <h1 className="text-[17px] inline-block break-words text-black dark:text-white  font-poppins font-[500]">
+                        <h1 className="text-[17px] inline-block break-words text-black dark:text-white  font-poppins font-[500] opacity-80">
                           {item.title.slice(0, 14)}
                         </h1>
                       </div>
@@ -125,7 +125,7 @@ const CourseContentList: FC<Props> = (props) => {
                       <h2>  {item.videoLength > 60
                           ? contentLength.toFixed(2)
                           : item.videoLength.toFixed(2)}{" "}</h2>
-                        <p className={`${props.isDemo? "px-5": "px-3"}`}>{props.isDemo
+                        <p className={` opacity-60 ${props.isDemo? "px-5 ": "px-3"}`}>{props.isDemo
                           ? <IoLockClosedOutline  size={20}/>
                           : item.videoLength > 60
                           ? "hours"

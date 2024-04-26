@@ -18,6 +18,7 @@ import { MdOutlineWatchLater } from "react-icons/md";
 import { RxUpdate } from "react-icons/rx";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { GoDotFill } from "react-icons/go";
+
 type Props = {
   data: any;
   stripePromise: any;
@@ -77,21 +78,23 @@ const CourseDetails = ({
         <div className="w-full  ">
           <div className="">
             {" "}
-            <h1 className="text-[26px] font-[700] font-poppins">
+            <h1 className="text-[27px] font-[700] font-poppins text-black  opacity-80">
               {data.name}
             </h1>
           </div>
-          <div className="flex justify-between font-poppins  w-[98%] items-start ">
-            <h3 className="m-2 text-[17px] font-poppins font-[500] items-start">
+          <div className="flex justify-between font-poppins  w-[98%]  ">
+           <div>
+           <h3 className="m-2 text-[17px] font-poppins font-[500] items-start text-black opacity-80">
               <span className="text-slate-400">category: </span>{" "}
               <Link href={``}>{data.categories}</Link>
             </h3>
-            <div className="flex justify-between">
-              <Link href={``} className="px-10  ">
+           </div>
+            <div className="  hidden md:flex md:justify-between">
+              <Link href={``} className="px-[5rem]   ">
                 {" "}
                 <div className="flex items-center px-3">
                   <MdOutlineContentCopy size={20} />
-                  <h3 className="text-[16px] font-poppins font-[400] dark:text-white text-black mx-1 ">
+                  <h3 className="text-[16px] font-poppins font-[400] dark:text-white text-[#212327] mx-1 ">
                     WhishList{" "}
                   </h3>
                 </div>{" "}
@@ -100,9 +103,9 @@ const CourseDetails = ({
                 {" "}
                 <div className="flex px-2 items-center ">
                   <IoIosShareAlt size={30} />
-                  <h3 className="text-[16px] font-poppins font-[400] dark:text-white text-black mx-1">
+                  <p className="text-[16px] font-poppins font-[400] dark:text-white text-[#212327] mx-1">
                     Share{" "}
-                  </h3>
+                  </p>
                 </div>{" "}
               </Link>
             </div>
@@ -121,7 +124,7 @@ const CourseDetails = ({
                   className={`800px:text-[20px] cursor-pointer ${
                     activeBar === index
                       ? "text-[#3e64de] border-b-2 border-[#3e64de] "
-                      : "dark:text-white text-black"
+                      : "dark:text-white text-[#41454f]"
                   } mr-10`}
                   onClick={() => setactiveBar(index)}
                 >
@@ -131,19 +134,19 @@ const CourseDetails = ({
             </div>
             {activeBar === 0 && (
               <div>
-                <div className="w-full border-1 border-[#e4e6ee] m-2">
-                  <h1 className="text-[26px] font-[700] leading-7 dark:text-white text-black font-poppins">
+                <div className="w-full border-1 border-[#e4e6ee] my-2">
+                  <h1 className="text-[26px] font-[700] leading-7 dark:text-white text-[#34373d] font-poppins">
                     About Course{" "}
                   </h1>
-                  <h2 className="text-[17px] font-poppins  font-[500] mt-5 dark:text-white   text-black ">
+                  <h2 className="text-[17px] font-poppins  font-[500] mt-5 dark:text-white   text-[#27292e]  ">
                     {/* {data.description} */}
                     {showMore
                       ? data.description
-                      : `${data.description.substring(0, 250)}...`}
-                    <br />
+                      : `${data.description.substring(0, 250)}`} 
+                
                   </h2>
                   <button
-                    className=" text-blue-600 font-medium text-[18px] flex  items-center justify-center  "
+                    className=" text-blue-600 font-medium text-[17px] flex  items-center justify-center opacity-70 "
                     onClick={() => setShowMore(!showMore)}
                   >
                     {" "}
@@ -159,21 +162,21 @@ const CourseDetails = ({
                   </button>
                 </div>
                 <div className="w-full mt-7">
-                  <h1 className="text-[26px] font-[700] leading-7 dark:text-white text-black font-poppins">
+                  <h1 className="text-[27px] font-[700] leading-7 dark:text-white text-black font-poppins opacity-80">
                     What will you learn ?{" "}
                   </h1>
 
-                  <div className="text-[17px] font-poppins  font-[400] mt-5 dark:text-white   text-black leading-7 ">
+                  <div className="text-[17px] font-poppins  font-[400] mt-5 dark:text-white   text-black  opacity-90 ">
                     {readMore
                       ? data.benefits?.map((item: any, index: number) => (
-                          <div className="w-full flex py-2" key={index}>
+                          <div className="w-full flex py-1 " key={index}>
                             <div className="w-[15px] mr-1">
                               <GoDotFill
                                 size={20}
                                 className="text-black dark:text-white"
                               />
                             </div>
-                            <p className="pl-2 text-black dark:text-white">
+                            <p className="pl-2 text-black dark:text-white opacity-80">
                               {item.title}
                             </p>
                           </div>
@@ -181,22 +184,22 @@ const CourseDetails = ({
                       : data.benefits
                           ?.slice(0, 2)
                           .map((item: any, index: number) => (
-                            <div className="w-full flex py-2" key={index}>
+                            <div className="w-full flex py-1" key={index}>
                               <div className="w-[15px] mr-1">
                                 <GoDotFill
                                   size={20}
-                                  className="text-black dark:text-white"
+                                  className="text-black dark:text-white opacity-80"
                                 />
                               </div>
-                              <p className="pl-2 text-black dark:text-white">
+                              <p className="pl-2 text-black dark:text-white opacity-80">
                                 {item.title}
                               </p>
                             </div>
                           ))}
 
                     <button
-                      className="text-blue-600 font-medium text-[18px]   flex items-center justify-center"
-                      onClick={() => setReadMore(!readMore)}
+className=" text-blue-600 font-medium text-[17px] flex  items-center justify-center opacity-80 "
+                    onClick={() => setReadMore(!readMore)}
                     >
                       {readMore ? (
                         <>
@@ -210,7 +213,7 @@ const CourseDetails = ({
                     </button>
                   </div>
                   <div className="w-full ">
-                    <h1 className="text-[27px] font-Poppins font-[700] text-black dark:text-white ">
+                    <h1 className="text-[27px] font-Poppins font-[700] text-black dark:text-white opacity-70 ">
                       Course Content
                     </h1>
                     <CourseContentList data={data?.courseData} isDemo={true} />
@@ -269,19 +272,19 @@ const CourseDetails = ({
             )}
           </div>
           <div className="lg:col-span-1 ">
-            <div className="w-[80%] m-auto shadow-md rounded-xl ">
-              <div className=" w-full  border bg-[#eaf0fa] flex  flex-col  justify-center items-center pt-16 pb-16 rounded-t-xl">
-                <div className="  flex  w-[70%] items-center  justify-between ">
-                  <h3 className=" text-[24px] text-black dark:text-white font-[700] font-poppins mx-3 ">
+            <div className="w-full m-auto shadow-sm rounded-lg  border-[1px] border-[#a6aec0]">
+              <div className=" w-full  border bg-[#eaf0fa] flex  flex-col  justify-center items-center pt-16 pb-16 rounded-t-lg">
+                <div className="  flex  w-[70%] items-center  ">
+                  <h3 className=" text-[24px] text-black dark:text-white font-[700] font-poppins mr-[0.8rem] ">
                     {data.originalPrice === 0
                       ? "Free"
                       : "₹" + data.discountPrice.toFixed(2)}{" "}
                   </h3>
-                  <p className="text-[16px] line-through opacity-80 text-[#383a3b] font-[600] dark:text-white mx-3">
+                  <p className="text-[16px] line-through opacity-80 text-[#383a3b] font-[600] dark:text-white mr-[0.8rem]">
                     {data.originalPrice === 0 ? " " : "₹" + data.originalPrice}
                   </p>
 
-                  <p className="text-[16px] text-[#36393b] dark:text-white  font-[500] ">
+                  <p className="text-[16px] text-[#36393b] dark:text-white  font-[500] mr-[0.8rem] ">
                     {data.originalPrice === 0
                       ? ""
                       : discountPercentengePrice + "% Off"}
@@ -319,13 +322,13 @@ const CourseDetails = ({
                     )
                   </h5>
                 </div>
-                <h1 className="text-[17px]  flex dark:text-white text-black font-[400] font-poppins items-center ">
+                <h1 className="text-[16px]  flex dark:text-white text-black font-[400] font-poppins items-center  opacity-80">
                   <span className="mr-2">
                     <SiLevelsdotfyi />
                   </span>
                   {data.level}
                 </h1>
-                <h1 className="text-[16px]  flex items-center  dark:text-white text-black font-[400] font-poppins ">
+                <h1 className="text-[16px]  flex items-center  dark:text-white text-black font-[400] font-poppins opacity-80">
                   {" "}
                   <span className="mr-2">
                     {" "}
@@ -333,7 +336,7 @@ const CourseDetails = ({
                   </span>{" "}
                   {data.purchased} Students Enrolled
                 </h1>
-                <h1 className="text-[16px]  flex items-center  dark:text-white text-black font-[400] font-poppins ">
+                <h1 className="text-[16px]  flex items-center  dark:text-white text-black font-[400] font-poppins opacity-80 ">
                   {" "}
                   <span className="mr-2">
                     {" "}
@@ -343,14 +346,14 @@ const CourseDetails = ({
                   {totalVideoLengthInHours < 60 ? " minutus" : " hours"}
                 </h1>
 
-                <h5 className=" flex items-center  text-black dark:text-[#fff] font-poppins font-[500] text-[17px]">
+                <h5 className=" flex items-center  text-black dark:text-[#fff] font-poppins font-[500] text-[16px] opacity-80">
                   <span className="mr-2">
                     {" "}
                     <AiOutlineUnorderedList size={20} />
                   </span>
                   {data.courseData?.length} Lectures
                 </h5>
-                <h1 className="text-[17px]  flex items-center  dark:text-white text-black font-[400] font-poppins mb-2 ">
+                <h1 className="text-[16px]  flex items-center  dark:text-white text-black font-[400] font-poppins mb-2  opacity-80">
                   {" "}
                   <span className="mr-2">
                     {" "}
@@ -360,8 +363,8 @@ const CourseDetails = ({
                 </h1>
               </div>
             </div>
-            <div className="w-[80%] m-auto p-2 shadow-xl ">
-              <h1 className="text-[27px] font-[700]  dark:text-white text-black font-poppins m-4">
+            <div className="w-full m-auto  shadow-lg border-[1px] border-[#a6aec0] rounded-lg mt-6 p-3 ">
+              <h1 className="text-[27px] font-[700]  dark:text-white text-black font-poppins m-4 opacity-70">
                 Materials Included?{" "}
               </h1>
               {seeMore ? data.prerequisites?.map((item: any, index: number) => (
@@ -396,8 +399,8 @@ const CourseDetails = ({
                 </div>
               ))}
                   <button
-                      className="text-blue-600 font-medium text-[18px] ml-8  flex items-center justify-center"
-                      onClick={() => setSeeMore(!seeMore)}
+                    className=" text-blue-600 font-medium text-[17px] flex  items-center justify-center opacity-70 "
+                    onClick={() => setSeeMore(!seeMore)}
                     >
                       {seeMore ? (
                         <>
@@ -416,7 +419,7 @@ const CourseDetails = ({
       <>
         {open && (
           <div className="w-full h-screen bg-[#00000036] fixed top-0 left-0 z-50 flex items-center justify-center">
-            <div className="w-[500px] min-h-[500px] bg-white rounded-xl shadow p-3">
+            <div className="w-[500px] min-h-[500px] bg-white rounded-lg shadow p-3">
               <div className="w-full flex justify-end">
                 <IoCloseOutline
                   size={40}
