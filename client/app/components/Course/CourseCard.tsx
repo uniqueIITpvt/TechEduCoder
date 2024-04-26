@@ -47,7 +47,7 @@ const CourseCard: FC<Props> = ({ item, isProfile }) => {
               <h3 className="text-black dark:text-[#fff] font-poppins font-[700] text-[15px] ">
                 {item.originalPrice === 0 ? "Free" : "₹ " + item.discountPrice.toFixed(2)}
               </h3>
-              <h5 className="pl-2 text-[18px] mt-[-5px] line-through opacity-80  dark:text-[#fff] text-red-600">
+              <h5 className="pl-2 text-[15px] mt-[-5px] line-through opacity-80  dark:text-[#fff] text-red-600">
                 {item.originalPrice === 0 ? " " : "₹ " + item.originalPrice.toFixed(2)}
               </h5>
             </div>
