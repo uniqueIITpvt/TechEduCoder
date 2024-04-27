@@ -63,16 +63,16 @@ const EbookDetails = ({
   };
   return (
     <div className=" w-full ">
-      <div className="w-[90%] m-auto  mt-20 mb-20">
+      <div className="w-[90%] m-auto  mt-10  mb-20">
         <div className="w-full  ">
           <div className="">
             {" "}
-            <h1 className="text-[26px] font-[700] font-poppins  leading-6  m-3 mb-10 truncate...">
+            <h1 className="text-[26px] font-[700] font-poppins   m-3  truncate...">
               {data.ebookTitle}
             </h1>
           </div>
           <div className="flex justify-between font-poppins ">
-            <h3 className="m-2 text-[17px] font-poppins font-[400]">
+            <h3 className="m-2 text-[17px] font-poppins font-[400] opacity-80">
               <span className="text-gray-700">category: </span>{" "}
               <Link href={`/course`}>{data.category}</Link>
             </h3>
@@ -81,14 +81,14 @@ const EbookDetails = ({
                 {" "}
                 <div className="flex items-center px-3">
                   <MdOutlineContentCopy size={20} />
-                  <h3 className="text-[16px] font-poppins font-[400] dark:text-white text-black mx-1 ">
+                  <h3 className="text-[16px] font-poppins font-[400] dark:text-white text-black mx-1 opacity-80  ">
                     WhishList{" "}
                   </h3>
                 </div>{" "}
               </Link>
               <Link href={`/`} className="px-2">
                 {" "}
-                <div className="flex px-2 items-center ">
+                <div className="flex px-2 items-center opacity-80 ">
                   <IoIosShareAlt size={30} />
                   <h3 className="text-[16px] font-poppins font-[400] dark:text-white text-black mx-1">
                     Share{" "}
@@ -112,7 +112,7 @@ const EbookDetails = ({
               />
             </div>
             <div className="w-full p-4  flex items-center justify-start  border-b-2 border-[#e4e6ee]  backdrop-blur shadow-[bg-slate-700]  rounded shadow-inner">
-              {["Overview", ].map((text, index) => (
+              {["Overview" ].map((text, index) => (
                 <h5
                   key={index}
                   className={`800px:text-[20px] cursor-pointer ${
@@ -129,10 +129,10 @@ const EbookDetails = ({
             {activeBar === 0 && (
               <div>
                 <div className="w-full border-1 border-[#e4e6ee] m-2">
-                  <h1 className="text-[26px] font-[700] leading-7 dark:text-white text-black font-poppins">
+                  <h1 className="text-[26px] font-[700] dark:text-white text-black font-poppins opacity-80">
                     About Books{" "}
                   </h1>
-                  <h2 className="text-[17px] font-poppins  font-[500] mt-5 dark:text-white   text-black leading-7">
+                  <h2 className="text-[17px] font-poppins  font-[500] mt-5 dark:text-white   text-black opacity-80">
                     {data.aboutEbooks}
                   </h2>
                 </div>
@@ -185,10 +185,10 @@ const EbookDetails = ({
             )} */}
           </div>
           <div className="lg:col-span-1">
-            <div className="w-[80%] m-auto shadow-md rounded-xl ">
-              <div className=" w-full   bg-[#d5e5fd] flex  flex-col  items-center p-12 rounded-t-xl">
+            <div className="w-full m-auto shadow-md rounded-lg border-[1px] border-[#565658] ">
+              <div className=" w-full   bg-[#d5e5fd] flex  flex-col  items-center p-12 rounded-t-lg ">
                 <div className=" flex w-full  ">
-                  <h3 className=" text-[17px] text-black dark:text-white font-[700] font-poppins mx-3 ">
+                  <h3 className=" text-[25px] text-black dark:text-white font-[700] font-poppins mx-3 ">
                     {data.originalPrice === 0
                       ? "Free"
                       : "₹" + data.originalPrice}{" "}
@@ -202,9 +202,9 @@ const EbookDetails = ({
                     
                   </p>
                 </div>
-                <div className="flex items-center mt-5">
+                <div className="flex items-center mt-5 w-full justify-center">
                   <Link
-                    className={`${styles.button}`}
+                    className={`${styles.button} !w-full !justify-center`}
                     // className=" rounded-lg p-5 text-[#ffffff] py-2 font-[500] font-poppins text-[17px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br "
                     href={`/eBook-access/${data._id}`}
                   >

@@ -33,7 +33,7 @@ const Book = (props: Props) => {
       <br />
 
       <div className="relative" >
-      <h1 className={`${styles.title} 800px:!text-[45px] text-gradient pt-10`}>
+      <h1 className={`${styles.title} 800px:!text-[45px] text-gradient `}>
         {/* Get in */}
         <span className='text-gradient'>Uncover <br /> The Future with Our Tech Bookshelf</span>
       </h1>
@@ -42,7 +42,7 @@ const Book = (props: Props) => {
 
       <br />
       <br />
-      <div className='grid grid-cols-1 justify-start items-center gap-10  mb-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:p-1 md:p-0 md:justify-start md:items-start md:mx-20 md:gap-10 p-10'>
+      <div className='grid grid-cols-1 justify-start items-center gap-5  mb-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:p-1 md:p-0 md:justify-start md:items-start md:mx-20 md:gap-10 p-10'>
         {ebooks.map((item) => (
           <EbookCard key={item.id} item={item} />
         ))}
