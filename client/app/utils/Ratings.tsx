@@ -16,30 +16,30 @@ const Ratings:FC<Props> = ({ rating }) => {
             key={i}
             size={17}
             color="#f6b100"
-            className="mr-2 cursor-pointer"
+            className="cursor-pointer"
           />
         );
       } else if (i === Math.ceil(rating) && !Number.isInteger(rating)) {
         stars.push(
           <BsStarHalf
             key={i}
-            size={15}
+            size={17}
             color="#f6ba00"
-            className="mr-2 cursor-pointer"
+            className="cursor-pointer"
           />
         );
       } else {
         stars.push(
           <AiOutlineStar
             key={i}
-            size={15}
+            size={17}
             color="#f6ba00"
-            className="mr-2 cursor-pointer"
+            className=" cursor-pointer"
           />
         );
       }
     }
-    return <div className="flex mt-1 ml-2 800px:mt-0 800px:ml-0 font-[8px] text-[10px]"> {stars}</div>;
+    return <div className="flex mt-1"> {stars}</div>;
   };
 
   export default Ratings;
