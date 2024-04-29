@@ -47,9 +47,9 @@ const Hero: FC<Props> = (props) => {
             className="block md:hidden h-[50vh]"
             > 
             {/* Ensure your images are responsive */}
-            <Image src={logo4} alt="" className=" h-[50vh] object-contain overflow-hidden " />
-            <Image src={logo4} alt="" className=" h-[50vh] object-contain overflow-hidden" />
-            <Image src={logo4} alt="" className=" h-[50vh] object-contain  overflow-hidden" />
+            <Image src={logo4} alt="" className=" h-[50vh] object-fill overflow-hidden " />
+            <Image src={logo4} alt="" className=" h-[50vh] object-fill  overflow-hidden" />
+            <Image src={logo4} alt="" className=" h-[50vh] object-fill  overflow-hidden" />
             
           </Carousel> 
         
