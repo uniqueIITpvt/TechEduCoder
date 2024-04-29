@@ -21,7 +21,7 @@ const Courses = (props: Props) => {
   }, [data]);
 
   return (
-    <div className="pb-10 lg:mt-[100px]">
+    <div className="pb-10 lg:mt-[40px]">
       <div className=" w-full relative ">
         <h1
           className={`${styles.title} 800px:!text-[45px] text-gradient pt-10`}
