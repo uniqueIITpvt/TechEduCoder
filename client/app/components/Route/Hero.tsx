@@ -26,15 +26,16 @@ const Hero: FC<Props> = (props) => {
             showStatus={false}
             interval={3000}
             transitionTime={500}
-            className="h-[50vh] md:h-auto "
+            className="hidden md:block h-auto"
+
           >
             {/* Ensure your images are responsive */}
-            <Image src={logo4} alt="" className="h-[50vh] object-cover" />
-            <Image src={logo3} alt="" className="h-[50vh] object-cover" />
-            <Image src={logo2} alt="" className="h-[50vh] object-cover" />
+            <Image src={logo1} alt="" className="object-cover" />
+            <Image src={logo3} alt="" className="object-cover" />
+            <Image src={logo2} alt="" className="object-cover" />
             
           </Carousel>
-          {/* <Carousel
+          <Carousel
             swipeable={false}
             showArrows={true}
             infiniteLoop={true}
@@ -43,14 +44,15 @@ const Hero: FC<Props> = (props) => {
             showStatus={false}
             interval={3000}
             transitionTime={500}
-            className="h-[70vh] md:h-auto "
-          > */}
+            className="block md:hidden h-[50vh]"
+            > 
             {/* Ensure your images are responsive */}
-            {/* <Image src={logo4} alt="" className=" h-[70vh] object-cover" />
-            <Image src={logo3} alt="" className=" h-[70vh] object-cover" />
-            <Image src={logo2} alt="" className=" h-[70vh] object-cover" />
+            <Image src={logo4} alt="" className=" h-[50vh] object-contain overflow-hidden " />
+            <Image src={logo4} alt="" className=" h-[50vh] object-contain overflow-hidden" />
+            <Image src={logo4} alt="" className=" h-[50vh] object-contain  overflow-hidden" />
             
-          </Carousel> */}
+          </Carousel> 
+        
 
           <div className="absolute bottom-0 left-0 top-0 h-full md:w-[60%] w-[80%]  md:bg-gradient-to-r from-sky-500 md:pt-10 pl-2 md:pl-0">
             <h1 className=" text-[#0a083b] md:text-white text-[28px] md:text-[28px] md:ml-10 pl-4  leading-9  font-bold lg:ml-[5rem] lg:text-[48px]   lg:leading-[56px] lg:font-extrabold font-sans lg:mt-10 opacity-90 mt-8  ">
