@@ -15,7 +15,7 @@ type Props = {};
 const Hero: FC<Props> = (props) => {
   return (
     <>
-      <div className="w-full h-[50vh] md:h-auto">
+      <div className="w-full md:h-auto">
         <div className="relative">
           <Carousel
             swipeable={false}
@@ -44,7 +44,7 @@ const Hero: FC<Props> = (props) => {
             showStatus={false}
             interval={3000}
             transitionTime={500}
-            className="block md:hidden h-[50vh]"
+            className="block md:hidden"
             > 
             {/* Ensure your images are responsive */}
             <Image src={logo4} alt="" className="  object-fill overflow-hidden " />
@@ -55,16 +55,16 @@ const Hero: FC<Props> = (props) => {
         
 
           <div className="absolute bottom-0 left-0 top-0 h-full md:w-[60%] w-[65%]  md:bg-gradient-to-r from-sky-500 md:pt-10 pl-2 md:pl-0">
-            <h1 className=" text-[#0a083b] md:text-white text-[24px] md:text-[28px] md:ml-10 pl-4  leading-9  font-bold lg:ml-[5rem] lg:text-[48px]   lg:leading-[56px] lg:font-extrabold font-sans lg:mt-10 opacity-90 mt-8  ">
+            <h1 className=" text-[#0a083b] md:text-white text-[22px] md:text-[28px] md:ml-10 pl-4  leading-9  font-bold lg:ml-[5rem] lg:text-[48px]   lg:leading-[56px] lg:font-extrabold font-sans lg:mt-10 opacity-90 mt-8  ">
               Upgrade your learning Skills <br />& Upgrade your life
             </h1>
             {/* Hidden on mobile, visible on md screens and up */}
-            <p className=" text-indigo-700 leading-[18px] pt-1  pl-4  text-[14px] font-[700] md:text-[17px] md:ml-9 md:font-[700] md:leading-[22px] lg:ml-20 lg:mt-6">
+            <p className=" text-indigo-700 leading-[16px] pt-1  pl-4  text-[13px] font-[600] md:text-[17px] md:ml-9 md:font-[700] md:leading-[22px] lg:ml-20 lg:mt-6">
               Hand-picked Instructor and expertly crafted courses, designed for
               <br /> the modern students and entrepreneur.
             </p>
-            <div className="flex mt-2  font-poppins font-[400] items-center  ml-3 w-full  justify-start md:px-6  md:ml-16  ">
-              <div className="bg-gradient-to-r from-blue-500 to-[#521088] text-white rounded-lg  hover:bg-gradient-to-br p-1 md:p-3 text-[12px]  transition-all ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 md:mr-6 lg:text-[16px] lg:p-4">
+            <div className="flex mt-1  font-poppins font-[400] items-center  ml-3 w-full  justify-start md:px-6  md:ml-16  ">
+              <div className="bg-gradient-to-r from-blue-500 to-[#521088] text-white rounded-lg  hover:bg-gradient-to-br p-1  md:p-3 text-[10px]  transition-all ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 md:mr-6 lg:text-[16px] lg:p-4">
                 <Link
                   href={`/courses`}
                   // className="  bg-gradient-to-r from-blue-500 to-[#521088]   text-center text-white rounded-lg hover:bg-gradient-to-br hover:text-white transition-all ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300"
@@ -73,7 +73,7 @@ const Hero: FC<Props> = (props) => {
                   Browse Courses
                 </Link>
               </div>
-              <div className="bg-gradient-to-r from-blue-500 to-[#521088] text-white rounded-lg  ml-3 md:ml-0 hover:bg-gradient-to-br p-1 md:p-3 text-[12px] transition-all ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 md:mr-6 lg:text-[16px] lg:p-4">
+              <div className="bg-gradient-to-r from-blue-500 to-[#521088] text-white rounded-lg  ml-3 md:ml-0 hover:bg-gradient-to-br p-1 md:p-3 text-[10px] transition-all ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 md:mr-6 lg:text-[16px] lg:p-4">
                 <Link
                   href={`/courses`}
 
