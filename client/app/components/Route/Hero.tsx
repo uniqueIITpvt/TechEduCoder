@@ -63,8 +63,8 @@ const Hero: FC<Props> = (props) => {
               Hand-picked Instructor and expertly crafted courses, designed for
               <br /> the modern students and entrepreneur.
             </p>
-            <div className="flex mt-6  font-poppins font-[500] items-center  ml-5 w-full  justify-start md:px-6  lg:ml-16  ">
-              <div className="bg-gradient-to-r from-blue-500 to-[#521088] text-white rounded-lg  hover:bg-gradient-to-br p-2 md:p-3 text-[13px]  transition-all ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 md:mr-6 lg:text-[16px] lg:p-4">
+            <div className="flex mt-2  font-poppins font-[400] items-center  ml-3 w-full  justify-start md:px-6  md:ml-16  ">
+              <div className="bg-gradient-to-r from-blue-500 to-[#521088] text-white rounded-lg  hover:bg-gradient-to-br p-1 md:p-3 text-[12px]  transition-all ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 md:mr-6 lg:text-[16px] lg:p-4">
                 <Link
                   href={`/courses`}
                   // className="  bg-gradient-to-r from-blue-500 to-[#521088]   text-center text-white rounded-lg hover:bg-gradient-to-br hover:text-white transition-all ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300"
@@ -73,7 +73,7 @@ const Hero: FC<Props> = (props) => {
                   Browse Courses
                 </Link>
               </div>
-              <div className="bg-gradient-to-r from-blue-500 to-[#521088] text-white rounded-lg  ml-3 md:ml-0 hover:bg-gradient-to-br p-2 md:p-3 text-[14px] transition-all ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 md:mr-6 lg:text-[16px] lg:p-4">
+              <div className="bg-gradient-to-r from-blue-500 to-[#521088] text-white rounded-lg  ml-3 md:ml-0 hover:bg-gradient-to-br p-1 md:p-3 text-[12px] transition-all ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 md:mr-6 lg:text-[16px] lg:p-4">
                 <Link
                   href={`/courses`}
 
