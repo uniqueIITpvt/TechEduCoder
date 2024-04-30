@@ -27,6 +27,7 @@ const EbookCard: FC<Props> = ({ item, isProfile }) => {
           </div>
         </div>
         <div className="px-3 flex flex-col  items-center justify-center mt-1 ">
+        <Ratings rating={item.ratings} />
           <h1 className="mb-2 text-[17px] font-[500] font-poppins  text-[#3b3b3b]  dark:text-white text-center ">
             {item.ebookTitle.slice(0, 20)}
           </h1>
@@ -35,7 +36,7 @@ const EbookCard: FC<Props> = ({ item, isProfile }) => {
             {item.authorName}
           </h1>
 
-          <Ratings rating={item.ratings} />
+        
           <h1 className="bg-[#388e3c] mt-2 text-white dark:text-black p-1 rounded-lg  text-[13px] flex items-center">
             {item.ratings}{" "}
             <span>

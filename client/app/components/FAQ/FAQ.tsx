@@ -23,7 +23,7 @@ const FAQ = (props: Props) => {
 
   return (
     <div>
-         <div className="w-[90%] 800px:w-[80%] m-auto">
+         <div className="w-[50%] 800px:w-[50%] m-auto">
         {/* <h1 className={``}>
           Frequently Asked Questions
         </h1> */}

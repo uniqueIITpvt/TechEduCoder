@@ -24,15 +24,15 @@ const Courses = (props: Props) => {
     <div className="pb-10 lg:mt-[40px]">
       <div className=" w-full relative ">
         <h1
-          className={`${styles.title} 800px:!text-[45px] text-gradient pt-10`}
+          className={`${styles.title} 800px:!text-[45px] text-gradient pt-10 !text-[33px]`}
         >
           Our Feature Courses
         </h1>
-        <h2 className="800px:!text-[20px] text-[18px] text-black dark:text-white font-[500] font-Poppins text-center py-2 mx-5 opacity-90">
+        <h2 className="800px:!text-[20px] text-[18px] text-black dark:text-white font-[500] font-Poppins text-center py-2 mx-5 opacity-90 mb-2">
           Learning often happens in classrooms but it doesn’t have to. Use
           Eduflow to facilitate learning experiences no matter the context.
         </h2>
-        <br />
+      
         <div className="grid grid-cols-1 justify-start items-center gap-5  mb-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:p-1 md:p-0 md:justify-start md:items-start md:mx-20 md:gap-5 p-10">
           {courses &&
             courses.slice(0, 4).map((item, index) => {

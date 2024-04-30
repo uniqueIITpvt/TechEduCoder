@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-
-
-// import { useGetAllEbooksQuery } from "../../redux/features/ebook/ebooksApi";
-// import { useGetEbookQuery } from "../../redux/features/ebook/ebooksApi";
 import EbookCard from "../../components/EbookCard/EbookCard";
 import { styles } from "@/app/styles/style";
 import { useGetAllEbooksQuery } from "@/redux/features/ebook/ebooksApi";
@@ -29,16 +25,16 @@ const Book = (props: Props) => {
 
   return (
     <div
-     className="bg-slate-200 pb-28 pt-10">
+     className="bg-slate-200 pb-28 pt-5">
       <br />
 
       <div className="relative" >
-      <h1 className={`${styles.title} 800px:!text-[45px] text-gradient `}>
+      <h1 className={`${styles.title} 800px:!text-[45px] text-gradient md:!leading-[50px] !leading-9   `}>
         {/* Get in */}
         <span className='text-gradient'>Uncover <br /> The Future with Our Tech Bookshelf</span>
       </h1>
       
-      <h2 className='800px:!text-[20px] text-[18px] text-black dark:text-white font-[700] font-Poppins text-center py-2 mx-5'>Technology is not just a tool. It can give learners a voice that they may not have had before - George Couros</h2>
+      <h2 className='800px:!text-[20px] text-[18px] text-black dark:text-white font-[700] font-Poppins text-center py-2 mx-5 opacity-80'>Technology is not just a tool. It can give learners a voice that they may not have had before - George Couros</h2>
 
       <br />
       <br />
