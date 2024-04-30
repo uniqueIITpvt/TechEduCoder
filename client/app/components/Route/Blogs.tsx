@@ -47,7 +47,7 @@ const Blogs = (props: Props) => {
       </div>
       <div className="flex items-center justify-center pl-7  w-full">
         <h2 className="800px:!text-[25px] text-[18px] text-black dark:text-white font-[700] font-Poppins text-center">
-          Latest Post
+          Latest Blogs
         </h2>
         <div className="border-2 border-red-700 w-[80%] mx-6"></div>
       </div>

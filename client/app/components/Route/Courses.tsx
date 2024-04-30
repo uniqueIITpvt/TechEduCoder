@@ -28,7 +28,7 @@ const Courses = (props: Props) => {
         >
           Our Feature Courses
         </h1>
-        <h2 className="800px:!text-[20px] text-[18px] text-black dark:text-white font-[500] font-Poppins text-center py-2 mx-5 opacity-90 mb-2">
+        <h2 className="800px:!text-[20px] md:text-[18px] text-[16px] text-black dark:text-white font-[500] font-Poppins text-center py-2 mx-5 opacity-90 mb-2 leading-6">
           Learning often happens in classrooms but it doesn’t have to. Use
           Eduflow to facilitate learning experiences no matter the context.
         </h2>
