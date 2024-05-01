@@ -42,7 +42,7 @@ const Page: FC<Props> = (props) => {
       <br />
       <br />
       <Events/>
-      <FAQ />
+      <FAQ inPage={false} />
       <Footer />
     </>
   );

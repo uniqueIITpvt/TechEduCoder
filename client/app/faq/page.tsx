@@ -5,7 +5,9 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import FAQ from "../components/FAQ/FAQ";
 
-type Props = {};
+type Props = {
+
+};
 
 const Page = (props: Props) => {
   const [open, setOpen] = useState(false);
@@ -27,7 +29,7 @@ const Page = (props: Props) => {
         route={route}
       />
       <br />
-      <FAQ />
+      <FAQ  inPage={true}/>
       <Footer />
     </div>
   );
