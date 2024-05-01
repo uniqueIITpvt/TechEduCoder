@@ -24,7 +24,7 @@ const FAQ = ({ inPage }: Props) => {
   console.log(inPage);
 
   return (
-    <div className={`w-[90%] mx-auto ${inPage ? "" : "grid grid-cols-2 gap-4"}`}>
+    <div className={`w-[90%] mx-auto ${inPage ? "" : "md:grid md:grid-cols-2 gap-4"}`}>
       <div className="col-span-1">
         <h1 className={`${styles.title} 800px:!text-[50px]`}>
           <span className="text-gradient">FAQs</span>
