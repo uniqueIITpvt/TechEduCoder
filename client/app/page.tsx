@@ -1,5 +1,5 @@
 "use client";
-import React, { FC,  useState } from "react";
+import React, { FC, useState } from "react";
 import Heading from "./utils/Heading";
 import Header from "./components/Header";
 import Hero from "./components/Route/Hero";
@@ -10,15 +10,12 @@ import Blogs from "./components/Route/Blogs";
 import Book from "../app/components/Route/Book";
 import Events from "./components/Route/events";
 
-interface Props {
-
-}
+interface Props {}
 
 const Page: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
   const [route, setRoute] = useState("Login");
-
 
   return (
     <>
@@ -36,12 +33,12 @@ const Page: FC<Props> = (props) => {
       />
       <Hero />
       <Courses />
-      <Book/>
-      <Blogs/>
+      <Book />
+      <Blogs />
       <br />
       <br />
       <br />
-      <Events/>
+      <Events />
       <FAQ inPage={false} />
       <Footer />
     </>

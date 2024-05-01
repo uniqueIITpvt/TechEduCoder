@@ -2,11 +2,19 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import logo from "../../public/TEC logo By UniqueIIT (1500 x 500 px) (1).svg";
-import { styles } from "../styles/style";
 import { FaLocationDot } from "react-icons/fa6";
 import { AiOutlineMail } from "react-icons/ai";
 import { IoCall } from "react-icons/io5";
-import { FaArrowRight } from "react-icons/fa";
+import {
+  FaArrowRight,
+  FaFacebookSquare,
+  FaInstagramSquare,
+  FaLinkedin,
+} from "react-icons/fa";
+import { TiSocialYoutube } from "react-icons/ti";
+import { IoLogoYoutube } from "react-icons/io";
+// import { FaXTwitter } from "react-icons/fa6";
+
 
 type Props = {};
 
@@ -32,12 +40,15 @@ const Footer = (props: Props) => {
                   systems, we have the skills and experience to bring your
                   project to life. Contact us today to discuss your software
                   needs.
-                </p> <br />
-               <Link href={`/policy`}>
-          <div className=" flex items-center justify-start">      <p className="mr-2 text-[18px] font-[600]">Read More</p>
-                <FaArrowRight /></div>
-               </Link>
-
+                </p>{" "}
+                <br />
+                <Link href={`/about`}>
+                  <div className=" flex items-center cursor-pointer text-[18px] ">
+                    {" "}
+                    <p>Read More</p>
+                    <FaArrowRight />
+                  </div>
+                </Link>
               </div>
             </div>
           </div>
@@ -45,7 +56,7 @@ const Footer = (props: Props) => {
             <div className=" grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 text-center md:text-start">
               <div className="space-y-3">
                 <h3 className="text-[26px] text-white font-[700]  font-poppins ">
-                  Quick Links
+                  For Students
                 </h3>
                 <ul className="space-y-4">
                   <li>
@@ -66,7 +77,7 @@ const Footer = (props: Props) => {
                   </li>
                   <li>
                     <Link
-                      href="/course"
+                      href="/profile"
                       className="text-base text-[17px] font-[500] font-poppins  dark:text-gray-300 dark:hover:text-white"
                     >
                       Course Dashboard
@@ -97,10 +108,10 @@ const Footer = (props: Props) => {
                   </li>
                   <li>
                     <Link
-                      href="/"
+                      href="https://www.facebook.com/profile.php?id=61558628114588"
                       className="text-base font-[500] text-[17px] font-poppins dark:text-gray-300 dark:hover:text-white"
                     >
-                      github
+                      Facebook
                     </Link>
                   </li>
                 </ul>
@@ -130,9 +141,27 @@ const Footer = (props: Props) => {
                 </div>
                 <div className="flex  items-center justify-start mb-2">
                   <IoCall />
-                  <p className="text-base dark:text-gray-300 dark:hover:text-white ml-2">
+                  <p className="text-base dark:text-gray-300 hover-gradient ml-2">
                     +(91) 8877873229
                   </p>
+                </div>
+
+                <div className="flex mt-2 ">
+                  <Link href={`https://www.youtube.com/channel/UCKJFJlEE6x4ZkN0WfvFMnPw `}>
+                    <IoLogoYoutube  size={30} className="mr-2 hover:text-[#521088]" />
+                  </Link>
+                  <Link href={`https://www.instagram.com/techeducoder/`}>
+                    {" "}
+                    <FaInstagramSquare size={30} className="mr-2 hover:text-[#521088]" />
+                  </Link>
+                  <Link href={`https://www.linkedin.com/company/uniqueiitpvt/mycompany/`}>
+                    {" "}
+                    <FaLinkedin size={30} className="mr-2 hover:text-[#521088]" />
+                  </Link>
+                  <Link href={`https://www.facebook.com/profile.php?id=61558628114588 `}>
+                    {" "}
+                    <FaFacebookSquare size={30} className="mr-2 hover:text-[#521088]" />
+                  </Link>
                 </div>
               </div>
             </div>
