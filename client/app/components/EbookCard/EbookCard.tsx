@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { FC } from "react";
 import { IoIosStar } from "react-icons/io";
-import { MdOutlineCurrencyRupee } from "react-icons/md";
 
 type Props = {
   item: any;
@@ -13,7 +12,7 @@ type Props = {
 
 const EbookCard: FC<Props> = ({ item, isProfile }) => {
   return (
-    <div className="w-[90%]  bg-slate-100 dark:bg-slate-500 dark:bg-opacity-20 backdrop-blur dark:border-[#ffffff1d]  dark:shadow-[bg-slate-700] rounded-lg  shadow-sm dark:shadow-inner  hover:-translate-y-1 hover:scale-70  duration-100">
+    <div className="w-[90%]  mx-auto bg-slate-100 dark:bg-slate-500 dark:bg-opacity-20 backdrop-blur dark:border-[#ffffff1d]  dark:shadow-[bg-slate-700] rounded-lg  shadow-sm   hover:-translate-y-1 hover:scale-70  duration-100">
       <Link href={`/eBooks/${item._id}`}>
         <div className="border border-red-500 p-2  rounded-t-[4px]">
           <div className="h-[18rem] overflow-hidden md:h-auto  ">

@@ -6,9 +6,7 @@ import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 
 type Props = {};
 const Book = (props: Props) => {
-  const [route, setRoute] = useState("Login");
-  const [activeItem, setActiveItem] = useState(2);
-  const [open, setOpen] = useState(false);
+
   const [category, setCategory] = useState("All");
   const [books ,setBooks] = useState<any[]>([]);
   const [ebooks, setEbooks] = useState<any[]>([]);
@@ -21,7 +19,7 @@ const Book = (props: Props) => {
   useEffect(() => {
     if (data) {
       // Slice the first 4 ebooks from the data and set them to state
-      setEbooks(data.ebooks.slice(0, 4));
+      setEbooks(data.ebooks);
     }
   }, [data]);
   
@@ -43,8 +41,7 @@ const Book = (props: Props) => {
 
   return (
     <>
-    <br />
-    <br />
+  
     <br />
        <div className="w-[90%] m-auto justify-center flex items-center flex-wrap">
               <div
@@ -76,8 +73,8 @@ const Book = (props: Props) => {
 
       <br />
       <br />
-      <div className="grid grid-cols-1  p-2 items-center gap-10  mb-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:justify-start md:items-start md:mx-20 md:gap-10">
-        { books && books.map((item) => (
+      <div className="grid grid-cols-1 items-center gap-10  mb-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  justify-center md:justify-start md:items-start md:mx-20 md:gap-10">
+        { books && books?.map((item) => (
           <EbookCard key={item.id} item={item} />
         ))}
       </div>

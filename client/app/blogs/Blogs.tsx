@@ -1,14 +1,6 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
-
-import { useCreateMessageMutation } from "@/redux/features/contactUs/contactUsApi";
-import { FcHome } from "react-icons/fc";
-import { FcIphone } from "react-icons/fc";
-import { FcInvite } from "react-icons/fc";
-import { FcIpad } from "react-icons/fc";
-
+import React, { useEffect, useState } from "react";
 import { useGetAllBlogsQuery } from "@/redux/features/blogs/blogsApi";
 import BlogCard from "../components/blogs/BlogsCard/BlogsCard";
-import { styles } from "@/app/styles/style";
 import Link from "next/link";
 import YouTube from "react-youtube";
 
@@ -47,7 +39,7 @@ const Blogs = (props: Props) => {
             Blogs
           </h1>
         </div>
-        <div className="w-[90%] m-auto mt-16">
+        <div className="w-[90%] m-auto mt-8">
           {/* Article Section */}
           <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
             {/* Main Content */}
@@ -59,13 +51,15 @@ const Blogs = (props: Props) => {
               </div>
             </div>
 
-            <div className="md:col-span-1">
+            <div className="md:col-span-1 rounded-xl border-2 border-red-700">
               {/* Advertisement Widget */}
-              <YouTube
+            <div className=" hidden md:block">
+            <YouTube
                 videoId="WLcaNNHoUJ0"
                 opts={opts}
                 onReady={handleVideoReady}
               />
+            </div>
 
               <br />
               <br />
@@ -73,7 +67,7 @@ const Blogs = (props: Props) => {
               <div className="bg-white p-4 rounded-sm">
                 {/* Post Items */}
                 <div className="bg-white shadow-sm rounded-md p-6">
-                  <h2 className="text-2xl font-bold mb-4">Recent Posts</h2>
+                  <h2 className="text-2xl font-bold mb-4 text-black opacity-90">Recent Posts</h2>
                   <ul className="list-none space-y-3">
                     {blog.map((blog: any, index: number) => (
                       <li
