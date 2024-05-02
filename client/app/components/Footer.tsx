@@ -142,37 +142,37 @@ const Footer: FC<Props> = ({ setOpen, route, open, setRoute }) => {
                   </li>
                 </ul>
               </div>
-              <div>
+              <div  className="space-y-3 ">
                 <h3 className="text-[26px] font-[700]   dark:text-white pb-3">
                   Contact Info
                 </h3>
 
-                <div className="flex  items-center justify-start mb-2">
+                <div className="flex  items-center md:justify-start justify-center mb-2">
                   <FaLocationDot />
                   <p className="text-base  dark:text-gray-300 dark:hover:text-white  ml-2">
                     Jaitpur Ext 2, New Delhi, India
                   </p>
                 </div>
-                <div className="flex  items-center justify-start mb-2">
+                <div className="flex  items-center md:justify-start justify-center mb-2">
                   <AiOutlineMail />
                   <p className="text-base dark:text-gray-300 dark:hover:text-white ml-2">
                     support@uniqueiit.com
                   </p>
                 </div>
-                <div className="flex  items-center justify-start mb-2">
+                <div className="flex  items-center md:justify-start justify-center mb-2">
                   <AiOutlineMail />
                   <p className="text-base dark:text-gray-300 dark:hover:text-white ml-2">
                     info@uniqueiit.com
                   </p>
                 </div>
-                <div className="flex  items-center justify-start mb-2">
+                <div className="flex  items-center md:justify-start justify-center  mb-2">
                   <IoCall />
                   <p className="text-base dark:text-gray-300 hover-gradient ml-2">
                     +(91) 8877873229
                   </p>
                 </div>
 
-                <div className="flex mt-2 ">
+                <div className="flex mt-2 items-center md:justify-start  justify-center ">
                   <Link
                     href={`https://www.youtube.com/channel/UCKJFJlEE6x4ZkN0WfvFMnPw `}
                   >
