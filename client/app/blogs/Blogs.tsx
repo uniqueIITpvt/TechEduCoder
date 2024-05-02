@@ -53,13 +53,13 @@ const Blogs = (props: Props) => {
 
             <div className="md:col-span-1 rounded-sm">
               {/* Advertisement Widget */}
-            <div className=" hidden md:block">
+         
             <YouTube
                 videoId="WLcaNNHoUJ0"
                 opts={opts}
                 onReady={handleVideoReady}
               />
-            </div>
+           
 
               <br />
               <br />

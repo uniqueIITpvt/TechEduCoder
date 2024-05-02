@@ -41,7 +41,7 @@ const BlogDetails = ({ params }: paramsType) => {
                 {/* <span className="text-white bg-indigo-600 m-3 p-2 font-[500] ">
                   {blog?.category}
                 </span> */}
-                <h1 className="text-[50px]  leading-[57px] font-[700]  font-poppins my-2 opacity-80">
+                <h1 className="text-[50px]  leading-[57px] font-[700]  font-poppins my-2 text-black opacity-80">
                   {blog?.Title}
                 </h1>
                 <div  className="flex">

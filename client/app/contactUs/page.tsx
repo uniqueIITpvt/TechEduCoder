@@ -9,7 +9,7 @@ type Props = {};
 
 const Page = (props: Props) => {
   const [open, setOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState(5);
+  const [activeItem, setActiveItem] = useState(7);
   const [route, setRoute] = useState('Login');
 
   return (

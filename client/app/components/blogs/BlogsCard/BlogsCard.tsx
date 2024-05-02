@@ -34,7 +34,7 @@ const BlogCard: FC<Props> = ({ blog }) => {
 
             <Link
               href={`/blog/${blog._id}`}
-              className="block  md:text-[26px] text-[17]  md:font-[700] font-[500] text-black hover:underline truncate ...  opacity-80 "
+              className="block  md:text-[26px] text-[18]  md:font-[700] font-[700] text-black hover:underline truncate ...  opacity-80 "
             >
               {" "}
               <h1>{blog.Title.slice(0, 30)}...</h1>
