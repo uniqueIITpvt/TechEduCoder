@@ -39,19 +39,19 @@ const Blogs = (props: Props) => {
             Blogs
           </h1>
         </div>
-        <div className="w-[90%] m-auto mt-8">
+        <div className="w-[95%] m-auto mt-8">
           {/* Article Section */}
           <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
             {/* Main Content */}
             <div className="md:col-span-2 ">
-              <div className="grid grid-rows-1 sm:grid-rows-2 md:grid-rows-3 lg:grid-rows-4 gap-4 rows-span-4 w-full ">
+              <div className="grid grid-rows-1 sm:grid-rows-2 md:grid-rows-3 lg:grid-rows-4 gap-4 md:rows-span-4 ">
                 {blog.slice(0, 10).map((blog: any, i: number) => (
                   <BlogCard key={i} blog={blog} />
                 ))}
               </div>
             </div>
 
-            <div className="md:col-span-1 rounded-xl border-2 border-red-700">
+            <div className="md:col-span-1 rounded-sm">
               {/* Advertisement Widget */}
             <div className=" hidden md:block">
             <YouTube
