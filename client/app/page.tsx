@@ -40,7 +40,8 @@ const Page: FC<Props> = (props) => {
       <br />
       <Events />
       <FAQ inPage={false} />
-      <Footer />
+      <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
+
     </>
   );
 };
