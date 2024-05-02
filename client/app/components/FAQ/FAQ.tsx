@@ -31,7 +31,11 @@ const FAQ = ({ inPage }: Props) => {
   console.log(inPage);
 
   return (
-    <div className={`w-[90%] mx-auto ${inPage ? "" : "md:grid md:grid-cols-2 gap-4"}`}>
+    <div
+      className={`w-[90%] mx-auto ${
+        inPage ? "" : "md:grid md:grid-cols-2 gap-4"
+      }`}
+    >
       <div className="col-span-1">
         <h1 className={`${styles.title} 800px:!text-[50px]`}>
           <span className="text-gradient">FAQs</span>
@@ -50,7 +54,9 @@ const FAQ = ({ inPage }: Props) => {
                     className="flex items-start justify-between w-full text-left focus:outline-none"
                     onClick={() => toggleQuestion(q._id)}
                   >
-                    <span className={`font-[600] text-black dark:text-white text-[18px]`}>
+                    <span
+                      className={`font-[600] text-black dark:text-white text-[18px]`}
+                    >
                       {q.question}
                     </span>
                     <span className="ml-6 flex-shrink-0">
@@ -79,35 +85,32 @@ const FAQ = ({ inPage }: Props) => {
         <br />
         <br />
       </div>
-      <div className="col-span-1">
+      <div className={`col-span-1 ${inPage ? "hidden" : ""}`}>
         <br />
         <br />
         <br />
         <br />
         <br />
-        
-      <Carousel
-            swipeable={false}
-            showArrows={false}
-            infiniteLoop={true}
-            autoPlay={true}
-            showThumbs={false}
-            showStatus={false}
-            interval={3000}
-            transitionTime={500}
-            className=""
 
-          >
-            {/* Ensure your images are responsive */}
-            <Image src={logo1} alt="" className="" />
-            <Image src={logo5} alt="" className="" />
-            <Image src={logo2} alt="" className="" />
-            
-          </Carousel>
+        <Carousel
+          swipeable={false}
+          showArrows={false}
+          infiniteLoop={true}
+          autoPlay={true}
+          showThumbs={false}
+          showStatus={false}
+          interval={3000}
+          transitionTime={500}
+          className=""
+        >
+          {/* Ensure your images are responsive */}
+          <Image src={logo1} alt="" className="" />
+          <Image src={logo5} alt="" className="" />
+          <Image src={logo2} alt="" className="" />
+        </Carousel>
       </div>
     </div>
   );
 };
 
 export default FAQ;
-;
