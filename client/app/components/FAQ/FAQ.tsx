@@ -85,7 +85,7 @@ const FAQ = ({ inPage }: Props) => {
         <br />
         <br />
       </div>
-      <div className={`col-span-1 ${inPage ? "hidden" : ""}`}>
+      <div className={`  hidden md:col-span-1 ${inPage ? "hidden" : ""}`}>
         <br />
         <br />
         <br />
