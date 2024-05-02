@@ -34,13 +34,13 @@ const BlogCard: FC<Props> = ({ blog }) => {
 
             <Link
               href={`/blog/${blog._id}`}
-              className="block  text-[26px]  font-[700] text-black hover:underline truncate ...  opacity-80 "
+              className="block  md:text-[26px] text-[17]  md:font-[700] font-[500] text-black hover:underline truncate ...  opacity-80 "
             >
               {" "}
               <h1>{blog.Title.slice(0, 30)}...</h1>
             </Link>
             <div className="flex">
-              <div className="text-[17px] text-bloack font-[600] mr-3">
+              <div className="md:text-[17px] text-[14px] text-black md:font-[600]  font-[400] mr-3">
                 <span className="text-[14px] text-gray-500 font-poppins">
                   by{" "}
                 </span>
@@ -52,7 +52,7 @@ const BlogCard: FC<Props> = ({ blog }) => {
               </div>
             </div>
             <div className=" md:mt-0">
-              <p className="mt-2 text-gray-500  text-[17px] font-poppins font-[500] truncate ...">
+              <p className="mt-2 text-gray-500  md:text-[17px]  text-[14] font-poppins  md:font-[500] font-[400] truncate ...">
                 {/* {blog.BlogContent.slice(0, 40)} */}
                 <div dangerouslySetInnerHTML={{ __html: body.slice(0, 40) }} />
               </p>
