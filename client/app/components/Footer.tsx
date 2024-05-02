@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { FC } from "react";
 import Image from "next/image";
 import logo from "../../public/TEC logo By UniqueIIT (1500 x 500 px) (1).svg";
 import { FaLocationDot } from "react-icons/fa6";
@@ -11,14 +11,22 @@ import {
   FaInstagramSquare,
   FaLinkedin,
 } from "react-icons/fa";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+
 import { TiSocialYoutube } from "react-icons/ti";
 import { IoLogoYoutube } from "react-icons/io";
 // import { FaXTwitter } from "react-icons/fa6";
 
+type Props = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  route: string;
+  setRoute: (route: string) => void;
+};
 
-type Props = {};
+const Footer: FC<Props> = ({ setOpen, route, open, setRoute }) => {
+  const { data } = useLoadUserQuery(undefined, {});
 
-const Footer = (props: Props) => {
   return (
     <footer className="bg-gray-900 text-white ">
       <br />
@@ -68,20 +76,38 @@ const Footer = (props: Props) => {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      href="/profile"
-                      className="text-base text-white font-poppins font-[500] text-[17px] dark:text-gray-300 dark:hover:text-white"
-                    >
-                      My Account
-                    </Link>
+                    {data?.user ? (
+                      <Link
+                        href={`/profile`}
+                        className="text-base text-white font-poppins font-[500] text-[17px] dark:text-gray-300 dark:hover:text-white cursor-pointer"
+                      >
+                        My Account
+                      </Link>
+                    ) : (
+                      <div
+                        onClick={() => setOpen(true)}
+                        className="text-base text-white font-poppins font-[500] text-[17px] dark:text-gray-300 dark:hover:text-white cursor-pointer"
+                      >
+                        My Account
+                      </div>
+                    )}
                   </li>
                   <li>
-                    <Link
-                      href="/profile"
-                      className="text-base text-[17px] font-[500] font-poppins  dark:text-gray-300 dark:hover:text-white"
-                    >
-                      Course Dashboard
-                    </Link>
+                    {data?.user ? (
+                      <Link
+                        href={`/profile`}
+                        className="text-base text-white font-poppins font-[500] text-[17px] dark:text-gray-300 dark:hover:text-white cursor-pointer"
+                      >
+                        Course Dashboard
+                      </Link>
+                    ) : (
+                      <div
+                        onClick={() => setOpen(true)}
+                        className="text-base text-white font-poppins font-[500] text-[17px] dark:text-gray-300 dark:hover:text-white cursor-pointer"
+                      >
+                        Course Dashboard
+                      </div>
+                    )}
                   </li>
                 </ul>
               </div>
@@ -147,20 +173,38 @@ const Footer = (props: Props) => {
                 </div>
 
                 <div className="flex mt-2 ">
-                  <Link href={`https://www.youtube.com/channel/UCKJFJlEE6x4ZkN0WfvFMnPw `}>
-                    <IoLogoYoutube  size={30} className="mr-2 hover:text-[#521088]" />
+                  <Link
+                    href={`https://www.youtube.com/channel/UCKJFJlEE6x4ZkN0WfvFMnPw `}
+                  >
+                    <IoLogoYoutube
+                      size={30}
+                      className="mr-2 hover:text-[#521088]"
+                    />
                   </Link>
                   <Link href={`https://www.instagram.com/techeducoder/`}>
                     {" "}
-                    <FaInstagramSquare size={30} className="mr-2 hover:text-[#521088]" />
+                    <FaInstagramSquare
+                      size={30}
+                      className="mr-2 hover:text-[#521088]"
+                    />
                   </Link>
-                  <Link href={`https://www.linkedin.com/company/uniqueiitpvt/mycompany/`}>
+                  <Link
+                    href={`https://www.linkedin.com/company/uniqueiitpvt/mycompany/`}
+                  >
                     {" "}
-                    <FaLinkedin size={30} className="mr-2 hover:text-[#521088]" />
+                    <FaLinkedin
+                      size={30}
+                      className="mr-2 hover:text-[#521088]"
+                    />
                   </Link>
-                  <Link href={`https://www.facebook.com/profile.php?id=61558628114588 `}>
+                  <Link
+                    href={`https://www.facebook.com/profile.php?id=61558628114588 `}
+                  >
                     {" "}
-                    <FaFacebookSquare size={30} className="mr-2 hover:text-[#521088]" />
+                    <FaFacebookSquare
+                      size={30}
+                      className="mr-2 hover:text-[#521088]"
+                    />
                   </Link>
                 </div>
               </div>
@@ -169,7 +213,7 @@ const Footer = (props: Props) => {
         </div>
         <br />
         <p className="text-center  dark:text-white">
-          Copyright © 2024 UniqueIIT | All Rights Reserved
+          Copyright ©2024 UniqueIIT | All Rights Reserved
         </p>
       </div>
       <br />

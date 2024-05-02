@@ -30,7 +30,7 @@ const Page = (props: Props) => {
       />
       <br />
       <FAQ  inPage={true}/>
-      <Footer />
+      <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
     </div>
   );
 };

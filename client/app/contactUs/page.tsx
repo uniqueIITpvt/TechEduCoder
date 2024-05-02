@@ -28,7 +28,7 @@ const Page = (props: Props) => {
       />
       <ContactUs />
       
-      <Footer />
+      <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
     </div>
   );
 };

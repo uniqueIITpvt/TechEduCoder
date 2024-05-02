@@ -38,6 +38,7 @@ const Page = ({params}: Props) => {
         </div>
     )
    }
+    
    </>
   )
 }

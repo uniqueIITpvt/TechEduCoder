@@ -74,7 +74,7 @@ const CourseDetailsPage = ({ id }: Props) => {
               setOpen={setOpen}
             />
           )}
-          <Footer />
+        <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
         </div>
       )}
     </>

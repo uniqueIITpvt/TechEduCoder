@@ -32,7 +32,7 @@ const CourseCard: FC<Props> = ({ item, isProfile }) => {
        <h1 className="ml-2 opacity-80 text-[14px] font-[500] font-poppins">({item.reviews.length} <span>Reviews</span>)</h1>
        </div>
         <div className="px-3 pt-[0.4rem]">
-          <h1 className="mb-2 text-[22px] font-[700] hover:text-blue-600 opacity-90 text-[#000000] dark:text-white truncate ... font-poppins">
+          <h1 className="mb-2 text-[22px] font-[700] hover:text-blue-600 opacity-90 text-[#000000] dark:text-white truncate ... font-poppins ">
             {item.name.slice(0, 20)}
           </h1>
           <div className="w-full flex items-center  justify-start ">
@@ -40,10 +40,10 @@ const CourseCard: FC<Props> = ({ item, isProfile }) => {
             <div
               className={`text-black dark:text-[#fff] opacity-70  flex items-center justify-center ${
                 isProfile && "hidden 800px:inline"
-              } font-[500] font-poppins  text-[16px]`}
+              } font-[500] font-poppins  text-[16px] opacity-90`}
             >
               <PiStudentDuotone  />
-              <h5 className="ml-1 mr-1"> {item.purchased} Students</h5>
+              <h5 className="ml-1 mr-1 "> {item.purchased} Students</h5>
              
             </div>
             <div className="flex items-center ml-[1rem] opacity-70 ">

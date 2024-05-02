@@ -15,7 +15,7 @@ const Page = (props: Props) => {
   return (
     <div>
       <Heading
-        title="About us - Elearning"
+        title="About us - techEduCoder"
         description="Elearning is a learning management system for helping programmers."
         keywords="programming,mern"
       />
@@ -27,7 +27,7 @@ const Page = (props: Props) => {
         route={route}
       />
       <About />
-      <Footer />
+      <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
     </div>
   );
 };

@@ -31,7 +31,7 @@ const Page: FC<Props> = (props) => {
           route={route}
         />
         <Profile user={user} />
-        <Footer />
+        <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
       </Protected>
     </div>
   );

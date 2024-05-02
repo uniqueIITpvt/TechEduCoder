@@ -13,7 +13,7 @@ type Props = {
 
 const EbookCard: FC<Props> = ({ item, isProfile }) => {
   return (
-    <div className="w-[90%]  bg-white dark:bg-slate-500 dark:bg-opacity-20 backdrop-blur dark:border-[#ffffff1d]  dark:shadow-[bg-slate-700] rounded-lg  shadow-sm dark:shadow-inner  hover:-translate-y-1 hover:scale-70  duration-100">
+    <div className="w-[90%]  bg-slate-100 dark:bg-slate-500 dark:bg-opacity-20 backdrop-blur dark:border-[#ffffff1d]  dark:shadow-[bg-slate-700] rounded-lg  shadow-sm dark:shadow-inner  hover:-translate-y-1 hover:scale-70  duration-100">
       <Link href={`/eBooks/${item._id}`}>
         <div className="border border-red-500 p-2  rounded-t-[4px]">
           <div className="h-[18rem] overflow-hidden md:h-auto  ">
@@ -26,9 +26,9 @@ const EbookCard: FC<Props> = ({ item, isProfile }) => {
             />
           </div>
         </div>
-        <div className="px-3 flex flex-col  items-center justify-center mt-1 ">
+        <div className="px-3 flex flex-col  items-center justify-center mt-1  ">
         <Ratings rating={item.ratings} />
-          <h1 className="mb-2 text-[17px] font-[500] font-poppins  text-[#3b3b3b]  dark:text-white text-center ">
+          <h1 className=" text-[17px] font-[500] font-poppins  text-[#3b3b3b]  dark:text-white text-center ">
             {item.ebookTitle.slice(0, 20)}
           </h1>
 
@@ -45,7 +45,7 @@ const EbookCard: FC<Props> = ({ item, isProfile }) => {
           </h1>
 
           <div className="flex mt-2">
-            <h3 className="text-black dark:text-[#fff] font-poppins font-[600] text-[17]">
+            <h3 className="text-black dark:text-[#fff] font-poppins font-[700] text-[17]">
               {item.originalPrice === 0 ? "Free" : "₹ " + item.originalPrice}
             </h3>
             <h5 className="pl-3 text-[17px]  font-[500] mt-[-5px] line-through opacity-80 text-red-900 dark:text-[#fff]">

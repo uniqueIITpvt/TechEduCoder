@@ -53,7 +53,7 @@ const Page = (props: Props) => {
           <div className="w-[95%] 800px:w-[85%] m-auto min-h-[70vh]">
             <Heading
               title={"All courses -uniqueiit "}
-              description={"Elearning is a programming community."}
+              description={"online  is a programming community."}
               keywords={
                 "programming community, coding skills, expert insights, collaboration, growth"
               }
@@ -62,11 +62,11 @@ const Page = (props: Props) => {
             <div className="w-full flex items-center flex-wrap">
               <div
                 className={`${
-                  category === "All" ? "bg-[#284aa7] text-white" : "bg-[#eaeaf0] shadow-lg text-black"
-                } m-3   rounded-lg flex items-center justify-center font-Poppins p-3 px-4 cursor-pointer text-xl font-[600]`}
+                  category === "All" ? "bg-gradient-to-r from-blue-500 to-[#521088] text-white" : "bg-white  text-black opacity-80 "
+                }  m-1   rounded-full flex items-center justify-center font-Poppins p-2 px-3 cursor-pointer text-[16px] font-[500] hover:bg-gradient-to-r from-blue-500 to-[#521088] hover:text-white`}
                 onClick={() => setCategory("All")}
               >
-                All
+             All Courses
               </div>
               {categories &&
                 categories.map((item: any, index: number) => (
@@ -74,9 +74,9 @@ const Page = (props: Props) => {
                     <div
                       className={`${
                         category === item.title
-                          ? "bg-[#284aa7] text-white"
-                          : "bg-[#eaeaf0] shadow-lg text-black"
-                        } m-3   rounded-lg flex items-center justify-center font-Poppins p-3 px-4 cursor-pointer text-xl font-[600] hover:bg-slate-400`}
+                          ? "bg-gradient-to-r from-blue-500 to-[#521088] text-white"
+                          : " text-black"
+                        } m-1   rounded-full flex items-center justify-center font-Poppins p-2 px-3 cursor-pointer text-[16px] font-[500] hover:bg-gradient-to-r from-blue-500 to-[#521088] hover:text-white opacity-80`}
 
                       onClick={() => setCategory(item.title)}
                     >
@@ -95,7 +95,7 @@ const Page = (props: Props) => {
                 ))}
             </div>
           </div>
-          <Footer />
+          <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
         </>
       )}
     </div>

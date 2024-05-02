@@ -67,7 +67,7 @@ const EbookDetailsPage = ({ id }: Props) => {
             setRoute={setRoute}
             open={open}
             setOpen={setOpen}
-            activeItem={3}
+            activeItem={2}
           />
           
           {stripePromise && (
@@ -79,7 +79,7 @@ const EbookDetailsPage = ({ id }: Props) => {
               setOpen={setOpen}
             />
           )}
-          <Footer />
+           <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
         </div>
       )}
     </>

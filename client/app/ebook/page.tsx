@@ -33,7 +33,7 @@ const Page = (props: Props) => {
       </div>
       <Book />
 
-      <Footer />
+      <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
     </>
   );
 };

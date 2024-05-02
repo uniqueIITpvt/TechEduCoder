@@ -1,7 +1,14 @@
 import { styles } from "@/app/styles/style";
 import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { HiMinus, HiPlus } from "react-icons/hi";
+import { Carousel } from "react-responsive-carousel";
+import logo3 from "../../../public/1.jpg";
+import logo1 from "../../../public/2.jpg";
+import logo2 from "../../../public/3.jpg";
+import logo4 from "../../../public/mobile.jpg";
+import logo5 from "../../../public/saaa.png";
 
 type Props = {
   inPage: boolean;
@@ -31,7 +38,7 @@ const FAQ = ({ inPage }: Props) => {
         </h1>
         <div className="mt-5">
           <dl className="space-y-4">
-            {questions.map((q, index) => (
+            {questions.slice(0, 10).map((q, index) => (
               <div
                 key={index}
                 className={`${
@@ -72,7 +79,32 @@ const FAQ = ({ inPage }: Props) => {
         <br />
         <br />
       </div>
-      <div className="col-span-1"></div>
+      <div className="col-span-1">
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        
+      <Carousel
+            swipeable={false}
+            showArrows={false}
+            infiniteLoop={true}
+            autoPlay={true}
+            showThumbs={false}
+            showStatus={false}
+            interval={3000}
+            transitionTime={500}
+            className=""
+
+          >
+            {/* Ensure your images are responsive */}
+            <Image src={logo1} alt="" className="" />
+            <Image src={logo5} alt="" className="" />
+            <Image src={logo2} alt="" className="" />
+            
+          </Carousel>
+      </div>
     </div>
   );
 };

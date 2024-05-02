@@ -47,7 +47,7 @@ const Page = (props: Props) => {
             activeItem={1}
           />
           < Events />
-          <Footer />
+          <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
         </>
       )}
     </div>

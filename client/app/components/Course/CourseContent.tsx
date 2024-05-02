@@ -5,6 +5,7 @@ import Heading from "@/app/utils/Heading";
 import CourseContentMedia from "./CourseContentMedia";
 import Header from "../Header";
 import CourseContentList from "./CourseContentList";
+import Footer from "../Footer";
 
 type Props = {
   id: string;
@@ -50,6 +51,7 @@ const CourseContent = ({ id,user }: Props) => {
             />
           </div>
           </div>
+          <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
         </>
       )}
     </>

@@ -48,22 +48,23 @@ const Book = (props: Props) => {
     <br />
        <div className="w-[90%] m-auto justify-center flex items-center flex-wrap">
               <div
-                className={`${
-                  category === "All" ? "bg-[#284aa7] text-white" : "bg-[#eaeaf0] shadow-lg text-black"
-                } m-3   rounded-lg flex items-center justify-center font-Poppins p-3 px-4 cursor-pointer text-xl font-[600]`}
+               className={`${
+                category === "All" ? "bg-gradient-to-r from-blue-500 to-[#521088] text-white" : "bg-white  text-black opacity-80 "
+              }  m-1   rounded-full flex items-center justify-center font-Poppins p-2 px-3 cursor-pointer text-[16px] font-[500] hover:bg-gradient-to-r from-blue-500 to-[#521088] hover:text-white`}
                 onClick={() => setCategory("All")}
               >
-                All
+                All books
               </div>
               {categories &&
                 categories.map((item: any, index: number) => (
                   <div key={index}>
                     <div
-                      className={`${
+                       className={`${
                         category === item.title
-                          ? "bg-[#284aa7] text-white"
-                          : "bg-[#eaeaf0] shadow-lg text-black"
-                        } m-3   rounded-lg flex items-center justify-center font-Poppins p-3 px-4 cursor-pointer text-xl font-[600] hover:bg-slate-400`}
+                          ? "bg-gradient-to-r from-blue-500 to-[#521088] text-white"
+                          : " text-black"
+                        } m-1   rounded-full flex items-center justify-center font-Poppins p-2 px-3 cursor-pointer text-[16px] font-[500] hover:bg-gradient-to-r from-blue-500 to-[#521088] hover:text-white opacity-80`}
+
 
                       onClick={() => setCategory(item.title)}
                     >

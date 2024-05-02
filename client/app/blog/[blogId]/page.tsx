@@ -25,7 +25,7 @@ const Page = ({ params }: paramsType) => {
         route={route}
       />
       <BlogDetails params={params} />
-      <Footer />
+      <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
     </>
   );
 };

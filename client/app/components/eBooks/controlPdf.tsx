@@ -63,8 +63,8 @@ const ControlPdf: React.FC<Props> = ({
 
   return (
    <div className=" fixed z-[80] top-0 p-5    items-center justify-center flex  w-full  bg-black">
-     <div className="flex justify-between w-[50%]  ">
-      <div className="flex justify-between items-center">
+     <div className="flex  justify-center w-[50%]  ">
+      <div className="flex justify-center items-center mr-6">
         {/* <button 
           className={`mx-3 ${isFirstPage ? 'text-gray-500' : 'text-blue-500 hover:text-blue-700'} `} 
           onClick={goToFirstPage} 
@@ -118,15 +118,15 @@ const ControlPdf: React.FC<Props> = ({
         >
        < FaPlus color="white" /></button>
       </div>
-      <div className="mx-3">
+      {/* <div className="mx-3">
         <Link href={file} download={true} title="download" className="text-blue-500 hover:text-blue-700">
        <button><IoMdDownload size={20} color="white"/></button>
         </Link>
-      </div>
-      <div className="mx-3">
+      </div> */}
+      {/* <div className="mx-3">
       
       
-      </div>
+      </div> */}
     </div>
    </div>
   );
