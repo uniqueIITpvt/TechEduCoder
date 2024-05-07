@@ -21,16 +21,15 @@ import { GoDotFill } from "react-icons/go";
 
 type Props = {
   data: any;
-  stripePromise: any;
-  clientSecret: string;
   setRoute: any;
   setOpen: any;
+  handlePayment: (e:any) => Promise<void>;
 };
 
 const CourseDetails = ({
   data,
-  stripePromise,
-  clientSecret,
+ 
+  handlePayment,
   setRoute,
   setOpen: openAuthModal,
 }: Props) => {
@@ -304,7 +303,7 @@ const CourseDetails = ({
                     <div
                       className={`${styles.button} !w-full !items-center !justify-center`}
                       // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
-                      onClick={handleOrder}
+                      onClick={handlePayment}
                     >
                       Buy Now
                     </div>
@@ -422,7 +421,7 @@ const CourseDetails = ({
         </div>
       </div>
       <>
-        {open && (
+        {/* {open && (
           <div className="w-full h-screen bg-[#00000036] fixed top-0 left-0 z-50 flex items-center justify-center">
             <div className="w-[500px] min-h-[500px] bg-white rounded-lg shadow p-3">
               <div className="w-full flex justify-end">
@@ -446,7 +445,7 @@ const CourseDetails = ({
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </>
     </div>
   );
