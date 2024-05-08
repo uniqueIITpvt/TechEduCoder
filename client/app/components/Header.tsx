@@ -48,7 +48,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     { refetchOnMountOrArgChange: true }
   );
 
-  const { data } = useSession();
+  // const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
   const [logout, setLogout] = useState(false);
   const {} = useLogOutQuery(undefined, {
@@ -57,26 +57,26 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
 
   useEffect(() => {
     if (!isLoading) {
-      if (!userData) {
-        if (data) {
-          socialAuth({
-            email: data?.user?.email,
-            name: data?.user?.name,
-            avatar: data.user?.image,
-          });
-          refetch();
-        }
-      }
-      if (data === null) {
+      // if (!userData) {
+      //   if (data) {
+      //     socialAuth({
+      //       email: data?.user?.email,
+      //       name: data?.user?.name,
+      //       avatar: data.user?.image,
+      //     });
+      //     refetch();
+      //   }
+      // }
+      // if (data === null) {
         if (isSuccess) {
           toast.success("Login Successfully");
         }
-      }
-      if (data === null && !isLoading && !userData) {
+      // }
+      if (!isLoading && !userData) {
         setLogout(true);
       }
     }
-  }, [data, userData, isLoading]);
+  }, [ userData, isLoading]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
