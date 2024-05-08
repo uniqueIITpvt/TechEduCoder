@@ -231,8 +231,8 @@ const CourseLiveEvents = (props: Props) => {
                 </div>
 
                {EventsCourse &&
-                    EventsCourse.map((item:any) => (
-                <div  key={item.id}  className="flex p-4">
+                    EventsCourse.map((item:any, index:any) => (
+                <div  key={index.id}  className="flex p-4">
                   
                   <p className="mr-[1rem] font-[17px]">{item.id}</p>
                   <p className=" mr-[1rem] font-[500]  border-b-2 text-[17px] shadow-sm  ">

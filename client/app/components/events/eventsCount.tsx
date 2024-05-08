@@ -79,7 +79,8 @@ const EventsCount: React.FC<CountDownProps> = ({ item }) => {
           })}
           {Object.keys(timeLeft).length === 0 && (
             <div className="bg-red-300 bg-opacity-50 border border-red-500 p-2 rounded-md shadow-md text-center">
-              <div className="text-red font-semibold text-2xl">Time &apos;s Up</div>
+         <div className="text-red font-semibold text-2xl">Time &apos;s Up</div>
+
             </div>
           )}
         </div>
