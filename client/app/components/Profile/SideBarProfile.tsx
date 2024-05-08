@@ -1,13 +1,11 @@
 import Image from "next/image";
 import React, { FC } from "react";
 import avatarDefault from "../../../public/assests/avatar.png";
-import { RiLockPasswordLine } from "react-icons/ri";
 import { SiCoursera } from "react-icons/si";
 import { AiOutlineLogout } from "react-icons/ai";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import Link from "next/link";
 import { FaUser, FaUserEdit } from "react-icons/fa";
-import { LiaBookSolid } from "react-icons/lia";
 import { IoBookSharp } from "react-icons/io5";
 
 type Props = {

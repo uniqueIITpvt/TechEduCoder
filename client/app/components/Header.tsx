@@ -10,7 +10,7 @@ import Verification from "../components/Auth/Verification";
 import Image from "next/image";
 import avatar from "../../public/assests/avatar.png";
 import logo from "../../public/TEC logo By UniqueIIT (1500 x 500 px) (1).svg";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import {
   useLogOutQuery,
   useSocialAuthMutation,
@@ -126,11 +126,17 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           >
             <div className="w-[95%] 800px:w-[92%] m-auto h-full">
               <div className="w-full h-[80px] flex items-center justify-between px-3">
-                <div className="w-[5rem] md:w-[10rem]">
-                  <Link href={"/"}>
-                    <Image src={logo} alt="" />
-                  </Link>
-                </div>
+              <div className="w-[5rem] md:w-[10rem]">
+    <Link href="/">
+        <Image 
+            src={logo} 
+            alt="Logo Description"
+            width={500} // Adjust based on the actual size of the SVG for best quality
+            height={160} // Adjust based on the actual aspect ratio of the SVG
+            priority={true}
+        />
+    </Link>
+</div>
 
 
                 <div className=" bg-transparent relative px-2  w-[18rem]  md:w-[30rem] ">

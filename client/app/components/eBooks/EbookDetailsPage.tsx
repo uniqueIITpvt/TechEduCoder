@@ -50,7 +50,7 @@ const EbookDetailsPage = ({ id }: Props) => {
             activeItem={2}
           />
           
-          {stripePromise && (
+       
             <EbookDetails
               data={data.ebook}
               stripePromise={stripePromise}
@@ -58,7 +58,7 @@ const EbookDetailsPage = ({ id }: Props) => {
               setRoute={setRoute}
               setOpen={setOpen}
             />
-          )}
+    
            <Footer open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
         </div>
       )}

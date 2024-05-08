@@ -70,7 +70,7 @@ const Profile: FC<Props> = ({ user }) => {
       setCourses(filteredCourses);
     }
   }, [data]);
-  console.log(active);
+
 
   return (
     <div className="w-[85%] mx-auto ">
@@ -98,7 +98,7 @@ const Profile: FC<Props> = ({ user }) => {
 
      <div className="flex ">
      <div
-        className={`hidden  md:w-[310px] md:h-[450px] dark:bg-slate-900 bg-opacity-90  bg-white dark:border-[#ffffff1d]  dark:shadow-sm  mb-[80px] sticky left-[30px] border-r-[1px] border-[#00000014]  border-opacity-60 `}
+        className={`  md:w-[310px] md:h-[450px] dark:bg-slate-900 bg-opacity-90  bg-white dark:border-[#ffffff1d]  dark:shadow-sm  mb-[80px] sticky left-[30px] border-r-[1px] border-[#00000014]  border-opacity-60 `}
       >
       <br />
         <SideBarProfile
