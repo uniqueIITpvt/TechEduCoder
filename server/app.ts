@@ -14,6 +14,20 @@ import { rateLimit } from 'express-rate-limit';
 import blogsRouter from './routes/blogs.route';
 import ebookRouter from './routes/ebook.route';
 import courseEventRouter from './routes/courseEvents.route';
+// You can also use ESM `import * as Sentry from "@sentry/node"` instead of `require`
+const Sentry = require("@sentry/node");
+import { nodeProfilingIntegration } from "@sentry/profiling-node";
+
+Sentry.init({
+  dsn: "https://0180fab26d88770ecd9d96f9d3f6b802@o4507213780090880.ingest.de.sentry.io/4507214544175184",
+  integrations: [
+    nodeProfilingIntegration(),
+  ],
+  // Performance Monitoring
+  tracesSampleRate: 1.0, //  Capture 100% of the transactions
+  // Set sampling rate for profiling - this is relative to tracesSampleRate
+  profilesSampleRate: 1.0,
+});
 
 
 // body parser
@@ -32,7 +46,7 @@ app.use(cookieParser());
 //   })
 // );
 app.use(cors({
-  origin: ["https://tech-edu-coder-client.vercel.app"],
+  origin: ["https://tech-edu-coder-client.vercel.app", ],
   methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
   credentials: true,
 }));
@@ -78,4 +92,6 @@ app.all('*', (req: Request, res: Response, next: NextFunction) => {
 
 // middleware calls
 app.use(limiter);
+// app.use(ErrorMiddleware);
+app.use(Sentry.Handlers.errorHandler());
 app.use(ErrorMiddleware);

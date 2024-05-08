@@ -5,11 +5,14 @@ import {
   getAllOrders,
   newPayment,
   sendStripePublishableKey,
+  valdateOrder,
 } from "../controllers/order.controller";
 const orderRouter = express.Router();
 
 orderRouter.post("/create-order", isAutheticated, createOrder);
 
+
+orderRouter.post('/validate-order', valdateOrder)
 orderRouter.get(
   "/get-orders",
   isAutheticated,

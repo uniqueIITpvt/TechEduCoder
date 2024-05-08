@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
-import { IOrder } from "../models/order.Model";
+import OrderModel, { IOrder } from "../models/order.Model";
 import userModel from "../models/user.model";
 import CourseModel, { ICourse } from "../models/course.model";
 import path from "path";
@@ -10,28 +10,31 @@ import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.Model";
 import { getAllOrdersService, newOrder } from "../services/order.service";
 import { redis } from "../utils/redis";
+import crypto from "crypto";
+
 require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
+const Razorpay = require("razorpay");
 
 // create order
 export const createOrder = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { courseId, payment_info } = req.body as IOrder;
+      // const { courseId, payment_info } = req.body as IOrder;
+      const { amount, currency, courseId } = req.body;
 
-      if (payment_info) {
-        if ("id" in payment_info) {
-          const paymentIntentId = payment_info.id;
-          const paymentIntent = await stripe.paymentIntents.retrieve(
-            paymentIntentId
-          );
-
-          if (paymentIntent.status !== "succeeded") {
-            return next(new ErrorHandler("Payment not authorized!", 400));
-          }
-        }
-      }
+      const razorpay = new Razorpay({
+        key_id: process.env.KEY_ID,
+        key_secret: process.env.KEY_SECRET,
+      });
+      const options = {
+        amount: amount * 100, // Razorpay expects the amount in the smallest currency unit (e.g., paise)
+        currency,
+        receipt: `rcpt_${Date.now()}`,
+        payment_capture: 1,
+      };
+    
+      // const response = await razorpay.orders.create(options)
 
       const user = await userModel.findById(req.user?._id);
 
@@ -45,18 +48,21 @@ export const createOrder = CatchAsyncError(
         );
       }
 
-      const course:ICourse | null = await CourseModel.findById(courseId);
+      const course: ICourse | null = await CourseModel.findById(courseId);
 
       if (!course) {
         return next(new ErrorHandler("Course not found", 404));
       }
-
+      const razorpayOrder = await razorpay.orders.create(options);
       const data: any = {
         courseId: course._id,
         userId: user?._id,
-        payment_info,
+        orderId: `order_${Date.now()}`,
+        razorpayOrderId: razorpayOrder.id,
+        amount,
+        currency,
+        status: "created",
       };
-
       const mailData = {
         order: {
           _id: course._id.toString().slice(0, 6),
@@ -106,7 +112,47 @@ export const createOrder = CatchAsyncError(
 
       await course.save();
 
-      newOrder(data, res, next);
+      const order = await OrderModel.create(data);
+
+      res.status(201).json({
+        succcess: true,
+        order,
+      });
+
+      //    res.status(201).json({
+      //   success: true,
+      //   message: 'Order successfully created',
+      //   order: newOrder,
+
+      // });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+export const valdateOrder = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
+
+    try {
+      // Check if process.env.KEY_SECRET is defined before using it
+      if (!process.env.KEY_SECRET) {
+        return next(new ErrorHandler("key  secret not found", 500));
+      }
+      const sha = crypto.createHmac("sha256", process.env.KEY_SECRET);
+      //order_id + "|" + razorpay_payment_id
+      sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+      const digest = sha.digest("hex");
+      if (digest !== razorpay_signature) {
+        return next(new ErrorHandler("Transaction is not legit!", 500));
+      }
+      res.json({
+        msg: "success",
+        orderId: razorpay_order_id,
+        paymentId: razorpay_payment_id,
+      });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
@@ -141,7 +187,7 @@ export const newPayment = CatchAsyncError(
         amount: req.body.amount,
         currency: "inr",
         metadata: {
-          company: "E-Learning",
+          company: "TechEduCOder",
         },
         automatic_payment_methods: {
           enabled: true,
