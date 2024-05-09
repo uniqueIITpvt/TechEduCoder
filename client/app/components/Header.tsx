@@ -13,7 +13,8 @@ import logo from "../../public/TEC logo By UniqueIIT (1500 x 500 px) (1).svg";
 // import { useSession } from "next-auth/react";
 import {
   useLogOutQuery,
-  useSocialAuthMutation,
+  useLoginMutation,
+  // useSocialAuthMutation,
 } from "@/redux/features/auth/authApi";
 import { toast } from "react-hot-toast";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
@@ -49,7 +50,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   );
 
   // const { data } = useSession();
-  const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
+  const [socialAuth, { isSuccess, error }] = useLoginMutation();
   const [logout, setLogout] = useState(false);
   const {} = useLogOutQuery(undefined, {
     skip: !logout ? true : false,
@@ -68,15 +69,15 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
       //   }
       // }
       // if (data === null) {
-        if (isSuccess) {
-          toast.success("Login Successfully");
-        }
+      if (isSuccess) {
+        toast.success("Login Successfully");
+      }
       // }
       if (!isLoading && !userData) {
         setLogout(true);
       }
     }
-  }, [ userData, isLoading]);
+  }, [userData, isLoading]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -126,18 +127,17 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           >
             <div className="w-[95%] 800px:w-[92%] m-auto h-full">
               <div className="w-full h-[80px] flex items-center justify-between px-3">
-              <div className="w-[5rem] md:w-[10rem]">
-    <Link href="/">
-        <Image 
-            src={logo} 
-            alt="Logo Description"
-            width={500} // Adjust based on the actual size of the SVG for best quality
-            height={160} // Adjust based on the actual aspect ratio of the SVG
-            priority={true}
-        />
-    </Link>
-</div>
-
+                <div className="w-[5rem] md:w-[10rem]">
+                  <Link href="/">
+                    <Image
+                      src={logo}
+                      alt="Logo Description"
+                      width={500} // Adjust based on the actual size of the SVG for best quality
+                      height={160} // Adjust based on the actual aspect ratio of the SVG
+                      priority={true}
+                    />
+                  </Link>
+                </div>
 
                 <div className=" bg-transparent relative px-2  w-[18rem]  md:w-[30rem] ">
                   <AiOutlineSearch
@@ -153,13 +153,14 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
 
                   {activeSearch?.length > 0 && (
                     <div className="absolute w-full  bg-slate-50 shadow-sm-2 rounded-xl z-[9] p-4 ">
-                      { activeSearch && activeSearch.map((course: any) => (
-                        <Link href={`/course/${course._id}`} key={course._id}>
-                          <p className="cursor-pointer p-2 hover:bg-gray-300 text-black rounded-sm border-b-2 text-[16px]  shadow-sm leading-[1.2] ">
-                            {course.name}
-                          </p>
-                        </Link>
-                      ))}
+                      {activeSearch &&
+                        activeSearch.map((course: any) => (
+                          <Link href={`/course/${course._id}`} key={course._id}>
+                            <p className="cursor-pointer p-2 hover:bg-gray-300 text-black rounded-sm border-b-2 text-[16px]  shadow-sm leading-[1.2] ">
+                              {course.name}
+                            </p>
+                          </Link>
+                        ))}
                     </div>
                   )}
                 </div>
@@ -168,7 +169,6 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                   <NavItems activeItem={activeItem} isMobile={false} />
                   <Dropdown />
 
-               
                   <div className="800px:hidden">
                     <HiOutlineMenuAlt3
                       size={25}
@@ -187,7 +187,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                         alt=""
                         width={30}
                         height={30}
-                        className="w-[30px] h-[30px] rounded-full cursor-pointer md:hidden  lg:block "
+                        className=" hidden 800px:block  w-[30px] h-[30px] rounded-full cursor-pointer md:hidden  lg:block "
                         style={{
                           border:
                             activeItem === 5 ? "2px solid #37a39a" : "none",
@@ -214,42 +214,40 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               >
                 <div className="w-[70%] fixed z-[999999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0">
                   <NavItems activeItem={activeItem} isMobile={true} />
-             <div className="ml-5">
-             {userData?.user ? (
-                    <Link href={"/profile"}>
-                      <Image
-                        src={
-                          userData?.user.avatar
-                            ? userData.user.avatar.url
-                            : avatar
-                        }
-                        alt=""
-                        width={30}
-                        height={30}
-                        className="w-[30px] h-[30px] rounded-full ml-[20px] cursor-pointer"
-                        style={{
-                          border:
-                            activeItem === 5 ? "2px solid #37a39a" : "none",
+                  <div className="ml-5">
+                    {userData?.user ? (
+                      <Link href={"/profile"}>
+                        <Image
+                          src={
+                            userData?.user.avatar
+                              ? userData.user.avatar.url
+                              : avatar
+                          }
+                          alt=""
+                          width={30}
+                          height={30}
+                          className="w-[30px] h-[30px] rounded-full ml-[20px] cursor-pointer"
+                          style={{
+                            border:
+                              activeItem === 5 ? "2px solid #37a39a" : "none",
+                          }}
+                        />
+                      </Link>
+                    ) : (
+                      <HiOutlineUserCircle
+                        size={25}
+                        className="800px:block cursor-pointer dark:text-white text-black"
+                        onClick={() => {
+                          setOpen(true);
+                          setOpenSidebar(false);
                         }}
                       />
-                    </Link>
-                  ) : (
-                    <HiOutlineUserCircle
-                      size={25}
-                      className="800px:block cursor-pointer dark:text-white text-black"
-                      onClick={() => {
-                        setOpen(true);
-                        setOpenSidebar(false);
-                      }}
-                     
-                    
-                    />
-                  )}
-             </div>
+                    )}
+                  </div>
                   <br />
                   <br />
                   <p className="text-[17px] px-2 pl-5 text-black dark:text-white">
-                    Copyright @2024  By UniqueIIT
+                    Copyright @2024 By UniqueIIT
                   </p>
                 </div>
               </div>

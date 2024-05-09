@@ -45,7 +45,7 @@ const Blogs = (props: Props) => {
             {/* Main Content */}
             <div className="md:col-span-2 ">
               <div className="grid grid-rows-1 sm:grid-rows-2 md:grid-rows-3 lg:grid-rows-4 gap-4 md:rows-span-4 ">
-                {blog.slice(0, 10).map((blog: any, i: number) => (
+                {blog.map((blog: any, i: number) => (
                   <BlogCard key={i} blog={blog} />
                 ))}
               </div>
@@ -65,18 +65,18 @@ const Blogs = (props: Props) => {
             </div>
            
 
-              <br />
-              <br />
+  
+     
               <br />
               <div className="bg-white p-4 rounded-sm">
                 {/* Post Items */}
                 <div className="bg-white shadow-sm rounded-md p-6">
-                  <h2 className="text-2xl font-bold mb-4 text-black opacity-90">Recent Posts</h2>
+                  <h2 className="text-[40px] font-[700] mb-4 text-black opacity-90">Recent Posts</h2>
                   <ul className="list-none space-y-3">
                     {blog.map((blog: any, index: number) => (
                       <li
                         key={index}
-                        className="text-blue-600 hover:text-blue-800 transition duration-300 ease-in-out"
+                        className="text-blue-600 hover:text-blue-800 transition duration-300 ease-in-out text-[18px] font-[600]"
                       >
                         <Link href={blog._id}>{blog.Title}</Link>
                       </li>

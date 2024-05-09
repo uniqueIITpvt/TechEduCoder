@@ -34,7 +34,7 @@ const SideBarProfile: FC<Props> = ({
         onClick={() => setActive(1)}
       >
         <FaUser />
-        <h5 className="pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
+        <h5 className="hidden md:block pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
           My Profile
         </h5>
       </div>
@@ -47,7 +47,7 @@ const SideBarProfile: FC<Props> = ({
         onClick={() => setActive(2)}
       >
         <IoBookSharp size={20} className="dark:text-white text-black" />
-        <h5 className="pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
+        <h5 className=" hidden md:block pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
           My Books
         </h5>
       </div>
@@ -60,7 +60,7 @@ const SideBarProfile: FC<Props> = ({
         onClick={() => setActive(3)}
       >
         <SiCoursera size={20} className="dark:text-white text-black" />
-        <h5 className="pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
+        <h5 className=" hidden  md:block  pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
           Enrolled Courses
         </h5>
       </div>
@@ -74,7 +74,7 @@ const SideBarProfile: FC<Props> = ({
         onClick={() => setActive(4)}
       >
         <FaUserEdit size={20} className="dark:text-white text-black" />
-        <h5 className="pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
+        <h5 className=" hidden md:block pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
           Edit Profile
         </h5>
       </div>
@@ -91,7 +91,7 @@ const SideBarProfile: FC<Props> = ({
             size={20}
             className="dark:text-white text-black"
           />
-          <h5 className="pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
+          <h5 className=" hidden md:block pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
             Admin Dashboard
           </h5>
         </Link>
@@ -105,7 +105,7 @@ const SideBarProfile: FC<Props> = ({
         onClick={() => logOutHandler()}
       >
         <AiOutlineLogout size={20} className="dark:text-white text-black" />
-        <h5 className="pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
+        <h5 className=" hidden  md:block pl-2 font-Poppins  text-[17px] font-poppins font-[500] ">
           Log Out
         </h5>
       </div>

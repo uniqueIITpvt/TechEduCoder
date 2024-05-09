@@ -94,11 +94,11 @@ const Profile: FC<Props> = ({ user }) => {
           <p className="text-[16px] font-poppins font-[500]">{user.email}</p>
         </div>
       </div>
-      <div className="border-[1px] border-[#00000014]  border-opacity-40"></div>
+      <div className="border-[1px] border-[#00000014]  border-opacity-40 mt-2"></div>
 
      <div className="flex ">
      <div
-        className={` md:w-[310px] md:h-[450px] dark:bg-slate-900 bg-opacity-90  bg-white dark:border-[#ffffff1d]  dark:shadow-sm  mb-[80px] sticky left-[30px] border-r-[1px] border-[#00000014]  border-opacity-60 `}
+        className={`  w-[50px] md:w-[310px] md:h-[450px] dark:bg-slate-900 bg-opacity-90  bg-white dark:border-[#ffffff1d]  dark:shadow-sm  mb-[80px] sticky left-[30px] border-r-[1px] border-[#00000014]  border-opacity-60 `}
       >
       <br />
         <SideBarProfile
