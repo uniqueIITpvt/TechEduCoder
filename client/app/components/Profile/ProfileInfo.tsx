@@ -20,7 +20,7 @@ const ProfileInfo: FC<Props> = ({ user }) => {
     <>
       <div className="w-[90%] mx-auto flex justify-start">
         <div className="">
-          <h5 className="md:pl-8 font-Poppins  text-[27px] font-poppins font-[700] mt-5  opacity-80 ">
+          <h5 className="md:pl-8 font-Poppins  text-[27px] font-poppins font-[700] mt-5  opacity-80  ml-2">
             My Profile
           </h5>
           <h5 className="md:pl-8 font-Poppins  text-[17px] font-poppins font-[500] md:px-4 py-2 opacity-95">

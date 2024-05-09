@@ -74,7 +74,7 @@ const Profile: FC<Props> = ({ user }) => {
 
   return (
     <div className="w-[85%] mx-auto ">
-      <div className="  flex items-center justify-start mt-10 ">
+      <div className="flex items-center justify-start mt-10 ">
         <div className="mr-2 md:ml-0">
     
           <Image

@@ -49,6 +49,7 @@ const CourseDetailsPage = ({ id }: Props) => {
     };
   }, []);
   
+  
 
   const handlePayment = async (e: any) => {
   
@@ -61,10 +62,21 @@ const CourseDetailsPage = ({ id }: Props) => {
     const amount = Math.round(data.course.discountPrice * 100);
     const currency = "INR"; 
     // await createOrder({ amount, currency, courseId: id });
-    const orderResponse = await createOrder({ amount, currency, courseId: id }).unwrap();
+    const response = await fetch("http://localhost:8000/api/v1/create-order", {
+      method: "POST",
+      body: JSON.stringify(
+        { amount, currency, courseId: id }
+      ),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const order = await response.json();
+    console.log(order);
+    // const orderResponse = await createOrder({ amount, currency, courseId: id }).unwrap();
 
     // Check the response
-    console.log('Order Response:', orderResponse);
+    // console.log('Order Response:', orderResponse);
 
     const options = {
       key: "rzp_test_DqTTqV6ObklsQm",

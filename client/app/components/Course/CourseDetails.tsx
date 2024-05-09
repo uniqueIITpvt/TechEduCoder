@@ -3,11 +3,11 @@ import CoursePlayer from "@/app/utils/CoursePlayer";
 import Ratings from "@/app/utils/Ratings";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { IoCloseOutline } from "react-icons/io5";
+// import { IoCloseOutline } from "react-icons/io5";
 import { format } from "timeago.js";
 import CourseContentList from "../Course/CourseContentList";
-import { Elements } from "@stripe/react-stripe-js";
-import CheckOutForm from "../Payment/CheckOutForm";
+// import { Elements } from "@stripe/react-stripe-js";
+// import CheckOutForm from "../Payment/CheckOutForm";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import Image from "next/image";
 import { IoIosShareAlt } from "react-icons/io";
@@ -53,14 +53,16 @@ const CourseDetails = ({
   const isPurchased =
     user && user?.courses?.find((item: any) => item._id === data._id);
 
-  const handleOrder = (e: any) => {
-    if (user) {
-      setOpen(true);
-    } else {
-      setRoute("Login");
-      openAuthModal(true);
-    }
-  };
+    const handleOrder = (e: any) => {
+      e.preventDefault(); 
+      if (user) {
+        handlePayment(e); 
+      } else {
+        setRoute("Login"); 
+        openAuthModal(true); 
+      }
+    };
+    
   // Assuming videoLength is in minutes, convert the total length to hours
   const totalVideoLengthInHours = data.courseData.reduce(
     (total: any, video: any) => total + video.videoLength,
@@ -303,7 +305,7 @@ const CourseDetails = ({
                     <div
                       className={`${styles.button} !w-full !items-center !justify-center`}
                       // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
-                      onClick={handlePayment}
+                      onClick={handleOrder}
                     >
                       Buy Now
                     </div>
