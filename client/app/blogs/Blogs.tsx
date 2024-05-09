@@ -20,8 +20,8 @@ const Blogs = (props: Props) => {
   }, [data]);
 
   const opts = {
-    height: "260",
-    width: "400",
+    height: "100%",
+    width: "100%",
     playerVars: {
       autoplay: 0,
     },
@@ -54,11 +54,15 @@ const Blogs = (props: Props) => {
             <div className="md:col-span-1 rounded-sm">
               {/* Advertisement Widget */}
          
+            <div className="aspect-video">
             <YouTube
                 videoId="WLcaNNHoUJ0"
                 opts={opts}
                 onReady={handleVideoReady}
+                iframeClassName="rounded-md" 
+                style={{ width: '100%', height: '100%' }}
               />
+            </div>
            
 
               <br />
