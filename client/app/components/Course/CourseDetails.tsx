@@ -57,7 +57,7 @@ const CourseDetails = ({
     const userId = user?._id;
   
     try {
-      const response = await fetch("http://localhost:8000/api/v1/create-order", {
+      const response = await fetch("https://techeducoder-lrel.onrender.com/api/v1/create-order", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ const CourseDetails = ({
           const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = response;
           try {
             const validationResponse = await fetch(
-              "http://localhost:8000/api/v1/validate-order",
+              "https://techeducoder-lrel.onrender.com/api/v1/validate-order",
               {
                 method: "POST",
                 headers: {

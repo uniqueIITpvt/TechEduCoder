@@ -18,6 +18,7 @@ import { MdOutlineWatchLater } from "react-icons/md";
 import { RxUpdate } from "react-icons/rx";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import dynamic from "next/dynamic";
+import toast from "react-hot-toast";
 
 const ShowEbook = dynamic(() => import("./ShowEbook"), { ssr: false });
 
@@ -45,22 +46,134 @@ const EbookDetails = ({
     setUser(userData?.user);
   }, [userData]);
 
-  const dicountPercentenge =
-    ((data?.estimatedPrice - data.originalPrice) / data?.estimatedPrice) * 100;
+  const handlePayment = async () => {
+    const res = await initializeRazorpay();
+    if (!res) {
+      toast.error("Razorpay SDK Failed to load");
+      return;
+    }
 
-  const discountPercentengePrice = dicountPercentenge.toFixed(0);
+    const amount = Math.round(data.discountPrice * 100);
+    const currency = "INR";
+    const userId = user?._id;
 
-  const isPurchased =
-    user && user?.courses?.find((item: any) => item._id === data._id);
+    try {
+      const response = await fetch(
+        "https://techeducoder-lrel.onrender.com/api/v1/create-BookOrder",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount,
+            currency,
+            bookId: data._id,
+            userId,
+          }),
+        }
+      );
 
-  const handleOrder = (e: any) => {
-    if (user) {
-      setOpen(true);
-    } else {
-      setRoute("Login");
-      openAuthModal(true);
+      const data1 = await response.json();
+      if (!response.ok) {
+        toast.error( "this is",  data1.message);
+      } 
+     
+
+
+      var options = {
+        key: process.env.KEY,
+        name: "book Payment",
+        currency: currency,
+        amount: amount,
+        order_id: data1.orderId,
+        description: "Thank you for purchasing my books",
+        handler: async function (response: any) {
+          const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
+            response;
+          try {
+            const validationResponse = await fetch(
+              "https://techeducoder-lrel.onrender.com/api/v1/validateBookOrder",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  razorpay_order_id,
+                  razorpay_payment_id,
+                  razorpay_signature,
+                }),
+              }
+            );
+            const validationData = await validationResponse.json();
+            if (validationData.success) {
+              toast.success("Payment verification successful");
+              refetch(); 
+              setUser({ ...user, book: [...user.books, { _id: data._id }] }); // Update locally without refetching if possible
+            } else {
+              throw new Error("Payment verification failed");
+            }
+          } catch (error: any) {
+            toast.error("Error" , error.message);
+          }
+        },
+        method: {
+          netbanking: true,
+          card: true,
+          wallet: true,
+          upi: true,
+          paylater: false,
+        },
+        prefill: {
+          name: "tanwir alam",
+          email: "tanw9004167@gmail.com",
+          contact: "9835471132",
+        },
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error: any) {
+      toast.error(
+        error.message || "An error occurred during the payment process"
+      );
     }
   };
+
+  const initializeRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleOrder = (e: any) => {
+    e.preventDefault(); 
+    if (user) {
+      handlePayment(); 
+    } else {
+      setRoute("Login"); 
+      openAuthModal(true); 
+    }
+  };
+  const dicountPercentenge =
+  ((data?.originalPrice - data.discountPrice) / data?.originalPrice) * 100;
+
+const discountPercentengePrice = dicountPercentenge.toFixed(0);
+
+  const isPurchased =
+    user && user?.books?.find((item: any) => item._id === data._id);
+
   return (
     <div className=" w-full ">
       <div className="w-[90%] m-auto  mt-10  mb-20">
@@ -112,7 +225,7 @@ const EbookDetails = ({
               />
             </div>
             <div className="w-full p-4  flex items-center justify-start  border-b-2 border-[#e4e6ee]  backdrop-blur shadow-[bg-slate-700]  rounded shadow-inner">
-              {["Overview" ].map((text, index) => (
+              {["Overview"].map((text, index) => (
                 <h5
                   key={index}
                   className={`800px:text-[20px] cursor-pointer ${
@@ -198,18 +311,29 @@ const EbookDetails = ({
                   </p>
 
                   <p className="text-[17px] text-[#3539fa] dark:text-white  font-[400] ">
-                    {data.originalPrice === 0 ? "" : discountPercentengePrice+"% off"}
-                    
+                    {data.originalPrice === 0
+                      ? ""
+                      : discountPercentengePrice + "% off"}
                   </p>
                 </div>
                 <div className="flex items-center mt-5 w-full justify-center">
-                  <Link
-                    className={`${styles.button} !w-full !justify-center`}
-                    // className=" rounded-lg p-5 text-[#ffffff] py-2 font-[500] font-poppins text-[17px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br "
-                    href={`/eBook-access/${data._id}`}
-                  >
-                    Read Ebook
-                  </Link>
+                  {isPurchased ? (
+                    <Link
+                      className={`${styles.button} !w-full !justify-center`}
+                      // className=" rounded-lg p-5 text-[#ffffff] py-2 font-[500] font-poppins text-[17px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br "
+                      href={`/eBook-access/${data._id}`}
+                    >
+                      Read Ebook
+                    </Link>
+                  ) : (
+                    <div
+                      className={`${styles.button} !w-full !items-center !justify-center`}
+                      // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
+                      onClick={handleOrder}
+                    >
+                      Buy Now
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="w-full m-6 leading-8 ">
@@ -236,7 +360,7 @@ const EbookDetails = ({
                     {" "}
                     <FaGraduationCap />
                   </span>{" "}
-                  {data.purchased} Students  Purchased
+                  {data.purchased} Students Purchased
                 </h1>
 
                 <h1 className="text-[17px]  flex items-center  dark:text-white text-black font-[400] font-poppins mb-2 ">
