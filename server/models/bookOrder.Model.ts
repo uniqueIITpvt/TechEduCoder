@@ -1,7 +1,7 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
-export interface IOrder extends Document {
-  courseId: string;
+export interface IBookOrder extends Document {
+  bookId: string;
   orderId: string;
   razorpayOrderId: string;
   razorpayPaymentId: string | null;
@@ -12,15 +12,14 @@ export interface IOrder extends Document {
   status: "created" | "paid" | "failed" | "refunded";
 }
 
-const orderSchema = new Schema<IOrder>(
+const bookOrderSchema = new Schema<IBookOrder>(
   {
-    courseId: {
+    bookId: { 
       type: String,
       required: true,
     },
     orderId: { type: String, required: true },
     razorpayOrderId: { type: String, required: true },
-  
     userId: { type: String, required: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true },
@@ -33,6 +32,6 @@ const orderSchema = new Schema<IOrder>(
   { timestamps: true }
 );
 
-const OrderModel: Model<IOrder> = mongoose.model("Order", orderSchema);
+const EbookOrderModel: Model<IBookOrder> = mongoose.model("BookOrder", bookOrderSchema);
 
-export default OrderModel;
+export default EbookOrderModel;

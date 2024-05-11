@@ -146,7 +146,7 @@
   <body>
     <div class="container">
       <div class="message-sm">
-        <h1>Your ELearning order is confirmed!</h1>
+        <h1>Your  TechEduCoder order is confirmed!</h1>
         <p>And we're just as excited as you are.</p>
       </div>
       <br>
@@ -159,7 +159,7 @@
                     Order #: <%= order._id %>
                 </td>
                 <td>
-                        Order Date: <%= order.date %>
+                     Order Date: <%= order.date %>
                 </td>
             </tr>
          </table>
@@ -175,7 +175,7 @@
           <tr>
             <td class="second-td"><%= order.name %></td>
             <td class="second-td">1</td>
-            <td class="second-td">$<%= order.price %></td>
+            <td class="second-td">RS<%= order.discountPrice %></td>
           </tr>
         </table>
 
@@ -184,20 +184,20 @@
         >
           <tr>
             <td class="col-2">Subtotal:</td>
-            <td class="col-2">$<%= order.price %></td>
+            <td class="col-2">RS<%= order.discountPrice %></td>
           </tr>
         </table>
         <table class="table-row" style="margin-top: -20px;">
             <tr>
                 <td class="col-2">Total:</td>
-                <td class="col-2">$<%= order.price %></td>
+                <td class="col-2">RS<%= order.discountPrice %></td>
               </tr>
         </table>
       </div>
       <div class="footer">
         <p>
           If you have any questions, please contact our support team at
-          <a href="mailto:support@becodemy.com">support@becodemy.com</a>
+          <a href="mailto:uniqueiit22@gmail.com">uniqueiit22@gmail.com</a>
         </p>
         <p>&copy; 2024 TechEduCoder all right reserved.</p>
       </div>
