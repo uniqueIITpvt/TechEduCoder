@@ -18,24 +18,23 @@ import { MdOutlineWatchLater } from "react-icons/md";
 import { RxUpdate } from "react-icons/rx";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { GoDotFill } from "react-icons/go";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 type Props = {
   data: any;
   setRoute: any;
   setOpen: any;
-  handlePayment: (e:any) => Promise<void>;
+  
 };
 
 const CourseDetails = ({
   data,
- 
-  handlePayment,
   setRoute,
   setOpen: openAuthModal,
 }: Props) => {
   const { data: userData, refetch } = useLoadUserQuery(undefined, {});
   const [user, setUser] = useState<any>();
-  const [open, setOpen] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [readMore, setReadMore] = useState(false);
   const [seeMore, setSeeMore] = useState(false);
@@ -44,6 +43,112 @@ const CourseDetails = ({
   useEffect(() => {
     setUser(userData?.user);
   }, [userData]);
+
+
+  const handlePayment = async () => {
+    const res = await initializeRazorpay();
+    if (!res) {
+      toast.error("Razorpay SDK Failed to load");
+      return;
+    }
+  
+    const amount = Math.round(data.discountPrice * 100);
+    const currency = "INR";
+    const userId = user?._id;
+  
+    try {
+      const response = await fetch("http://localhost:8000/api/v1/create-order", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          amount,
+          currency,
+          courseId: data._id,
+          userId
+        })
+      });
+  
+      const data1 = await response.json();
+      if (!response.ok) {
+        toast.error(data1.message);
+      }
+
+  
+      var options = {
+        key: process.env.KEY, 
+        name: "Course Payment",
+        currency: currency,
+        amount: amount,
+        order_id: data1.orderId,
+        description: "Thank you for purchasing my course",
+        handler: async function (response:any) {
+          const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = response;
+          try {
+            const validationResponse = await fetch(
+              "http://localhost:8000/api/v1/validate-order",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  razorpay_order_id,
+                  razorpay_payment_id,
+                  razorpay_signature,
+                }),
+              }
+            );
+            const validationData = await validationResponse.json();
+            if (validationData.success) {
+              toast.success("Payment verification successful");
+              refetch();  // Refetch user data or update purchase status
+              setUser({ ...user, courses: [...user.courses, { _id: data._id }] }); // Update locally without refetching if possible
+            } else {
+              throw new Error("Payment verification failed");
+            }
+          } catch (error:any) {
+            toast.error(error.message);
+          }
+        },
+        method: {
+          netbanking: true,
+          card: true,
+          wallet: true,
+          upi: true,
+          paylater: false, 
+        },
+        prefill: {
+          name: "tanwir alam",
+          email: "tanw9004167@gmail.com",
+          contact: "9835471132",
+        },
+      };
+  
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error:any) {
+      toast.error(error.message || "An error occurred during the payment process");
+    }
+  };
+  
+  const initializeRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+
+      document.body.appendChild(script);
+    });
+  };
+
 
   const dicountPercentenge =
     ((data?.originalPrice - data.discountPrice) / data?.originalPrice) * 100;
@@ -56,7 +161,7 @@ const CourseDetails = ({
     const handleOrder = (e: any) => {
       e.preventDefault(); 
       if (user) {
-        handlePayment(e); 
+        handlePayment(); 
       } else {
         setRoute("Login"); 
         openAuthModal(true); 

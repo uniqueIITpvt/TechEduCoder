@@ -11,7 +11,8 @@ type Props = {
 
 const Page = ({params}: Props) => {
     const id = params.id;
-  const { isLoading, error, data,refetch } = useLoadUserQuery(undefined, {});
+
+  const { isLoading, error, data, refetch } = useLoadUserQuery(undefined, {});
 
   useEffect(() => {
     if (data) {
