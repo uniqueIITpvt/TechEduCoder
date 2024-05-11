@@ -3,13 +3,12 @@ import { authorizeRoles, isAutheticated } from "../middleware/auth";
 import {
   createOrder,
   getAllOrders,
-  newPayment,
-  sendStripePublishableKey,
+
   valdateOrder,
 } from "../controllers/order.controller";
 const orderRouter = express.Router();
 
-orderRouter.post("/create-order", isAutheticated, createOrder);
+orderRouter.post("/create-order",  createOrder);
 
 
 orderRouter.post('/validate-order', valdateOrder)
@@ -20,8 +19,8 @@ orderRouter.get(
   getAllOrders
 );
 
-orderRouter.get("/payment/stripepublishablekey", sendStripePublishableKey);
+// orderRouter.get("/payment/stripepublishablekey", sendStripePublishableKey);
 
-orderRouter.post("/payment", isAutheticated, newPayment);
+// orderRouter.post("/payment", isAutheticated, newPayment);
 
 export default orderRouter;

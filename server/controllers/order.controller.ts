@@ -13,15 +13,13 @@ import { redis } from "../utils/redis";
 import crypto from "crypto";
 
 require("dotenv").config();
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Razorpay = require("razorpay");
 
 // create order
 export const createOrder = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // const { courseId, payment_info } = req.body as IOrder;
-      const { amount, currency, courseId } = req.body;
+      const { amount, currency, courseId, userId } = req.body;
 
       const razorpay = new Razorpay({
         key_id: process.env.KEY_ID,
@@ -33,10 +31,10 @@ export const createOrder = CatchAsyncError(
         receipt: `rcpt_${Date.now()}`,
         payment_capture: 1,
       };
-    
-      // const response = await razorpay.orders.create(options)
 
-      const user = await userModel.findById(req.user?._id);
+      //  const razorpayOrder = await razorpay.orders.create(options)
+
+      const user = await userModel.findById(userId);
 
       const courseExistInUser = user?.courses.some(
         (course: any) => course._id.toString() === courseId
@@ -54,6 +52,15 @@ export const createOrder = CatchAsyncError(
         return next(new ErrorHandler("Course not found", 404));
       }
       const razorpayOrder = await razorpay.orders.create(options);
+      if (!razorpayOrder) {
+        return next(new ErrorHandler("something went wrong", 400));
+      }
+      res.status(200).json({
+        orderId: razorpayOrder.id,
+        currency: razorpayOrder.currency,
+        amount: razorpayOrder.amount,
+      });
+
       const data: any = {
         courseId: course._id,
         userId: user?._id,
@@ -98,7 +105,7 @@ export const createOrder = CatchAsyncError(
 
       user?.courses.push(course?._id);
 
-      await redis.set(req.user?._id, JSON.stringify(user));
+       await redis.set(req.user?._id, JSON.stringify(user));
 
       await user?.save();
 
@@ -108,23 +115,15 @@ export const createOrder = CatchAsyncError(
         message: `You have a new order from ${course?.name}`,
       });
 
+
+         const order =  await OrderModel.create(data);
+         
+         order.save();
+       
       course.purchased = course.purchased + 1;
 
       await course.save();
 
-      const order = await OrderModel.create(data);
-
-      res.status(201).json({
-        succcess: true,
-        order,
-      });
-
-      //    res.status(201).json({
-      //   success: true,
-      //   message: 'Order successfully created',
-      //   order: newOrder,
-
-      // });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
@@ -146,13 +145,21 @@ export const valdateOrder = CatchAsyncError(
       sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
       const digest = sha.digest("hex");
       if (digest !== razorpay_signature) {
-        return next(new ErrorHandler("Transaction is not legit!", 500));
+        return next(
+          new ErrorHandler(
+            "Invalid signature. Payment verification failed",
+            400
+          )
+        );
       }
-      res.json({
-        msg: "success",
-        orderId: razorpay_order_id,
-        paymentId: razorpay_payment_id,
-      });
+        // Fetch the user and course based on orderId or other relevant identifiers
+  const order = await OrderModel.findOne({ razorpayOrderId: razorpay_order_id });
+  if (!order) {
+    return next(new ErrorHandler("Order not found", 404));
+  }
+
+
+      res.status(201).json({ success: true, message: "Payment verified successfully" });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
@@ -164,40 +171,6 @@ export const getAllOrders = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       getAllOrdersService(res);
-    } catch (error: any) {
-      return next(new ErrorHandler(error.message, 500));
-    }
-  }
-);
-
-//  send stripe publishble key
-export const sendStripePublishableKey = CatchAsyncError(
-  async (req: Request, res: Response) => {
-    res.status(200).json({
-      publishablekey: process.env.STRIPE_PUBLISHABLE_KEY,
-    });
-  }
-);
-
-// new payment
-export const newPayment = CatchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const myPayment = await stripe.paymentIntents.create({
-        amount: req.body.amount,
-        currency: "inr",
-        metadata: {
-          company: "TechEduCOder",
-        },
-        automatic_payment_methods: {
-          enabled: true,
-        },
-      });
-
-      res.status(201).json({
-        success: true,
-        client_secret: myPayment.client_secret,
-      });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
