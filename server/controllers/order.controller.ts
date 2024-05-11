@@ -154,13 +154,6 @@ export const valdateOrder = CatchAsyncError(
           )
         );
       }
-        // Fetch the user and course based on orderId or other relevant identifiers
-  const order = await OrderModel.findOne({ razorpayOrderId: razorpay_order_id });
-  if (!order) {
-    return next(new ErrorHandler("Order not found", 404));
-  }
-
-
       res.status(201).json({ success: true, message: "Payment verified successfully" });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
@@ -329,12 +322,7 @@ export const valdateBookOrder = CatchAsyncError(
           )
         );
       }
-        // Fetch the user and course based on orderId or other relevant identifiers
-  const order = await EbookOrderModel.findOne({ razorpayOrderId: razorpay_order_id });
-  if (!order) {
-    return next(new ErrorHandler("Order not found", 404));
-  }
-
+    
 
       res.status(201).json({ success: true, message: "Payment verified successfully" });
     } catch (error: any) {
