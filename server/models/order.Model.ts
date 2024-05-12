@@ -4,8 +4,6 @@ export interface IOrder extends Document {
   courseId: string;
   orderId: string;
   razorpayOrderId: string;
-  razorpayPaymentId: string | null;
-  razorpaySignature: string | null;
   userId?: mongoose.Schema.Types.ObjectId;
   amount: number;
   currency: string;

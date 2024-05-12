@@ -77,7 +77,7 @@ export const createOrder = CatchAsyncError(
           _id: course._id.toString().slice(0, 6),
           name: course.name,
 
-          discountPrice: course.discountPrice,
+          discountPrice: course.discountPrice.toFixed(2),
 
           date: new Date().toLocaleDateString("en-US", {
             year: "numeric",
@@ -119,6 +119,8 @@ export const createOrder = CatchAsyncError(
 
 
          const order =  await new OrderModel(data);
+
+         console.log(order);
          
          order.save();
        
@@ -178,6 +180,7 @@ export const createBookOrder = CatchAsyncError(
         currency,
         bookId,
         userId,} = req.body;
+        
 
       const razorpay = new Razorpay({
         key_id: process.env.KEY_ID,
