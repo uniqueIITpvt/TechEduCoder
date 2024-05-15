@@ -118,11 +118,11 @@ const ControlPdf: React.FC<Props> = ({
         >
        < FaPlus color="white" /></button>
       </div>
-      {/* <div className="mx-3">
+      <div className="mx-3">
         <Link href={file} download={true} title="download" className="text-blue-500 hover:text-blue-700">
        <button><IoMdDownload size={20} color="white"/></button>
         </Link>
-      </div> */}
+      </div>
       {/* <div className="mx-3">
       
       

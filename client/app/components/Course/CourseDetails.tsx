@@ -18,7 +18,6 @@ import { MdOutlineWatchLater } from "react-icons/md";
 import { RxUpdate } from "react-icons/rx";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { GoDotFill } from "react-icons/go";
-import axios from "axios";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -39,9 +38,12 @@ const CourseDetails = ({
   const [readMore, setReadMore] = useState(false);
   const [seeMore, setSeeMore] = useState(false);
   const [activeBar, setactiveBar] = useState(0);
+  
 
   useEffect(() => {
+   if(userData){
     setUser(userData?.user);
+   }
   }, [userData]);
 
 
@@ -57,7 +59,7 @@ const CourseDetails = ({
     const userId = user?._id;
   
     try {
-      const response = await fetch("https://techeducoder-lrel.onrender.com/api/v1/create-order", {
+      const response = await fetch("http://localhost:8000/api/v1/create-order", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -87,7 +89,7 @@ const CourseDetails = ({
           const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = response;
           try {
             const validationResponse = await fetch(
-              "https://techeducoder-lrel.onrender.com/api/v1/validate-order",
+              "http://localhost:8000/api/v1/validate-order",
               {
                 method: "POST",
                 headers: {

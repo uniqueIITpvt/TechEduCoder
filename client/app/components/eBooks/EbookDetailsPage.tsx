@@ -23,8 +23,7 @@ const EbookDetailsPage = ({ id }: Props) => {
   const { data, isLoading } = useGetEbookQuery(id);
  
   const { data: userData } = useLoadUserQuery(undefined, {});
-  const [stripePromise, setStripePromise] = useState<any>(null);
-  const [clientSecret, setClientSecret] = useState("");
+
 
 
  
@@ -53,8 +52,6 @@ const EbookDetailsPage = ({ id }: Props) => {
        
             <EbookDetails
               data={data.ebook}
-              stripePromise={stripePromise}
-              clientSecret={clientSecret}
               setRoute={setRoute}
               setOpen={setOpen}
             />

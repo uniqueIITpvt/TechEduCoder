@@ -24,16 +24,13 @@ const ShowEbook = dynamic(() => import("./ShowEbook"), { ssr: false });
 
 type Props = {
   data: any;
-  stripePromise: any;
-  clientSecret: string;
+
   setRoute: any;
   setOpen: any;
 };
 
 const EbookDetails = ({
   data,
-  stripePromise,
-  clientSecret,
   setRoute,
   setOpen: openAuthModal,
 }: Props) => {
@@ -398,7 +395,7 @@ const discountPercentengePrice = dicountPercentenge.toFixed(0);
         </div>
       </div>
       <>
-        {open && (
+        {/* {open && (
           <div className="w-full h-screen bg-[#00000036] fixed top-0 left-0 z-50 flex items-center justify-center">
             <div className="w-[500px] min-h-[500px] bg-white rounded-xl shadow p-3">
               <div className="w-full flex justify-end">
@@ -422,7 +419,7 @@ const discountPercentengePrice = dicountPercentenge.toFixed(0);
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </>
     </div>
   );
