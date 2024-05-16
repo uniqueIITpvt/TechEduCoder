@@ -54,8 +54,8 @@ const Hero: FC<Props> = (props) => {
           </Carousel> 
         
 
-          <div className="absolute bottom-0 left-0 top-0  md:w-[60%] w-[65%]  md:bg-gradient-to-r from-sky-500 md:pt-20 pl-2 md:pl-0">
-            <h1 className=" mt-6 text-[#0a083b] md:text-white text-[22px] md:text-[28px] md:ml-10 pl-4  leading-7 md:leading-10  font-bold lg:ml-[5rem] lg:text-[48px]   lg:leading-[56px] lg:font-extrabold font-sans lg:mt-10 opacity-90   ">
+          <div className="absolute bottom-0 left-0 top-0  md:w-[60%] w-[65%] md:pt-20 pl-2 md:pl-0">
+            <h1 className=" mt-6 text-[#0a083b] md:text-[#18181b] text-[22px] md:text-[28px] md:ml-10 pl-4  leading-7 md:leading-10  font-bold lg:ml-[5rem] lg:text-[48px]   lg:leading-[56px] lg:font-extrabold font-sans lg:mt-10 opacity-90   ">
               Upgrade your learning Skills <br />& Upgrade your life
             </h1>
             {/* Hidden on mobile, visible on md screens and up */}
