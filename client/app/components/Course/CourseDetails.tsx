@@ -186,7 +186,7 @@ const CourseDetails = ({
         <div className="w-full  ">
           <div className="">
             {" "}
-            <h1 className="text-[27px] font-[700] font-poppins text-black  opacity-80">
+            <h1 className="text-[27px] font-[700] font-poppins text-black  opacity-80 leading-9">
               {data.name}
             </h1>
           </div>

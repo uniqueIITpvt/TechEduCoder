@@ -181,13 +181,13 @@ const discountPercentengePrice = dicountPercentenge.toFixed(0);
               {data.ebookTitle}
             </h1>
           </div>
-          <div className="flex justify-between font-poppins ">
+          <div className=" w-full flex justify-between font-poppins ">
             <h3 className="m-2 text-[17px] font-poppins font-[400] opacity-80">
               <span className="text-gray-700">category: </span>{" "}
               <Link href={`/course`}>{data.category}</Link>
             </h3>
             <div className="flex justify-between">
-              <Link href={`/`} className="px-10  ">
+              <Link href={`/`} className=" md:px-10 px-2   ">
                 {" "}
                 <div className="flex items-center px-3">
                   <MdOutlineContentCopy size={20} />

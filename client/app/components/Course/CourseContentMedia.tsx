@@ -200,7 +200,7 @@ const CourseContentMedia = ({
   };
 
   return (
-    <div className="w-[95%] 800px:w-[86%] py-4 m-auto">
+    <div className="w-[95%] 800px:w-[86%] py-0 m-auto md:py-4">
       <CoursePlayer
         title={data[activeVideo]?.title}
         videoUrl={data[activeVideo]?.videoUrl}
