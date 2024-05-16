@@ -248,51 +248,6 @@ const discountPercentengePrice = dicountPercentenge.toFixed(0);
                 </div>
               </div>
             )}
-            {/* {activeBar === 1 && (
-              <div>
-                {(data?.reviews && [...data.reviews].reverse()).map(
-                  (item: any, index: number) => (
-                    <div className="w-full pb-4" key={index}>
-                      <div className="flex">
-                        <div className="w-[50px] h-[50px]">
-                          <Image
-                            src={
-                              item.user.avatar
-                                ? item.user.avatar.url
-                                : "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"
-                            }
-                            width={50}
-                            height={50}
-                            alt=""
-                            className="w-[50px] h-[50px] rounded-full object-cover"
-                          />
-                        </div>
-                        <div className="hidden 800px:block pl-2">
-                          <div className="flex items-center">
-                            <h5 className="text-[18px] pr-2 text-black dark:text-white">
-                              {item.user.name}
-                            </h5>
-                            <Ratings rating={item.rating} />
-                          </div>
-                          <p className="text-black dark:text-white">
-                            {item.comment}
-                          </p>
-                          <small className="text-[#000000d1] dark:text-[#ffffff83]">
-                            {format(item.createdAt)} •
-                          </small>
-                        </div>
-                        <div className="pl-2 flex 800px:hidden items-center">
-                          <h5 className="text-[18px] pr-2 text-black dark:text-white">
-                            {item.user.name}
-                          </h5>
-                          <Ratings rating={item.rating} />
-                        </div>
-                      </div>
-                    </div>
-                  )
-                )}
-              </div>
-            )} */}
           </div>
           <div className="lg:col-span-1">
             <div className="w-full m-auto shadow-md rounded-lg border-[1px] border-[#565658] ">
@@ -304,7 +259,7 @@ const discountPercentengePrice = dicountPercentenge.toFixed(0);
                       : "₹" + data.originalPrice}{" "}
                   </h3>
                   <p className="text-[17px] line-through opacity-60 text-red-400 dark:text-white mx-3">
-                    {data.originalPrice === 0 ? " " : "₹" + data.estimatedPrice}
+                    {data.originalPrice === 0 ? " " : "₹" + data.discountPrice.toFixed(2)}
                   </p>
 
                   <p className="text-[17px] text-[#3539fa] dark:text-white  font-[400] ">
@@ -374,53 +329,10 @@ const discountPercentengePrice = dicountPercentenge.toFixed(0);
               <h1 className="text-[27px] font-[700]  dark:text-white text-black font-poppins m-4">
                 {/* Materials Included?{" "} */}
               </h1>
-              {/* {data.prerequisites?.map((item: any, index: number) => (
-                <div
-                  className="w-full flex 800px:items-center py-2 font-[400] text-[17px]"
-                  key={index}
-                >
-                  <div className="w-[15px] mr-1">
-                    <IoCheckmarkDoneOutline
-                      size={20}
-                      className="text-black dark:text-white"
-                    />
-                  </div>
-                  <p className="pl-2 text-black dark:text-white">
-                    {item.title}
-                  </p>
-                </div>
-              ))} */}
             </div>
           </div>
         </div>
       </div>
-      <>
-        {/* {open && (
-          <div className="w-full h-screen bg-[#00000036] fixed top-0 left-0 z-50 flex items-center justify-center">
-            <div className="w-[500px] min-h-[500px] bg-white rounded-xl shadow p-3">
-              <div className="w-full flex justify-end">
-                <IoCloseOutline
-                  size={40}
-                  className="text-black cursor-pointer"
-                  onClick={() => setOpen(false)}
-                />
-              </div>
-              <div className="w-full">
-                {stripePromise && clientSecret && (
-                  <Elements stripe={stripePromise} options={{ clientSecret }}>
-                    <CheckOutForm
-                      setOpen={setOpen}
-                      data={data}
-                      user={user}
-                      refetch={refetch}
-                    />
-                  </Elements>
-                )}
-              </div>
-            </div>
-          </div>
-        )} */}
-      </>
     </div>
   );
 };
