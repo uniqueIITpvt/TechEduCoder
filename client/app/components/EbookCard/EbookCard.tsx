@@ -31,7 +31,7 @@ const EbookCard: FC<Props> = ({ item, isProfile }) => {
             {item.ebookTitle.slice(0, 20)}
           </h1>
 
-          <h1 className="text-[17px] font-[500] font-poppins dark:text-white leading-6 ">
+          <h1 className="text-[17px] font-[500] font-poppins dark:text-white  text-black leading-6 ">
             {item.authorName}
           </h1>
 

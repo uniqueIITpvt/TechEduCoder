@@ -173,7 +173,7 @@ const discountPercentengePrice = dicountPercentenge.toFixed(0);
 
   return (
     <div className=" w-full ">
-      <div className="w-[90%] m-auto  mt-10  mb-20">
+      <div className="w-[90%] m-auto  mt-4  mb-20">
         <div className="w-full  ">
           <div className="">
             {" "}
@@ -187,7 +187,7 @@ const discountPercentengePrice = dicountPercentenge.toFixed(0);
               <Link href={`/course`}>{data.category}</Link>
             </h3>
             <div className="flex justify-between">
-              <Link href={`/`} className=" md:px-10 px-2   ">
+              <Link href={`/`} className=" md:px-10   ">
                 {" "}
                 <div className="flex items-center px-3">
                   <MdOutlineContentCopy size={20} />
