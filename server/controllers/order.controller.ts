@@ -119,8 +119,6 @@ export const createOrder = CatchAsyncError(
 
 
          const order =  await new OrderModel(data);
-
-         console.log(order);
          
          order.save();
        
