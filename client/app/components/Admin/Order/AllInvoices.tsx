@@ -36,7 +36,7 @@ const AllInvoices = ({ isDashboard }: Props) => {
           userName: user?.name,
           userEmail: user?.email,
           title: course?.name,
-          price:  "RS " +course?.discountPrice,
+          price:  "RS " +course?.discountPrice.toFixed(2),
         };
       });
       setOrderData(temp);
