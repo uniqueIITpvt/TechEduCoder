@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid, GridDeleteIcon, GridToolbar } from "@mui/x-data-grid";
 import { useTheme } from "next-themes";
 import { useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
 import Loader from "../../Loader/Loader";
@@ -37,7 +36,7 @@ const AllInvoices = ({ isDashboard }: Props) => {
           userName: user?.name,
           userEmail: user?.email,
           title: course?.name,
-          price:  "M R P" +course?.discountPrice,
+          price:  "RS " +course?.discountPrice,
         };
       });
       setOrderData(temp);

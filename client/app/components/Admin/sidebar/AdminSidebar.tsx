@@ -278,20 +278,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-             <Item
-              title="Books-Create-Events"
-              to="/admin/Books-Create-Events"
-              icon={<RiLiveFill  />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-             <Item
-              title="Books-Live-Events"
-              to="/admin/Books-Live-Events"
-              icon={<OndemandVideoIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+           
             <Typography
               variant="h5"
               className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
@@ -299,14 +286,6 @@ const Sidebar = () => {
             >
               {!isCollapsed && "Customization"}
             </Typography>
-
-            <Item
-              title="Hero"
-              to="/admin/hero"
-              icon={<WebIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
             <Item
               title="FAQ"
               to="/admin/faq"

@@ -33,7 +33,7 @@ const CourseDetailsPage = ({ id }: Props) => {
           <Heading
             title={data.course.name + " - UniqueIIT "}
             description={
-              " techEduC0der is a programming community which is developed by Musharraf hussain for helping programmers"
+              "TechEduC0der is a programming community which is developed by Musharraf hussain for helping programmers"
             }
             keywords={data?.course?.tags}
           />

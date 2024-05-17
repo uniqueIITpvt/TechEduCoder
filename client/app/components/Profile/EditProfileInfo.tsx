@@ -59,7 +59,7 @@ const EditProfileInfo: FC<Props> = ({ avatar, user }) => {
 
   return (
     <>
-      <div className="w-full flex justify-center">
+      <div className="w-[90%] mx-auto flex justify-center">
         <div className="relative">
           <Image
             src={user.avatar || avatar ? user.avatar.url || avatar : avatarIcon}

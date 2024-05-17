@@ -3,8 +3,6 @@ import React, { FC, useEffect, useState } from "react";
 import SideBarProfile from "./SideBarProfile";
 import { useLogOutQuery } from "../../../redux/features/auth/authApi";
 import { signOut } from "next-auth/react";
-
-import ChangePassword from "./ChangePassword";
 import CourseCard from "../Course/CourseCard";
 import { useGetUsersAllCoursesQuery } from "@/redux/features/courses/coursesApi";
 import Image from "next/image";
@@ -69,6 +67,7 @@ const Profile: FC<Props> = ({ user }) => {
         .filter((course: any) => course !== undefined);
       setCourses(filteredCourses);
     }
+
   }, [data]);
 
 
@@ -116,14 +115,14 @@ const Profile: FC<Props> = ({ user }) => {
       )}
       {active === 2 && (
         <div className="w-full mt-5">
-     <div className='grid grid-cols-1 justify-start items-center gap-10  mb-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3  md:p-0 md:justify-start md:items-start md:mx-20 md:gap-10  xl:p-0 p-10'>
+     <div className='grid grid-cols-1 justify-start items-center  mb-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3  md:p-0 md:justify-start md:items-start md:mx-20 md:gap-10  xl:p-0 '>
         {ebooks.map((item:any) => (
           <EbookCard key={item.id} item={item} />
         ))}
       </div>
           {courses.length === 0 && (
             <h1 className="text-center text-[18px] font-Poppins dark:text-white text-black">
-              You don&apos;t have any purchased courses!
+              You don&apos;t have any purchased Book!
             </h1>
           )}
         </div>
@@ -133,17 +132,7 @@ const Profile: FC<Props> = ({ user }) => {
           <div className="grid grid-cols-1 justify-start items-center gap-5  mb-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 lg:p-1 md:p-0 md:justify-start md:items-start md:mx-10 md:gap-[11rem] p-4">
           {courses &&
             courses.slice(0, 4).map((item, index) => {
-              // This assumes you want to do something with the isEvent property
-              // For example, setting state (though setting state in a map like this can be problematic)
-              // setEvent(item.isEvent); // Be cautious with setting state inside a map function
-
-              // Directly return the CourseCard component if isEvent is false
-              // Adjust this condition based on your actual requirement
-
               return <CourseCard item={item} key={index} />;
-
-              // If you don't want to render anything for items where isEvent is true,
-              // you must return null or undefined
             })}
         </div>
           {courses.length === 0 && (
