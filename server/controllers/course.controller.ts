@@ -481,8 +481,7 @@ export const generateVideoUrl = CatchAsyncError(
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`,
-          },
-        
+          },        
         }
       );
       res.json(response.data);

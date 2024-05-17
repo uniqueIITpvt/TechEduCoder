@@ -21,9 +21,9 @@ const Page: FC<Props> = (props) => {
   return (
     <>
       <Heading
-        title="uniqueiit lms "
-        description="uniqueiit lms is a platform for students to learn and get help from teachers"
-        keywords="Prograaming,MERN,Redux,Machine Learning"
+        title="techeducoder.com "
+        description="techeducoder is a platform for tain student in latest technology  in web development app development devOps"
+        keywords=" programing ,MERN,Redux,Machine Learning , AI , devOps"
       />
       <Header
         open={open}
