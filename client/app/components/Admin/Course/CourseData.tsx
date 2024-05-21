@@ -20,9 +20,11 @@ const CourseData: FC<Props> = ({
   active,
   setActive,
 }) => {
+
   const handleBenefitChange = (index: number, value: any) => {
-    const updatedBenefits = [...benefits];
-    updatedBenefits[index].title = value;
+    const updatedBenefits = benefits.map((benefit, i) => 
+      i === index ? { ...benefit, title: value } : benefit
+    );
     setBenefits(updatedBenefits);
   };
 
@@ -31,8 +33,9 @@ const CourseData: FC<Props> = ({
   };
 
   const handlePrerequisitesChange = (index: number, value: any) => {
-    const updatedPrerequisites = [...prerequisites];
-    updatedPrerequisites[index].title = value;
+    const updatedPrerequisites = prerequisites.map((prerequisite, i) => 
+      i === index ? { ...prerequisite, title: value } : prerequisite
+    );
     setPrerequisites(updatedPrerequisites);
   };
 
@@ -42,27 +45,24 @@ const CourseData: FC<Props> = ({
 
   const prevButton = () => {
     setActive(active - 1);
-  };
+  }
 
   const handleOptions = () => {
-    if (
-      benefits[benefits.length - 1]?.title !== "" &&
-      prerequisites[prerequisites.length - 1]?.title !== ""
-    ) {
+    if (benefits[benefits.length - 1]?.title !== "" && prerequisites[prerequisites.length - 1]?.title !== "") {
       setActive(active + 1);
     } else {
-      toast.error("Please fill the fields for go to next!");
+      toast.error("Please fill in the fields to go to the next step!");
     }
   };
-
+  
   return (
     <div className="w-[80%] m-auto mt-24 block">
       <div>
-        <label className={`${styles.label} text-[20px]`} htmlFor="email">
-          What will learn students from this course?
+        <label className={`${styles.label} text-[20px]`} htmlFor="benefits">
+          What are the benefits for students in this course?
         </label>
         <br />
-        {benefits.map((benefit: any, index: number) => (
+        {benefits.map((benefit, index) => (
           <input
             type="text"
             key={index}
@@ -81,19 +81,19 @@ const CourseData: FC<Props> = ({
       </div>
 
       <div>
-        <label className={`${styles.label} text-[20px]`} htmlFor="email">
-          Materials Incluuded in this course
+        <label className={`${styles.label} text-[20px]`} htmlFor="prerequisites">
+          What are the prerequisites for starting this course?
         </label>
         <br />
-        {prerequisites.map((prerequisites: any, index: number) => (
+        {prerequisites.map((prerequisite, index) => (
           <input
             type="text"
             key={index}
-            name="prerequisites"
+            name="Prerequisite"
             placeholder="You need basic knowledge of MERN stack"
             required
             className={`${styles.input} my-2`}
-            value={prerequisites.title}
+            value={prerequisite.title}
             onChange={(e) => handlePrerequisitesChange(index, e.target.value)}
           />
         ))}
@@ -105,13 +105,13 @@ const CourseData: FC<Props> = ({
       <div className="w-full flex items-center justify-between">
         <div
           className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
-          onClick={() => prevButton()}
+          onClick={prevButton}
         >
           Prev
         </div>
         <div
           className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
-          onClick={() => handleOptions()}
+          onClick={handleOptions}
         >
           Next
         </div>

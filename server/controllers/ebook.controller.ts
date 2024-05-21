@@ -80,7 +80,7 @@ export const getEbookDetails = CatchAsyncError(
     }
   }
 );
-// edit course
+// edit ebooks
 export const editEbook = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -88,14 +88,13 @@ export const editEbook = CatchAsyncError(
 
       const thumbnail = data.thumbnail;
       const ebookpdf = data.ebookpdf;
-      console.log(data)
-      console.log(thumbnail)
+     
       const eBookId = req.params.id;
 
       const eBookeData = await EbookModel.findById(eBookId) as any;
 
-      if ( typeof thumbnail=== 'string' && thumbnail && !thumbnail.startsWith("https")) {
-        await cloudinary.v2.uploader.destroy(ebookpdf.thumbnail.public_id);
+      if (typeof thumbnail === 'string' && thumbnail && !thumbnail.startsWith("https")) {
+        await cloudinary.v2.uploader.destroy(eBookeData.thumbnail.public_id);
 
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: "ebooksss",
@@ -107,16 +106,15 @@ export const editEbook = CatchAsyncError(
         };
       }
 
-      if ( typeof thumbnail=== 'string' && thumbnail.startsWith("https")) {
+      if (typeof thumbnail === 'string' && thumbnail.startsWith("https")) {
         data.thumbnail = {
           public_id: eBookeData?.thumbnail.public_id,
           url: eBookeData?.thumbnail.url,
         };
       }
 
-   
-      if ( ebookpdf && !ebookpdf.startsWith("https")) {
-        await cloudinary.v2.uploader.destroy(ebookpdf.ebookpdf.public_id);
+      if (typeof ebookpdf === 'string' && ebookpdf && !ebookpdf.startsWith("https")) {
+        await cloudinary.v2.uploader.destroy(eBookeData.ebookpdf.public_id);
 
         const myCloud = await cloudinary.v2.uploader.upload(ebookpdf, {
           folder: "ebooksss",
@@ -127,10 +125,11 @@ export const editEbook = CatchAsyncError(
           url: myCloud.secure_url,
         };
       }
-      if (ebookpdf.startsWith("https")) {
+
+      if (typeof ebookpdf === 'string' && ebookpdf.startsWith("https")) {
         data.ebookpdf = {
-          public_id: ebookpdf?.thumbnail.public_id,
-          url: ebookpdf?.thumbnail.url,
+          public_id: eBookeData.ebookpdf.public_id,
+          url: eBookeData.ebookpdf.url,
         };
       }
 
@@ -151,6 +150,7 @@ export const editEbook = CatchAsyncError(
     }
   }
 );
+
 
 // Delete Cebooks--- only for admin
 export const deleteEbook = CatchAsyncError(

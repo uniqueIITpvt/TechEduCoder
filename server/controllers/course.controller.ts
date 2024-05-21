@@ -82,6 +82,8 @@ export const editCourse = CatchAsyncError(
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
+
+   
   }
 );
 

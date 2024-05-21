@@ -100,7 +100,7 @@ const[discountPriceError , setDiscountPriceError] = useState(false)
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success("Course created successfully");
+      toast.success("ebook  uploaded successfully");
       setEbookData({...initialState})
     
     }
