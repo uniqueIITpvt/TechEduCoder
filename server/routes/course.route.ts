@@ -24,7 +24,7 @@ courseRouter.post(
 );
 
 courseRouter.put(
-  "/edit-course/:id",
+  "/edit-course/:id ",
   isAutheticated,
   authorizeRoles("admin"),
   editCourse
