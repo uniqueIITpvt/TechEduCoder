@@ -30,6 +30,10 @@ import { FaFileUpload } from "react-icons/fa";
 import { SiUploaded } from "react-icons/si";
 import { FaBloggerB } from "react-icons/fa6";
 import { RiLiveFill } from "react-icons/ri";
+import { useLogOutQuery } from "@/redux/features/auth/authApi";
+import { signOut } from "next-auth/react";
+import { redirect } from "next/navigation";
+
 
 interface itemProps {
   title: string;
@@ -60,15 +64,24 @@ const Sidebar = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
+
+  const {} = useLogOutQuery(undefined, {
+    skip: !logout ? true : false,
+  });
+
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {
     return null;
   }
 
-  const logoutHandler = () => {
+
+  const logOutHandler = async () => {
     setlogout(true);
+    await signOut();
+    redirect("/")
   };
+
 
   return (
     <Box
@@ -353,14 +366,12 @@ const Sidebar = () => {
             >
               {!isCollapsed && "Extras"}
             </Typography>
-            <div onClick={logoutHandler}>
-              <Item
-                title="Logout"
-                to="/"
-                icon={<ExitToAppIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
+            <div onClick={logOutHandler} className="flex "
+            >
+               <p>Logout</p>
+                <ExitToAppIcon />
+                
+            
             </div>
           </Box>
         </Menu>

@@ -11,6 +11,7 @@ import ProfileInfo from "./ProfileInfo";
 import EbookCard from "../EbookCard/EbookCard";
 import { useGetAllEbooksQuery } from "@/redux/features/ebook/ebooksApi";
 import EditProfileinfo from "./EditProfileInfo";
+import { redirect } from "next/navigation";
 
 
 
@@ -33,12 +34,19 @@ const Profile: FC<Props> = ({ user }) => {
     {},
     { refetchOnMountOrArgChange: true }
   );
+
   useEffect(() => {
     if (books) {
-      // Slice the first 4 ebooks from the data and set them to state
-      setEbooks(books?.ebooks);
+      const filteredbooks = user.books
+        .map((userbooks: any) =>
+          books?.ebooks.find((book: any) => book._id === userbooks._id)
+        )
+        .filter((course: any) => course !== undefined);
+        setEbooks(filteredbooks);
     }
+
   }, [books]);
+
  
 
   const [active, setActive] = useState(1);
@@ -46,6 +54,7 @@ const Profile: FC<Props> = ({ user }) => {
   const logOutHandler = async () => {
     setLogout(true);
     await signOut();
+    redirect("/")
   };
 
   if (typeof window !== "undefined") {
@@ -120,7 +129,7 @@ const Profile: FC<Props> = ({ user }) => {
           <EbookCard key={item.id} item={item} />
         ))}
       </div>
-          {courses.length === 0 && (
+          {ebooks.length === 0 && (
             <h1 className="text-center text-[18px] font-Poppins dark:text-white text-black">
               You don&apos;t have any purchased Book!
             </h1>

@@ -73,7 +73,7 @@ const EbookDetails = ({
 
       const data1 = await response.json();
       if (!response.ok) {
-        toast.error( "this is",  data1.message);
+        toast.error(data1.message);
       } 
      
 

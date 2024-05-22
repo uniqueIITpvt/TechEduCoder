@@ -26,7 +26,7 @@ const EditBlogs: FC<Props> = ({ id }) => {
     { refetchOnMountOrArgChange: true }
   );
   const editblog = data && data.blogs.find((i: any) => i._id === id);
-  console.log(editblog)
+
 
   const initialState = {
     id: 0,
@@ -40,9 +40,7 @@ const EditBlogs: FC<Props> = ({ id }) => {
   const [blogFormData, setBlogFormData] = useState({ ...initialState });
  console.log(blogFormData);
   const [editorContent, setEditorContent] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [open, setOpen] = useState(false);
-
+ 
   useEffect(() => {
     setBlogFormData((prevFormData) => ({
       ...prevFormData,
@@ -93,24 +91,7 @@ const EditBlogs: FC<Props> = ({ id }) => {
       reader.readAsDataURL(file);
     }
   };
-  // const handleThumbnailChange = (e: any) => {
-  //   const file = e.target.files?.[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  
-  //     reader.onload = (e: any) => {
-  //       if (typeof reader.result === 'string') {
-  //         setBlogFormData((prevFormData) => ({
-  //           ...prevFormData,
-  //           thumbnail: reader.result,
-  //         }));
-  //       }
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
-  
-
+ 
   const handleBlogChange = (e: any) => {
     const { name, value } = e.target;
     // setBlogFormData({ ...blogFormData, [name]: value });
@@ -231,10 +212,10 @@ const EditBlogs: FC<Props> = ({ id }) => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     >
                       <option selected={true}>Select category</option>
-                      <option value="TV">TV/Monitors</option>
-                      <option value="PC">PC</option>
-                      <option value="GA">Gaming/Console</option>
-                      <option value="PH">Phones</option>
+                      <option value="Web">Web</option>
+                      <option value="AI">AI</option>
+                      <option value="DevOps">DevOps</option>
+                      <option value="ML">ML</option>
                     </select>
                   </div>
 
@@ -280,7 +261,7 @@ const EditBlogs: FC<Props> = ({ id }) => {
                     />
                   </div>
 
-                  <div className="sm:col-span-2">
+                  {/* <div className="sm:col-span-2">
                     <label
                       htmlFor="description"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -296,7 +277,7 @@ const EditBlogs: FC<Props> = ({ id }) => {
                       className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder={`Write Blog's Short Description`}
                     ></textarea>
-                  </div>
+                  </div> */}
 
                   <div className="sm:col-span-2 dark:bg-gray-700 rounded-xl">
                     <TinyEditor
