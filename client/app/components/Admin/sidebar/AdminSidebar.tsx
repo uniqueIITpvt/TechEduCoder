@@ -32,7 +32,8 @@ import { FaBloggerB } from "react-icons/fa6";
 import { RiLiveFill } from "react-icons/ri";
 import { useLogOutQuery } from "@/redux/features/auth/authApi";
 import { signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 
 
 interface itemProps {
@@ -63,6 +64,7 @@ const Sidebar = () => {
   const [selected, setSelected] = useState("Dashboard");
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const router = useRouter();
 
 
   const {} = useLogOutQuery(undefined, {
@@ -79,7 +81,7 @@ const Sidebar = () => {
   const logOutHandler = async () => {
     setlogout(true);
     await signOut();
-    redirect("/")
+    router.push("/");
   };
 
 
