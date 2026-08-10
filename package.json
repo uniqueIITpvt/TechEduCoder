@@ -1,0 +1,9 @@
+{
+  "name": "techeducoder-main",
+  "private": true,
+  "scripts": {
+    "build": "cd server && npm run build && cd ../client && npm run build",
+    "build:server": "cd server && npm run build",
+    "build:client": "cd client && npm run build"
+  }
+}

@@ -1,0 +1,237 @@
+// components/CountDown.js
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+
+const CountDown = ({ eventId, endTime }) => {
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    if (Object.keys(timeLeft).length === 0) {
+      axios.delete(`/api/events/${eventId}/delete`)
+           .then(response => console.log(response.data))
+           .catch(error => console.error("Failed to delete event:", error));
+    }
+
+    return () => clearTimeout(timer);
+  }, [timeLeft]);
+
+  function calculateTimeLeft() {
+    const difference = +new Date(endTime) - +new Date();
+    let timeLeft = {};
+
+    if (difference > 0) {
+      timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      };
+    }
+
+    return timeLeft;
+  }
+
+  return (
+    <div className="flex space-x-4">
+      {Object.keys(timeLeft).map((interval) => {
+        if (!timeLeft[interval]) {
+          return null;
+        }
+
+        return (
+          <div
+            key={interval}
+            className="bg-blue-300 bg-opacity-50 border border-blue-500 p-2 rounded-md shadow-md text-center"
+          >
+            <div className="text-blue-800 font-semibold text-2xl">
+              {timeLeft[interval]}
+            </div>
+            <div className="text-blue-800 text-xs uppercase">{interval}</div>
+          </div>
+        );
+      })}
+      {Object.keys(timeLeft).length === 0 && (
+        <div className="bg-red-300 bg-opacity-50 border border-red-500 p-2 rounded-md shadow-md text-center">
+          <div className="text-red-800 font-semibold text-2xl">Time's Up</div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CountDown;
+//////////////////////////////////////
+const handlePreviewClick = (rowData: any) => {
+  setPreviewCourse(!previewCourse);
+
+  const previewEventsData =
+    data && data.courseEvent.find((i: any) => i._id === rowData.realID);
+
+  const eventCourses = previewEventsData.filteredCourseId
+    .map((filteredId: any) => {
+      return (
+        courseData &&
+        courseData.courses.find((c: any) => c._id === filteredId.courseId)
+      );
+    })
+    .filter(Boolean);
+  setEventsCourse(eventCourses);
+};
+
+import React, { useEffect, useState } from 'react';
+import CourseCard from '../Course/CourseCard';
+import { useGetUsersAllCoursesQuery } from '@/redux/features/courses/coursesApi';
+import { styles } from '@/app/styles/style';
+import { IoIosArrowDroprightCircle } from 'react-icons/io';
+import Link from 'next/link';
+import moment from 'moment';
+import { useUserGetCourseEventQuery } from '@/redux/features/course-Events/courseEventsApi';
+import EventsCounts from '@/app/utils/eventsCount';
+
+type Props = {};
+
+const Events = (props: Props) => {
+  const { data, isLoading } = useGetUsersAllCoursesQuery({});
+  const [courses, setCourses] = useState<any[]>([]);
+  const [event, setEvent] = useState<any[]>([]);
+  const { data: events, refetch } = useUserGetCourseEventQuery({}, { refetchOnMountOrArgChange: true });
+
+  useEffect(() => {
+    if (data && events) {
+      setCourses(data?.courses);
+      setEvent(events.courseEvent);
+    }
+  }, [data, events]);
+
+  return (
+    <div className="pb-10 lg:mt-[100px]">
+      <div className="w-full relative">
+        <h1 className={`${styles.title} 800px:!text-[45px] text-gradient pt-10`}></h1>
+        <div>
+          {event &&
+            event.map((item: any) => (
+              <>
+                <div>
+                  <h1>{item._id}</h1>
+                  <h1>
+                    <EventsCounts item={item} />
+                  </h1>
+                  {item.filteredCourseId.map((i: any) => {
+                    // Find the course in the courses array that matches i.courseId
+                    const matchingCourse = courses.find((course) => course.id === i.courseId);
+                    return matchingCourse ? (
+                      // Render the matching course details here
+                      <div key={matchingCourse.id}>
+                        <h2>{matchingCourse.name}</h2>
+                        {/* Render more details of the matchingCourse as needed */}
+                      </div>
+                    ) : null;
+                  })}
+                </div>
+              </>
+            ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Events;
+===================================================
+// components/CountdownTimer.tsx
+import React from 'react';
+
+type CountdownTimerProps = {
+  // Add any props you need, for example, the target date for the countdown
+};
+
+const CountdownTimer: React.FC<CountdownTimerProps> = (props) => {
+  // Add your countdown logic here to calculate days, hours, minutes, and seconds
+
+  return (
+    <div className="bg-black text-white">
+      <div className="flex items-center justify-between px-4 py-2 lg:py-4">
+        <span className="text-lg lg:text-2xl font-bold">Black Friday Sale up to 50% OFF</span>
+        <button className="text-sm lg:text-base bg-yellow-400 px-2 lg:px-4 py-1 rounded-md">Shop now</button>
+      </div>
+      <div className="flex justify-center space-x-2 p-2">
+        <div className="flex flex-col items-center">
+          <span className="text-3xl lg:text-4xl font-semibold">23</span>
+          <span className="text-xs lg:text-sm">Days</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="text-3xl lg:text-4xl font-semibold">07</span>
+          <span className="text-xs lg:text-sm">Hours</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="text-3xl lg:text-4xl font-semibold">10</span>
+          <span className="text-xs lg:text-sm">Minutes</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="text-3xl lg:text-4xl font-semibold">57</span>
+          <span className="text-xs lg:text-sm">Seconds</span>
+        </div>
+      </div>
+    </div>
+  );
+
+
+
+
+};
+
+export default CountdownTimer;
+
+
+return (
+  <div className="bg-black text-white">
+
+<div className="flex items-center justify-between px-4 py-2 lg:py-4">
+      <span className="text-lg lg:text-2xl font-bold">Black Friday Sale up to 50% OFF</span>
+      <button className="text-sm lg:text-base bg-yellow-400 px-2 lg:px-4 py-1 rounded-md">Shop now</button>
+    </div>
+    {Object.keys(timeLeft).map((interval) => {
+      if (!timeLeft[interval as keyof TimeLeft]) {
+        return null;
+      }
+
+      return (
+
+        <div
+          key={interval}
+          className="bg-blue-300 bg-opacity-50 border border-blue-500 p-2 rounded-md shadow-md text-center"
+        >
+          <div className="text-blue-800 font-semibold text-2xl">
+            {timeLeft[interval as keyof TimeLeft]}
+          </div>
+          <div className="text-blue-800 text-xs uppercase">{interval}</div>
+        </div>
+      );
+    })}
+    {Object.keys(timeLeft).length === 0 && (
+      <div className="bg-red-300 bg-opacity-50 border border-red-500 p-2 rounded-md shadow-md text-center">
+        <div className="text-red font-semibold text-2xl">Time's Up</div>
+      </div>
+    )}
+  </div>
+
+
+)
+
+===================
+<div className="flex flex-row items-center space-x-4 text-blue-800 font-semibold text-2xl">
+{/* Assuming timeLeft is an object with keys representing intervals (e.g., 'hours', 'minutes', 'seconds') */}
+{Object.entries(timeLeft).map(([interval, value]) => (
+  <div key={interval}>
+    {value}
+  </div>
+))}
+</div>
+
+
+
+
