@@ -1,7 +1,6 @@
 require("dotenv").config();
 import { Response } from "express";
 import { IUser } from "../models/user.model";
-import { redis } from "./redis";
 import { sanitizeUser } from "./sanitizeUser";
 
 interface ITokenOptions {
@@ -47,9 +46,6 @@ export const sendToken = async (
   const accessToken = user.SignAccessToken();
   const refreshToken = user.SignRefreshToken();
   const safeUser = sanitizeUser(user);
-
-  // upload session to redis
-  await redis.set(user._id, JSON.stringify(safeUser), "EX", 604800);
 
   res.cookie("access_token", accessToken, accessTokenOptions);
   res.cookie("refresh_token", refreshToken, refreshTokenOptions);

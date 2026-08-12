@@ -11,7 +11,6 @@ import {
   refreshTokenOptions,
   sendToken,
 } from '../utils/jwt';
-import { redis } from '../utils/redis';
 import {
   getAllUsersService,
   getUserById,
@@ -26,9 +25,18 @@ const forwardUserError = (error: any, next: NextFunction) =>
       ? error
       : new ErrorHandler(
           error?.message || 'Internal server error',
-          error?.name === 'RedisUnavailableError' ? 503 : 500
+          500
         )
   );
+
+const getActivationSecret = () => {
+  const secret = process.env.ACTIVATION_SECRET || process.env.ACCESS_TOKEN;
+  if (!secret) {
+    throw new Error('ACTIVATION_SECRET is not configured');
+  }
+
+  return secret;
+};
 
 // register user
 interface IRegistrationBody {
@@ -55,24 +63,29 @@ export const registrationUser = CatchAsyncError(
       }
 
       const isEmailExist = await userModel.findOne({ email: normalizedEmail });
-      if (isEmailExist) {
+      if (isEmailExist?.isVerified) {
         return next(new ErrorHandler('Email already exist', 400));
       }
 
-      const user: IRegistrationBody = {
-        name: normalizedName,
-        email: normalizedEmail,
-        password,
-      };
+      const user =
+        isEmailExist ||
+        new userModel({
+          name: normalizedName,
+          email: normalizedEmail,
+          isVerified: false,
+        });
+
+      user.name = normalizedName;
+      user.email = normalizedEmail;
+      user.password = password;
+      user.isVerified = false;
+      await user.save();
 
       const activationCode = crypto.randomInt(1000, 10000).toString();
-      const activationToken = crypto.randomBytes(32).toString('hex');
-      const pendingKey = `pending-registration:${activationToken}`;
-      await redis.set(
-        pendingKey,
-        JSON.stringify({ user, activationCode, attempts: 0 }),
-        'EX',
-        300
+      const activationToken = jwt.sign(
+        { id: user._id, activationCode },
+        getActivationSecret(),
+        { expiresIn: '5m' }
       );
 
       const data = { user: { name: user.name }, activationCode };
@@ -91,7 +104,6 @@ export const registrationUser = CatchAsyncError(
           activationToken,
         });
       } catch (error: any) {
-        await redis.del(pendingKey);
         return next(new ErrorHandler(error.message, 400));
       }
     } catch (error: any) {
@@ -112,51 +124,31 @@ export const activateUser = CatchAsyncError(
       const { activation_token, activation_code } =
         req.body as IActivationRequest;
 
-      if (!/^[a-f0-9]{64}$/.test(activation_token || '')) {
+      let decoded: JwtPayload & { activationCode?: string };
+      try {
+        decoded = jwt.verify(
+          activation_token,
+          getActivationSecret()
+        ) as JwtPayload & { activationCode?: string };
+      } catch {
         return next(new ErrorHandler('Invalid or expired activation token', 400));
       }
 
-      const pendingKey = `pending-registration:${activation_token}`;
-      const pendingJson = await redis.get(pendingKey);
-      if (!pendingJson) {
+      if (!decoded?.id || !decoded.activationCode) {
         return next(new ErrorHandler('Invalid or expired activation token', 400));
       }
 
-      const pending = JSON.parse(pendingJson) as {
-        user: IRegistrationBody;
-        activationCode: string;
-        attempts: number;
-      };
-
-      if (pending.activationCode !== String(activation_code)) {
-        const attempts = (pending.attempts || 0) + 1;
-        if (attempts >= 5) {
-          await redis.del(pendingKey);
-        } else {
-          await redis.set(
-            pendingKey,
-            JSON.stringify({ ...pending, attempts }),
-            'EX',
-            300
-          );
-        }
+      if (decoded.activationCode !== String(activation_code)) {
         return next(new ErrorHandler('Invalid activation code', 400));
       }
 
-      const { name, email, password } = pending.user;
-
-      const existUser = await userModel.findOne({ email });
-
-      if (existUser) {
-        return next(new ErrorHandler('Email already exist', 400));
+      const user = await userModel.findById(decoded.id);
+      if (!user) {
+        return next(new ErrorHandler('Invalid or expired activation token', 400));
       }
-      const user = await userModel.create({
-        name,
-        email,
-        password,
-        isVerified: true,
-      });
-      await redis.del(pendingKey);
+
+      user.isVerified = true;
+      await user.save();
 
       res.status(201).json({
         success: true,
@@ -193,6 +185,10 @@ export const loginUser = CatchAsyncError(
         return next(new ErrorHandler('Invalid email or password', 400));
       }
 
+      if (!user.isVerified) {
+        return next(new ErrorHandler('Please activate your account before logging in', 403));
+      }
+
       const isPasswordMatch = await user.comparePassword(password);
       if (!isPasswordMatch) {
         return next(new ErrorHandler('Invalid email or password', 400));
@@ -211,8 +207,6 @@ export const logoutUser = CatchAsyncError(
     try {
       res.cookie('access_token', '', { maxAge: 1 });
       res.cookie('refresh_token', '', { maxAge: 1 });
-      const userId = req.user?._id || '';
-      await redis.del(userId);
       res.status(200).json({
         success: true,
         message: 'Logged out successfully',
@@ -245,15 +239,12 @@ export const updateAccessToken = CatchAsyncError(
       if (!decoded) {
         return next(new ErrorHandler(message, 400));
       }
-      const session = await redis.get(decoded.id as string);
-
-      if (!session) {
+      const user = await userModel.findById(decoded.id);
+      if (!user) {
         return next(
           new ErrorHandler('Please login to access this resource', 401)
         );
       }
-
-      const user = JSON.parse(session);
 
       const accessToken = jwt.sign(
         { id: user._id },
@@ -276,8 +267,6 @@ export const updateAccessToken = CatchAsyncError(
 
       res.cookie('access_token', accessToken, accessTokenOptions);
       res.cookie('refresh_token', refreshToken, refreshTokenOptions);
-
-      await redis.set(user._id, JSON.stringify(safeUser), 'EX', 604800); // 7days
 
       return next();
     } catch (error: any) {
@@ -319,7 +308,6 @@ export const updateUserInfo = CatchAsyncError(
       await user?.save();
 
       const safeUser = sanitizeUser(user);
-      await redis.set(userId, JSON.stringify(safeUser), 'EX', 604800);
 
       res.status(201).json({
         success: true,
@@ -363,12 +351,6 @@ export const updatePassword = CatchAsyncError(
       await user.save();
 
       const safeUser = sanitizeUser(user);
-      await redis.set(
-        req.user?._id,
-        JSON.stringify(safeUser),
-        'EX',
-        604800
-      );
 
       res.status(201).json({
         success: true,
@@ -423,7 +405,6 @@ export const updateProfilePicture = CatchAsyncError(
       await user?.save();
 
       const safeUser = sanitizeUser(user);
-      await redis.set(userId, JSON.stringify(safeUser), 'EX', 604800);
 
       res.status(200).json({
         success: true,
@@ -480,8 +461,6 @@ export const deleteUser = CatchAsyncError(
       }
 
       await user.deleteOne({ id });
-
-      await redis.del(id);
 
       res.status(200).json({
         success: true,

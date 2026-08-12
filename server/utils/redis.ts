@@ -12,19 +12,15 @@ class SafeRedisCache {
   private connectionPromise?: Promise<void>;
   private readonly memory = new Map<string, CacheEntry>();
   private readonly isProduction = process.env.NODE_ENV === "production";
+  private readonly memoryFallbackAllowed =
+    process.env.NODE_ENV !== "production" || process.env.REDIS_DISABLED === "true";
   private warned = false;
 
   constructor() {
     const redisUrl = process.env.REDIS_URL?.trim();
     const redisDisabled = process.env.REDIS_DISABLED === "true";
 
-    if (this.isProduction && redisDisabled) {
-      throw new Error(
-        "REDIS_DISABLED cannot be used when NODE_ENV=production. Configure REDIS_URL instead."
-      );
-    }
-
-    if (this.isProduction && !redisUrl) {
+    if (this.isProduction && !redisUrl && !this.memoryFallbackAllowed) {
       throw new Error(
         "REDIS_URL is required when NODE_ENV=production. Process-local Redis fallback is disabled."
       );
@@ -55,13 +51,14 @@ class SafeRedisCache {
     this.client.on("error", (error) => {
       const failure = this.createRedisFailure("Redis connection failed", error);
 
-      if (this.isProduction) {
+      if (!this.memoryFallbackAllowed) {
         // EventEmitter listeners must not throw. The awaited cache operation
         // receives the same failure and a later request can reconnect.
         console.error(`${failure.message} No in-memory fallback was used.`);
         return;
       }
 
+      this.disableRemote();
       this.warnFallback(`${failure.message} Using in-memory cache.`);
     });
   }
@@ -102,7 +99,7 @@ class SafeRedisCache {
       return "OK";
     }
 
-    if (!this.isProduction) {
+    if (this.memoryFallbackAllowed) {
       this.setMemory(cacheKey, value, expiryMode, seconds);
     }
 
@@ -143,7 +140,7 @@ class SafeRedisCache {
       this.assertMemoryFallbackAllowed();
     }
 
-    if (!this.isProduction && this.memory.delete(cacheKey)) {
+    if (this.memoryFallbackAllowed && this.memory.delete(cacheKey)) {
       deleted += 1;
     }
 
@@ -292,7 +289,7 @@ class SafeRedisCache {
   private handleRedisFailure(context: string, error: unknown): void {
     const failure = this.createRedisFailure(context, error);
 
-    if (this.isProduction) {
+    if (!this.memoryFallbackAllowed) {
       throw failure;
     }
 
@@ -301,7 +298,7 @@ class SafeRedisCache {
   }
 
   private assertMemoryFallbackAllowed(): void {
-    if (!this.isProduction) {
+    if (this.memoryFallbackAllowed) {
       return;
     }
 

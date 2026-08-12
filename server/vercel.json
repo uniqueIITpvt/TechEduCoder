@@ -4,7 +4,8 @@
   "framework": null,
   "env": {
     "ORIGIN": "https://techeducoderlms.vercel.app,https://techeducoderlms-unique-iits-projects.vercel.app,https://techeducoderlms-git-main-unique-iits-projects.vercel.app",
-    "CLIENT_URL": "https://techeducoderlms.vercel.app,https://techeducoderlms-unique-iits-projects.vercel.app,https://techeducoderlms-git-main-unique-iits-projects.vercel.app"
+    "CLIENT_URL": "https://techeducoderlms.vercel.app,https://techeducoderlms-unique-iits-projects.vercel.app,https://techeducoderlms-git-main-unique-iits-projects.vercel.app",
+    "REDIS_DISABLED": "true"
   },
   "builds": [
     {

@@ -25,6 +25,7 @@ const backendConfig = {
   env: {
     ORIGIN: FRONTEND_ORIGINS,
     CLIENT_URL: FRONTEND_ORIGINS,
+    REDIS_DISABLED: "true",
   },
   builds: [
     {

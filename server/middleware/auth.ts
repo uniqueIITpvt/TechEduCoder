@@ -2,8 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { CatchAsyncError } from "./catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { redis } from "../utils/redis";
 import { updateAccessToken } from "../controllers/user.controller";
+import userModel from "../models/user.model";
+import { sanitizeUser } from "../utils/sanitizeUser";
 
 // authenticated user
 export const isAutheticated = CatchAsyncError(
@@ -44,7 +45,7 @@ export const isAutheticated = CatchAsyncError(
         return next(error);
       }
     } else {
-      const user = await redis.get(decoded.id);
+      const user = await userModel.findById(decoded.id);
 
       if (!user) {
         return next(
@@ -52,7 +53,7 @@ export const isAutheticated = CatchAsyncError(
         );
       }
 
-      req.user = JSON.parse(user);
+      req.user = sanitizeUser(user);
 
       next();
     }
