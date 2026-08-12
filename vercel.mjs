@@ -38,5 +38,5 @@ const backendConfig = {
   ],
 };
 
-exports.config =
+export const config =
   projectId === BACKEND_PROJECT_ID ? backendConfig : frontendConfig;
