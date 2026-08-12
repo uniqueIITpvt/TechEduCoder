@@ -41,6 +41,8 @@ app.use(cookieParser());
 // );
 const allowedOrigins = [
   'https://www.techeducoder.com',
+  'https://techeducoderlms.vercel.app',
+  'https://techeducoderlms-unique-iits-projects.vercel.app',
   'http://localhost:3000',
   ...(process.env.ORIGIN || '')
     .split(',')
