@@ -1,5 +1,9 @@
 {
   "version": 2,
+  "env": {
+    "ORIGIN": "https://techeducoderlms.vercel.app",
+    "CLIENT_URL": "https://techeducoderlms.vercel.app"
+  },
   "builds": [
     {
       "src": "api/index.ts",

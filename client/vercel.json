@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "env": {
+    "NEXT_PUBLIC_SERVER_URI": "https://techeducoderlmsbackend.vercel.app/api/v1/",
+    "NEXT_PUBLIC_SOCKET_SERVER_URI": "https://techeducoderlmsbackend.vercel.app"
+  }
+}
