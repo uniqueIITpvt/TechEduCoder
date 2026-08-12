@@ -1,8 +1,7 @@
 "use client";
-import React, { FC, use, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
    import { useEditEbookMutation ,useGetAdminAllEbooksQuery } from "@/redux/features/ebook/ebooksApi";
- import toast, { Toast } from "react-hot-toast";
-import { redirect } from "next/navigation";
+ import toast from "react-hot-toast";
    type Props = {
     id:any
 }
