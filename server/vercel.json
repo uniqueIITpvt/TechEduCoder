@@ -1,5 +1,7 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+  "framework": null,
   "env": {
     "ORIGIN": "https://techeducoderlms.vercel.app",
     "CLIENT_URL": "https://techeducoderlms.vercel.app"

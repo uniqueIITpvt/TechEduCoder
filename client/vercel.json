@@ -1,5 +1,7 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+  "framework": "nextjs",
   "env": {
     "NEXT_PUBLIC_SERVER_URI": "https://techeducoderlmsbackend.vercel.app/api/v1/",
     "NEXT_PUBLIC_SOCKET_SERVER_URI": "https://techeducoderlmsbackend.vercel.app"

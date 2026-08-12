@@ -1,9 +1,20 @@
 {
   "name": "techeducoder-main",
   "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
-    "build": "cd server && npm run build && cd ../client && npm run build",
-    "build:server": "cd server && npm run build",
-    "build:client": "cd client && npm run build"
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "npm --workspace server run build",
+    "build:client": "npm --workspace client run build",
+    "vercel-build": "npm run build:client",
+    "vercel-build:server": "npm run build:server"
+  },
+  "dependencies": {
+    "next": "13.4.13",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }
