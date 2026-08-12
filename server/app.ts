@@ -39,8 +39,21 @@ app.use(cookieParser());
 //      credentials: true,
 //   })
 // );
+const allowedOrigins = [
+  'https://www.techeducoder.com',
+  'http://localhost:3000',
+  ...(process.env.ORIGIN || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+  ...(process.env.CLIENT_URL || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+];
+
 app.use(cors({
-  origin: ["https://www.techeducoder.com" ,"http://localhost:3000"],
+  origin: allowedOrigins,
   methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
   credentials: true,
 }));

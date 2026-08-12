@@ -3,3 +3,6 @@ node_modules
 app
 # Sentry Config File
 .sentryclirc
+
+.vercel
+.env*
