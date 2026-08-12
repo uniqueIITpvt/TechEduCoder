@@ -1,5 +1,10 @@
 const FRONTEND_PROJECT_ID = "prj_XCquuo4eQ2DvgqcsN990d0QUoV1S";
 const BACKEND_PROJECT_ID = "prj_3ZTlC9WzZFzBLMgyQjC1GpDUV4ql";
+const FRONTEND_ORIGINS = [
+  "https://techeducoderlms.vercel.app",
+  "https://techeducoderlms-unique-iits-projects.vercel.app",
+  "https://techeducoderlms-git-main-unique-iits-projects.vercel.app",
+].join(",");
 
 const projectId = process.env.VERCEL_PROJECT_ID;
 
@@ -18,8 +23,8 @@ const backendConfig = {
   installCommand: "npm ci --include=dev",
   buildCommand: "npm --workspace server run build",
   env: {
-    ORIGIN: "https://techeducoderlms.vercel.app",
-    CLIENT_URL: "https://techeducoderlms.vercel.app",
+    ORIGIN: FRONTEND_ORIGINS,
+    CLIENT_URL: FRONTEND_ORIGINS,
   },
   builds: [
     {

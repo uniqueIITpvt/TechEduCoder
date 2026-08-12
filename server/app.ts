@@ -40,6 +40,7 @@ const allowedOrigins = [
   'https://www.techeducoder.com',
   'https://techeducoderlms.vercel.app',
   'https://techeducoderlms-unique-iits-projects.vercel.app',
+  'https://techeducoderlms-git-main-unique-iits-projects.vercel.app',
   'http://localhost:3000',
   ...(process.env.ORIGIN || '')
     .split(',')
@@ -51,8 +52,37 @@ const allowedOrigins = [
     .filter(Boolean),
 ];
 
+const allowedOriginSet = new Set(allowedOrigins.map((origin) => origin.replace(/\/+$/, '')));
+
+const isAllowedVercelFrontendOrigin = (origin: string) => {
+  try {
+    const { hostname, protocol } = new URL(origin);
+
+    return (
+      protocol === 'https:' &&
+      hostname.endsWith('.vercel.app') &&
+      (
+        hostname === 'techeducoderlms.vercel.app' ||
+        hostname === 'techeducoderlms-unique-iits-projects.vercel.app' ||
+        hostname === 'techeducoderlms-git-main-unique-iits-projects.vercel.app' ||
+        /^techeducoder-[a-z0-9-]+-unique-iits-projects\.vercel\.app$/.test(hostname)
+      )
+    );
+  } catch {
+    return false;
+  }
+};
+
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    const normalizedOrigin = origin.replace(/\/+$/, '');
+    callback(null, allowedOriginSet.has(normalizedOrigin) || isAllowedVercelFrontendOrigin(normalizedOrigin));
+  },
   methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
   credentials: true,
 }));

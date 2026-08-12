@@ -3,8 +3,8 @@
   "version": 2,
   "framework": null,
   "env": {
-    "ORIGIN": "https://techeducoderlms.vercel.app",
-    "CLIENT_URL": "https://techeducoderlms.vercel.app"
+    "ORIGIN": "https://techeducoderlms.vercel.app,https://techeducoderlms-unique-iits-projects.vercel.app,https://techeducoderlms-git-main-unique-iits-projects.vercel.app",
+    "CLIENT_URL": "https://techeducoderlms.vercel.app,https://techeducoderlms-unique-iits-projects.vercel.app,https://techeducoderlms-git-main-unique-iits-projects.vercel.app"
   },
   "builds": [
     {
