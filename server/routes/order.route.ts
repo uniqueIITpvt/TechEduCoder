@@ -6,15 +6,14 @@ import {
   createBookOrder,
   valdateOrder,
   valdateBookOrder,
+  getAllBookOrders,
 } from "../controllers/order.controller";
 const orderRouter = express.Router();
 
-orderRouter.post("/create-order",  createOrder);
-orderRouter.post("/create-BookOrder",  createBookOrder);
-  orderRouter.post("/validateBookOrder" , valdateBookOrder)
-
-
-orderRouter.post('/validate-order', valdateOrder)
+orderRouter.post("/create-order", isAutheticated, createOrder);
+orderRouter.post("/create-BookOrder", isAutheticated, createBookOrder);
+orderRouter.post("/validateBookOrder", isAutheticated, valdateBookOrder);
+orderRouter.post("/validate-order", isAutheticated, valdateOrder);
 orderRouter.get(
   "/get-orders",
   isAutheticated,
@@ -25,7 +24,7 @@ orderRouter.get(
   "/get-Book-orders",
   isAutheticated,
   authorizeRoles("admin"),
-  getAllOrders
+  getAllBookOrders
 );
 
 // orderRouter.get("/payment/stripepublishablekey", sendStripePublishableKey);

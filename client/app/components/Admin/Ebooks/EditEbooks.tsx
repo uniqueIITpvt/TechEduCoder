@@ -1,6 +1,6 @@
 "use client";
 import React, { FC, use, useEffect, useState } from "react";
-   import { useEditEbookMutation ,useGetAllEbooksQuery } from "@/redux/features/ebook/ebooksApi"; 
+   import { useEditEbookMutation ,useGetAdminAllEbooksQuery } from "@/redux/features/ebook/ebooksApi";
  import toast, { Toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
    type Props = {
@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 
 const EditEbooks:FC<Props> = ({id}) => {
     const [ editEbook,{isSuccess,error}] = useEditEbookMutation();
-    const { data, refetch } = useGetAllEbooksQuery(
+    const { data, refetch } = useGetAdminAllEbooksQuery(
         {},
         { refetchOnMountOrArgChange: true }
       );

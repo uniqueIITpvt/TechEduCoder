@@ -5,6 +5,7 @@ import { FcHome } from 'react-icons/fc';
 import { FcIphone } from 'react-icons/fc';
 import { FcInvite } from 'react-icons/fc';
 import { FcIpad } from 'react-icons/fc';
+import toast from 'react-hot-toast';
 
 const ContactUs = () => {
   const initialState = {
@@ -15,7 +16,7 @@ const ContactUs = () => {
     message: '',
   };
 
-  const [createMessage] = useCreateMessageMutation();
+  const [createMessage, { isLoading }] = useCreateMessageMutation();
 
   const [contactFormData, setContactFormData] = useState({ ...initialState });
 
@@ -28,13 +29,13 @@ const ContactUs = () => {
 
   const contactFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    await createMessage({
-      ...contactFormData,
-      status: '',
-      updateId: '',
-      updatedAt: '',
-      description: '',
-    });
+    try {
+      const result = await createMessage(contactFormData).unwrap();
+      toast.success(result.message || 'Message sent successfully');
+      setContactFormData({ ...initialState });
+    } catch (error: any) {
+      toast.error(error?.data?.message || 'Unable to send message');
+    }
   };
   return (
     <div className='text-black dark:text-white'>
@@ -150,9 +151,10 @@ const ContactUs = () => {
                 </div>
                 <button
                   type='submit'
-                  className='bg-gradient-to-r from-blue-500 to-[#521088] text-white py-3 px-5 text-sm font-medium text-center   dark:text-white rounded-lg bg-primary-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full'
+                  disabled={isLoading}
+                  className='bg-gradient-to-r from-blue-500 to-[#521088] text-white py-3 px-5 text-sm font-medium text-center disabled:cursor-not-allowed disabled:opacity-70 dark:text-white rounded-lg bg-primary-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full'
                 >
-                  Send message
+                  {isLoading ? 'Sending...' : 'Send message'}
                 </button>
               </form>
             </div>

@@ -56,32 +56,9 @@ export const authApi = apiSlice.injectEndpoints({
           const result = await queryFulfilled;
           dispatch(
             userLoggedIn({
-              accessToken: result.data.accessToken,
-              user: result.data.user,
-            })
-          );
-        } catch (error: any) {
-          console.log(error);
-        }
-      },
-    }),
-    socialAuth: builder.mutation({
-      query: ({ email, name, avatar }) => ({
-        url: "social-auth",
-        method: "POST",
-        body: {
-          email,
-          name,
-          avatar,
-        },
-        credentials: "include" as const,
-      }),
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-          dispatch(
-            userLoggedIn({
-              accessToken: result.data.accessToken,
+              // Authentication is cookie based; never persist the access token
+              // in browser-readable state.
+              accessToken: "",
               user: result.data.user,
             })
           );
@@ -113,6 +90,5 @@ export const {
   useRegisterMutation,
   useActivationMutation,
   useLoginMutation,
-  useSocialAuthMutation,
   useLogOutQuery
 } = authApi;

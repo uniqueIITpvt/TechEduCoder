@@ -13,12 +13,25 @@ type Props = {
 };
 
 const CourseContent = ({ id,user }: Props) => {
-  const { data: contentData, isLoading,refetch } = useGetCourseContentQuery(id,{refetchOnMountOrArgChange:true});
+  const {
+    data: contentData,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetCourseContentQuery(id, { refetchOnMountOrArgChange: true });
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState('Login')
   const data = contentData?.content;
 
   const [activeVideo, setActiveVideo] = useState(0);
+
+  if (!isLoading && (isError || !Array.isArray(data) || data.length === 0)) {
+    return (
+      <div className="min-h-screen flex items-center justify-center dark:text-white text-black">
+        Course content could not be loaded. Please refresh or try again later.
+      </div>
+    );
+  }
 
   return (
     <>
@@ -29,9 +42,9 @@ const CourseContent = ({ id,user }: Props) => {
           <Header activeItem={1} open={open} setOpen={setOpen} route={route} setRoute={setRoute} />
           <div className="w-full grid 800px:grid-cols-10">
             <Heading
-              title={data[activeVideo]?.title}
+              title={data?.[activeVideo]?.title}
               description=" TechEduCoder"
-              keywords={data[activeVideo]?.tags}
+              keywords={data?.[activeVideo]?.tags}
             />
             <div className="col-span-7 mt-10">
               <CourseContentMedia

@@ -11,6 +11,7 @@ import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.Model";
 import axios from "axios";
+import { entitlementMatches, hasEntitlement } from "../utils/entitlements";
 
 // upload course
 export const uploadCourse = CatchAsyncError(
@@ -145,7 +146,7 @@ export const getCourseByUser = CatchAsyncError(
       const courseId = req.params.id;
 
       const courseExists = userCourseList?.find(
-        (course: any) => course._id.toString() === courseId
+        (course: any) => entitlementMatches(course, courseId)
       );
 
       if (!courseExists) {
@@ -327,7 +328,7 @@ export const addReview = CatchAsyncError(
 
       // check if courseId already exists in userCourseList based on _id
       const courseExists = userCourseList?.some(
-        (course: any) => course._id.toString() === courseId.toString()
+        (course: any) => entitlementMatches(course, courseId)
       );
 
       if (!courseExists) {
@@ -473,22 +474,84 @@ export const deleteCourse = CatchAsyncError(
 export const generateVideoUrl = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { videoId } = req.body;
-      const response = await axios.post(
-        `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
-        { ttl: 300 },
+      const { videoId, courseId } = req.body;
+      if (!videoId) {
+        return next(new ErrorHandler("Video id is required", 400));
+      }
 
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`,
-          },        
+      if (req.user?.role !== "admin") {
+        if (!courseId) {
+          return next(new ErrorHandler("Course id is required", 400));
         }
-      );
-      res.json(response.data);
+
+        const course = await CourseModel.findById(courseId).select(
+          "courseData.videoUrl"
+        );
+        if (!course) {
+          return next(new ErrorHandler("Course not found", 404));
+        }
+
+        const hasAccess = hasEntitlement(req.user?.courses, courseId);
+        const videoBelongsToCourse = course.courseData.some(
+          (item: any) => item.videoUrl === videoId
+        );
+
+        if (!hasAccess) {
+          return next(new ErrorHandler("You cannot access this course", 403));
+        }
+        if (!videoBelongsToCourse) {
+          return next(
+            new ErrorHandler("Video does not belong to this course", 400)
+          );
+        }
+      }
+
+      res.json(await requestVideoOtp(videoId));
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
   }
 );
+
+export const generateDemoVideoUrl = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { videoId, courseId } = req.body;
+      if (!videoId || !courseId) {
+        return next(new ErrorHandler("Video id and course id are required", 400));
+      }
+
+      const course = await CourseModel.findById(courseId).select("demoUrl");
+      if (!course) {
+        return next(new ErrorHandler("Course not found", 404));
+      }
+      if (course.demoUrl !== videoId) {
+        return next(new ErrorHandler("Invalid course demo video", 400));
+      }
+
+      res.json(await requestVideoOtp(videoId));
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+const requestVideoOtp = async (videoId: string) => {
+  if (!process.env.VDOCIPHER_API_SECRET) {
+    throw new Error("VDOCIPHER_API_SECRET is not configured");
+  }
+
+  const response = await axios.post(
+    `https://dev.vdocipher.com/api/videos/${encodeURIComponent(videoId)}/otp`,
+    { ttl: 300 },
+    {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`,
+      },
+    }
+  );
+
+  return response.data;
+};

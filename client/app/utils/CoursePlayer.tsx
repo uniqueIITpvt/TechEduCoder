@@ -1,28 +1,50 @@
 import React, { FC, useEffect, useState } from "react";
 import axios from "axios";
+import { apiUrl } from "./api";
 
 type Props = {
   videoUrl: string;
   title: string;
+  courseId?: string;
+  isDemo?: boolean;
 };
 
-const CoursePlayer: FC<Props> = ({ videoUrl }) => {
+const CoursePlayer: FC<Props> = ({ videoUrl, courseId, isDemo = false }) => {
   const [videoData, setVideoData] = useState({
     otp: "",
     playbackInfo: "",
   });
 
   useEffect(() => {
-    axios.post("https://techeducoder-lrel.onrender.com/api/v1/getVdoCipherOTP", {
-        videoId: videoUrl,
-      })
-      .then((res) => {
-        setVideoData(res.data);
-      })
-      .catch((error) => {
+    if (!videoUrl) {
+      setVideoData({ otp: "", playbackInfo: "" });
+      return;
+    }
+
+    let isActive = true;
+
+    const loadVideo = async () => {
+      try {
+        const response = await axios.post(
+          apiUrl(isDemo ? "getVdoCipherDemoOTP" : "getVdoCipherOTP"),
+          { videoId: videoUrl, courseId },
+          { withCredentials: true }
+        );
+
+        if (isActive) {
+          setVideoData(response.data);
+        }
+      } catch (error) {
         console.error("Error fetching video data:", error);
-      });
-  }, [videoUrl]);
+      }
+    };
+
+    loadVideo();
+
+    return () => {
+      isActive = false;
+    };
+  }, [courseId, isDemo, videoUrl]);
 
   return (
     <div style={{position:"relative",paddingTop:"56.25%",overflow:"hidden"}}>

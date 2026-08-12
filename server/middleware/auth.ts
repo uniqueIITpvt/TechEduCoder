@@ -12,14 +12,28 @@ export const isAutheticated = CatchAsyncError(
 
     if (!access_token) {
       return next(
-        new ErrorHandler("Please login to access this resource", 400)
+        new ErrorHandler("Please login to access this resource", 401)
       );
     }
 
-    const decoded = jwt.decode(access_token) as JwtPayload;
+    let decoded: JwtPayload;
+    const accessTokenSecret = process.env.ACCESS_TOKEN;
+    if (!accessTokenSecret) {
+      return next(new ErrorHandler("ACCESS_TOKEN is not configured", 500));
+    }
 
-    if (!decoded) {
-      return next(new ErrorHandler("access token is not valid", 400));
+    try {
+      decoded = jwt.verify(access_token, accessTokenSecret) as JwtPayload;
+    } catch (error: any) {
+      if (error?.name !== "TokenExpiredError") {
+        return next(new ErrorHandler("access token is not valid", 401));
+      }
+
+      decoded = jwt.decode(access_token) as JwtPayload;
+    }
+
+    if (!decoded?.id) {
+      return next(new ErrorHandler("access token is not valid", 401));
     }
 
     // check if the access token is expired
@@ -34,7 +48,7 @@ export const isAutheticated = CatchAsyncError(
 
       if (!user) {
         return next(
-          new ErrorHandler("Please login to access this resource", 400)
+          new ErrorHandler("Please login to access this resource", 401)
         );
       }
 

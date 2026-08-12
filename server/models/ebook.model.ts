@@ -6,7 +6,12 @@ export interface IEbook extends Document {
   authorName: string;
   category: string;
   ebookTitle: string;
-  ebookpdf: object;
+  ebookpdf: {
+    public_id: string;
+    url: string;
+    resource_type?: string;
+    delivery_type?: string;
+  };
   // ebookPDF: {
   //   public_id: string; // Cloudinary public ID for the eBook PDF
   //   url: string; // Cloudinary URL for the eBook PDF
@@ -74,6 +79,8 @@ const ebookSchema: Schema<IEbook> = new mongoose.Schema(
         type: String,
         required: [true, "Cloudinary URL is required"],
       },
+      resource_type: String,
+      delivery_type: String,
     },
     level: {
       type: String,

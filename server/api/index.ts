@@ -11,21 +11,36 @@ cloudinary.config({
 let dbConnection: Promise<typeof mongoose> | null = null;
 
 async function connectDatabase() {
-  if (mongoose.connection.readyState >= 1) {
+  if (mongoose.connection.readyState === 1) {
     return;
   }
 
+  if (mongoose.connection.readyState === 2 && dbConnection) {
+    await dbConnection;
+    return;
+  }
+
+  // A previously resolved promise must not mask a later disconnect in a warm
+  // serverless instance.
+  dbConnection = null;
+
   const dbUrl = process.env.DB_URL;
   if (!dbUrl) {
-    return;
+    throw new Error("DB_URL is not configured");
   }
 
   dbConnection =
     dbConnection ||
-    mongoose.connect(dbUrl).then((connection) => {
-      console.log(`Database connected with ${connection.connection.host}`);
-      return connection;
-    });
+    mongoose
+      .connect(dbUrl)
+      .then((connection) => {
+        console.log(`Database connected with ${connection.connection.host}`);
+        return connection;
+      })
+      .catch((error) => {
+        dbConnection = null;
+        throw error;
+      });
 
   await dbConnection;
 }

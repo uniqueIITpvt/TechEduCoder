@@ -6,12 +6,13 @@ import Heading from "@/app/utils/Heading";
 import { loadStripe } from "@stripe/stripe-js";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 
-import { useGetEbookQuery } from "@/redux/features/ebook/ebooksApi";
+import { useGetEbookContentQuery } from "@/redux/features/ebook/ebooksApi";
 import Loader from "../../components/Loader/Loader";
 import Header from "../../components/Header";
 import EbookDetails from "../../components/eBooks/EbookDetails";
 import Footer from "../../components/Footer";
 import dynamic from "next/dynamic";
+import { redirect } from "next/navigation";
 
 const  ShowEbook= dynamic(()=>import("../../components/eBooks/ShowEbook" ),{  ssr: false,} )
 
@@ -28,7 +29,7 @@ const Page = ({params}:any) => {
 
   
 
-  const { data, isLoading } = useGetEbookQuery(id);
+  const { data, isLoading, error } = useGetEbookContentQuery(id);
 
   const { data: userData } = useLoadUserQuery(undefined, {});
   const [stripePromise, setStripePromise] = useState<any>(null);
@@ -42,6 +43,8 @@ const Page = ({params}:any) => {
     <>
       {isLoading ? (
         <Loader />
+      ) : error || !data?.ebook ? (
+        redirect("/")
       ) : (
         <div>
           <Heading

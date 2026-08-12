@@ -1,6 +1,9 @@
 {
   "name": "techeducoder-main",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "workspaces": [
     "client",
     "server"
@@ -9,6 +12,8 @@
     "build": "npm run build:server && npm run build:client",
     "build:server": "npm --workspace server run build",
     "build:client": "npm --workspace client run build",
+    "lint": "npm --workspace client run lint",
+    "typecheck": "npm --workspace client exec -- tsc --noEmit --pretty false && npm --workspace server exec -- tsc --noEmit --pretty false",
     "vercel-build": "npm run build:client",
     "vercel-build:server": "npm run build:server"
   },

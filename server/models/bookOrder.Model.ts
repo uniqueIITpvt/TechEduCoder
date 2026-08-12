@@ -3,13 +3,16 @@ import mongoose, { Document, Model, Schema } from "mongoose";
 export interface IBookOrder extends Document {
   bookId: string;
   orderId: string;
+  checkoutKey?: string;
   razorpayOrderId: string;
-  razorpayPaymentId: string | null;
-  razorpaySignature: string | null;
-  userId?: mongoose.Schema.Types.ObjectId;
+  razorpayPaymentId?: string;
+  razorpaySignature?: string;
+  userId: mongoose.Types.ObjectId | string;
   amount: number;
   currency: string;
   status: "created" | "paid" | "failed" | "refunded";
+  fulfilledBy?: "checkout" | "webhook";
+  paidAt?: Date;
 }
 
 const bookOrderSchema = new Schema<IBookOrder>(
@@ -19,7 +22,10 @@ const bookOrderSchema = new Schema<IBookOrder>(
       required: true,
     },
     orderId: { type: String, required: true },
-    razorpayOrderId: { type: String, required: true },
+    checkoutKey: { type: String },
+    razorpayOrderId: { type: String, required: true, unique: true },
+    razorpayPaymentId: { type: String },
+    razorpaySignature: { type: String },
     userId: { type: String, required: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true },
@@ -28,8 +34,29 @@ const bookOrderSchema = new Schema<IBookOrder>(
       enum: ["created", "paid", "failed", "refunded"],
       default: "created",
     },
+    fulfilledBy: {
+      type: String,
+      enum: ["checkout", "webhook"],
+    },
+    paidAt: { type: Date },
   },
   { timestamps: true }
+);
+
+bookOrderSchema.index(
+  { checkoutKey: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { checkoutKey: { $type: "string" } },
+  }
+);
+
+bookOrderSchema.index(
+  { razorpayPaymentId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { razorpayPaymentId: { $type: "string" } },
+  }
 );
 
 const EbookOrderModel: Model<IBookOrder> = mongoose.model("BookOrder", bookOrderSchema);

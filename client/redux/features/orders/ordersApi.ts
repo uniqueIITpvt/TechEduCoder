@@ -10,13 +10,9 @@ export const ordersApi = apiSlice.injectEndpoints({
       }),
     }),
     createOrder: builder.mutation({
-      query: ({ amount, currency, courseId }) => ({
+      query: ({ courseId }) => ({
         url: "create-order",
-        body: {
-          courseId,
-          amount, 
-          currency,
-        },
+        body: { courseId },
         method: "POST",
         credentials: "include" as const,
       }),
@@ -34,13 +30,6 @@ export const ordersApi = apiSlice.injectEndpoints({
     }),
     
       
-    getRazorpayKey: builder.query({
-      query: () => ({
-        url: `payment/razorpaykey`,
-        method: "GET",
-        credentials: "include" as const,
-      }),
-    }),
   }),
 });
 
@@ -49,5 +38,4 @@ export const {
   useGetAllOrdersQuery,
   useCreateOrderMutation,
   useValidateRazorpayPaymentMutation,
-  useGetRazorpayKeyQuery,
 } = ordersApi;

@@ -12,6 +12,7 @@ import EbookCard from "../EbookCard/EbookCard";
 import { useGetAllEbooksQuery } from "@/redux/features/ebook/ebooksApi";
 import EditProfileinfo from "./EditProfileInfo";
 import { redirect } from "next/navigation";
+import { entitlementId } from "@/app/utils/entitlements";
 
 
 
@@ -37,15 +38,17 @@ const Profile: FC<Props> = ({ user }) => {
 
   useEffect(() => {
     if (books) {
-      const filteredbooks = user.books
+      const filteredbooks = (user.books || [])
         .map((userbooks: any) =>
-          books?.ebooks.find((book: any) => book._id === userbooks._id)
+          books?.ebooks.find(
+            (book: any) => book._id === entitlementId(userbooks)
+          )
         )
         .filter((course: any) => course !== undefined);
         setEbooks(filteredbooks);
     }
 
-  }, [books]);
+  }, [books, user.books]);
 
  
 
@@ -57,27 +60,31 @@ const Profile: FC<Props> = ({ user }) => {
     redirect("/")
   };
 
-  if (typeof window !== "undefined") {
-    window.addEventListener("scroll", () => {
+  useEffect(() => {
+    const handleScroll = () => {
       if (window.scrollY > 85) {
         setScroll(true);
       } else {
         setScroll(false);
       }
-    });
-  }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (data) {
-      const filteredCourses = user.courses
+      const filteredCourses = (user.courses || [])
         .map((userCourse: any) =>
-          data.courses.find((course: any) => course._id === userCourse._id)
+          data.courses.find(
+            (course: any) => course._id === entitlementId(userCourse)
+          )
         )
         .filter((course: any) => course !== undefined);
       setCourses(filteredCourses);
     }
 
-  }, [data]);
+  }, [data, user.courses]);
 
 
   return (

@@ -5,6 +5,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import cloudinary from "cloudinary";
 import { redis } from "../utils/redis";
+import { hasEntitlement } from "../utils/entitlements";
 
   export const createEbook = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -27,11 +28,15 @@ import { redis } from "../utils/redis";
         if (ebookpdf) {
           const myCloud = await cloudinary.v2.uploader.upload(ebookpdf, {
             folder: "ebooksss",
+            resource_type: "raw",
+            type: "authenticated",
           });
   
           ebookData.ebookpdf = {
             public_id: myCloud.public_id,
             url: myCloud.secure_url,
+            resource_type: "raw",
+            delivery_type: "authenticated",
           };
         }
         
@@ -49,7 +54,7 @@ import { redis } from "../utils/redis";
 export const getAllEbooks = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const ebooks = await EbookModel.find();
+      const ebooks = await EbookModel.find().select("-ebookpdf");
 
       res.status(200).json({
         success: true,
@@ -65,7 +70,7 @@ export const getEbookDetails = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const ebookId = req.params.id;
-      const ebook = await EbookModel.findById(ebookId);
+      const ebook = await EbookModel.findById(ebookId).select("-ebookpdf");
 
       if (!ebook) {
         return next(new ErrorHandler("Ebook not found", 404));
@@ -75,6 +80,50 @@ export const getEbookDetails = CatchAsyncError(
         success: true,
         ebook,
       });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+export const getEbookContent = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const ebook = await EbookModel.findById(req.params.id);
+      if (!ebook) {
+        return next(new ErrorHandler("Ebook not found", 404));
+      }
+
+      if (
+        req.user?.role !== "admin" &&
+        !hasEntitlement(req.user?.books, ebook._id)
+      ) {
+        return next(new ErrorHandler("You cannot access this ebook", 403));
+      }
+
+      const safeEbook = ebook.toObject() as any;
+      const publicId = safeEbook.ebookpdf?.public_id;
+      if (!publicId) {
+        return next(new ErrorHandler("Ebook file is unavailable", 404));
+      }
+
+      const signedUrl = cloudinary.v2.utils.private_download_url(
+        publicId,
+        "pdf",
+        {
+          resource_type: safeEbook.ebookpdf.resource_type || "raw",
+          type:
+            safeEbook.ebookpdf.delivery_type ||
+            (safeEbook.ebookpdf.url?.includes("/authenticated/")
+              ? "authenticated"
+              : "upload"),
+          expires_at: Math.floor(Date.now() / 1000) + 5 * 60,
+          attachment: false,
+        }
+      );
+
+      safeEbook.ebookpdf = { url: signedUrl };
+      res.status(200).json({ success: true, ebook: safeEbook });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
@@ -118,11 +167,15 @@ export const editEbook = CatchAsyncError(
 
         const myCloud = await cloudinary.v2.uploader.upload(ebookpdf, {
           folder: "ebooksss",
+          resource_type: "raw",
+          type: "authenticated",
         });
 
         data.ebookpdf = {
           public_id: myCloud.public_id,
           url: myCloud.secure_url,
+          resource_type: "raw",
+          delivery_type: "authenticated",
         };
       }
 
@@ -130,6 +183,8 @@ export const editEbook = CatchAsyncError(
         data.ebookpdf = {
           public_id: eBookeData.ebookpdf.public_id,
           url: eBookeData.ebookpdf.url,
+          resource_type: eBookeData.ebookpdf.resource_type,
+          delivery_type: eBookeData.ebookpdf.delivery_type,
         };
       }
 
@@ -181,11 +236,11 @@ export const deleteEbook = CatchAsyncError(
 export const getAdminAllEbooks = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const Ebooks = await EbookModel.find().sort({ createdAt: -1 });
+      const ebooks = await EbookModel.find().sort({ createdAt: -1 });
   
       res.status(201).json({
         success: true,
-        Ebooks,
+        ebooks,
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));

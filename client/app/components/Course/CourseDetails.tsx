@@ -19,6 +19,9 @@ import { RxUpdate } from "react-icons/rx";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { GoDotFill } from "react-icons/go";
 import toast from "react-hot-toast";
+import { apiUrl } from "@/app/utils/api";
+import { hasEntitlement } from "@/app/utils/entitlements";
+import { loadRazorpay } from "@/app/utils/razorpay";
 
 type Props = {
   data: any;
@@ -38,6 +41,7 @@ const CourseDetails = ({
   const [readMore, setReadMore] = useState(false);
   const [seeMore, setSeeMore] = useState(false);
   const [activeBar, setactiveBar] = useState(0);
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   
 
   useEffect(() => {
@@ -48,50 +52,64 @@ const CourseDetails = ({
 
 
   const handlePayment = async () => {
-    const res = await initializeRazorpay();
-    if (!res) {
-      toast.error("Razorpay SDK Failed to load");
+    if (isPaymentLoading) {
       return;
     }
-  
-    const amount = Math.round(data.discountPrice * 100);
-    const currency = "INR";
-    const userId = user?._id;
-  
+
+    const razorpayKeyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+    if (!razorpayKeyId) {
+      toast.error("Razorpay key is not configured");
+      return;
+    }
+
+    setIsPaymentLoading(true);
+    const res = await loadRazorpay();
+    if (!res) {
+      toast.error("Razorpay SDK Failed to load");
+      setIsPaymentLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch("https://techeducoder-lrel.onrender.com/api/v1/create-order", {
+      const response = await fetch(apiUrl("create-order"), {
         method: "POST",
+        credentials: "include",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          amount,
-          currency,
-          courseId: data._id,
-          userId
-        })
+        body: JSON.stringify({ courseId: data._id }),
       });
-  
-      const data1 = await response.json();
+
+      const data1 = await response.json().catch(() => ({}));
       if (!response.ok) {
-        toast.error(data1.message);
+        toast.error(data1.message || "Unable to create payment order");
+        setIsPaymentLoading(false);
+        return;
       }
 
-  
-      var options = {
-        key: process.env.KEY, 
+      const { orderId, currency, amount } = data1;
+      if (!orderId || !currency || amount == null) {
+        toast.error("Invalid payment order response");
+        setIsPaymentLoading(false);
+        return;
+      }
+
+      const options = {
+        key: razorpayKeyId,
         name: "Course Payment",
-        currency: currency,
-        amount: amount,
-        order_id: data1.orderId,
+        currency,
+        amount,
+        order_id: orderId,
         description: "Thank you for purchasing my course",
-        handler: async function (response:any) {
-          const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = response;
+        handler: async function (paymentResponse: any) {
+          const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
+            paymentResponse;
           try {
             const validationResponse = await fetch(
-              "http://localhost:8000/api/v1/validate-order",
+              apiUrl("validate-order"),
               {
                 method: "POST",
+                credentials: "include",
                 headers: {
                   "Content-Type": "application/json",
                 },
@@ -102,17 +120,34 @@ const CourseDetails = ({
                 }),
               }
             );
-            const validationData = await validationResponse.json();
-            if (validationData.success) {
-              toast.success("Payment verification successful");
-              refetch();  // Refetch user data or update purchase status
-              setUser({ ...user, courses: [...user.courses, { _id: data._id }] }); // Update locally without refetching if possible
-            } else {
-              throw new Error("Payment verification failed");
+            const validationData = await validationResponse
+              .json()
+              .catch(() => ({}));
+
+            if (!validationResponse.ok || !validationData.success) {
+              toast.error(
+                validationData.message || "Payment verification failed"
+              );
+              return;
             }
-          } catch (error:any) {
+
+            toast.success("Payment verification successful");
+            refetch();
+            setUser({
+              ...user,
+              courses: [
+                ...(user?.courses ?? []),
+                { courseId: data._id },
+              ],
+            });
+          } catch (error: any) {
             toast.error(error.message);
+          } finally {
+            setIsPaymentLoading(false);
           }
+        },
+        modal: {
+          ondismiss: () => setIsPaymentLoading(false),
         },
         method: {
           netbanking: true,
@@ -122,9 +157,8 @@ const CourseDetails = ({
           paylater: false, 
         },
         prefill: {
-          name: "tanwir alam",
-          email: "tanw9004167@gmail.com",
-          contact: "9835471132",
+          name: user?.name || "",
+          email: user?.email || "",
         },
       };
   
@@ -132,23 +166,8 @@ const CourseDetails = ({
       paymentObject.open();
     } catch (error:any) {
       toast.error(error.message || "An error occurred during the payment process");
+      setIsPaymentLoading(false);
     }
-  };
-  
-  const initializeRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-
-      document.body.appendChild(script);
-    });
   };
 
 
@@ -157,12 +176,11 @@ const CourseDetails = ({
 
   const discountPercentengePrice = dicountPercentenge.toFixed(0);
 
-  const isPurchased =
-    user && user?.courses?.find((item: any) => item._id === data._id);
+  const isPurchased = hasEntitlement(user?.courses, data._id);
 
     const handleOrder = (e: any) => {
       e.preventDefault(); 
-      if (user) {
+      if (user && !isPaymentLoading) {
         handlePayment(); 
       } else {
         setRoute("Login"); 
@@ -223,7 +241,12 @@ const CourseDetails = ({
           <div className="lg:col-span-2">
             {/* course content  */}
             <div className=" mb-10">
-              <CoursePlayer videoUrl={data?.demoUrl} title={data?.title} />
+              <CoursePlayer
+                videoUrl={data?.demoUrl}
+                title={data?.title}
+                courseId={data?._id}
+                isDemo
+              />
             </div>
             <div className="w-full p-4  text-[17px] flex items-center justify-start  border-b-2 border-[#e4e6ee]  backdrop-blur shadow-[bg-slate-700]  rounded shadow-inner">
               {["Overview", "Reviews"].map((text, index) => (
@@ -402,7 +425,9 @@ const CourseDetails = ({
                 <div className="flex items-center mt-5  w-[70%] ">
                   {isPurchased ? (
                     <Link
-                      className={`${styles.button} !w-full !items-center !justify-center`}
+                      className={`${styles.button} !w-full !items-center !justify-center ${
+                        isPaymentLoading ? "cursor-not-allowed opacity-70" : ""
+                      }`}
                       // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
                       href={`/course-access/${data._id}`}
                     >
@@ -414,7 +439,7 @@ const CourseDetails = ({
                       // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
                       onClick={handleOrder}
                     >
-                      Buy Now
+                      {isPaymentLoading ? "Opening checkout..." : "Buy Now"}
                     </div>
                   )}
                 </div>

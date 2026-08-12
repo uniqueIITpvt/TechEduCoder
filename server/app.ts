@@ -14,21 +14,18 @@ import { rateLimit } from 'express-rate-limit';
 import blogsRouter from './routes/blogs.route';
 import ebookRouter from './routes/ebook.route';
 import courseEventRouter from './routes/courseEvents.route';
+import contactRouter from './routes/contact.route';
+import { RedisRateLimitStore } from './utils/rateLimitStore';
+import { razorpayWebhook } from './controllers/order.controller';
 // You can also use ESM `import * as Sentry from "@sentry/node"` instead of `require`
 const Sentry = require("@sentry/node");
 
 Sentry.init({
   dsn: "https://0180fab26d88770ecd9d96f9d3f6b802@o4507213780090880.ingest.de.sentry.io/4507214544175184",
   // Performance Monitoring
-  tracesSampleRate: 1.0, //  Capture 100% of the transactions
+  tracesSampleRate: Number(process.env.SENTRY_TRACES_SAMPLE_RATE || "0.1"),
 });
 
-
-// body parser
-app.use(express.json({ limit: '50mb' }));
-
-// cookie parser
-app.use(cookieParser());
 
 // cors => cross origin resource sharing
 // app.use(
@@ -60,6 +57,19 @@ app.use(cors({
   credentials: true,
 }));
 
+if (process.env.NODE_ENV === 'production') {
+  // Vercel and the supported reverse-proxy deployment use one trusted hop.
+  app.set('trust proxy', 1);
+}
+
+// Razorpay signs the exact request bytes. Keep this route ahead of both the
+// shared JSON parser and the general API limiter: it authenticates with its own
+// HMAC signature and must remain available while Redis is recovering.
+app.post(
+  '/api/v1/payment/razorpay/webhook',
+  express.raw({ type: 'application/json', limit: '1mb' }),
+  razorpayWebhook
+);
 
 // api requests limit
 const limiter = rateLimit({
@@ -67,7 +77,14 @@ const limiter = rateLimit({
   max: 100,
   standardHeaders: 'draft-7',
   legacyHeaders: false,
+  store: new RedisRateLimitStore(),
 });
+
+app.use('/api/v1', limiter);
+
+// Parse potentially large request bodies only after the request is admitted.
+app.use(express.json({ limit: '50mb' }));
+app.use(cookieParser());
 
 // routes
 app.use(
@@ -80,7 +97,8 @@ app.use(
   layoutRouter,
   blogsRouter,
   ebookRouter,
-  courseEventRouter
+  courseEventRouter,
+  contactRouter
  
 );
 
@@ -100,7 +118,6 @@ app.all('*', (req: Request, res: Response, next: NextFunction) => {
 });
 
 // middleware calls
-app.use(limiter);
 // app.use(ErrorMiddleware);
 app.use(Sentry.Handlers.errorHandler());
 app.use(ErrorMiddleware);

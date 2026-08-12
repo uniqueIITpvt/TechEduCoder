@@ -19,6 +19,9 @@ import { RxUpdate } from "react-icons/rx";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
+import { apiUrl } from "@/app/utils/api";
+import { hasEntitlement } from "@/app/utils/entitlements";
+import { loadRazorpay } from "@/app/utils/razorpay";
 
 const ShowEbook = dynamic(() => import("./ShowEbook"), { ssr: false });
 
@@ -38,61 +41,71 @@ const EbookDetails = ({
   const [user, setUser] = useState<any>();
   const [open, setOpen] = useState(false);
   const [activeBar, setactiveBar] = useState(0);
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false);
 
   useEffect(() => {
     setUser(userData?.user);
   }, [userData]);
 
   const handlePayment = async () => {
-    const res = await initializeRazorpay();
-    if (!res) {
-      toast.error("Razorpay SDK Failed to load");
+    if (isPaymentLoading) {
       return;
     }
 
-    const amount = Math.round(data.discountPrice * 100);
-    const currency = "INR";
-    const userId = user?._id;
+    const razorpayKeyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+    if (!razorpayKeyId) {
+      toast.error("Razorpay key is not configured");
+      return;
+    }
+
+    setIsPaymentLoading(true);
+    const res = await loadRazorpay();
+    if (!res) {
+      toast.error("Razorpay SDK Failed to load");
+      setIsPaymentLoading(false);
+      return;
+    }
 
     try {
-      const response = await fetch(
-        "https://techeducoder-lrel.onrender.com/api/v1/create-BookOrder",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            amount,
-            currency,
-            bookId: data._id,
-            userId,
-          }),
-        }
-      );
+      const response = await fetch(apiUrl("create-BookOrder"), {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ bookId: data._id }),
+      });
 
-      const data1 = await response.json();
+      const data1 = await response.json().catch(() => ({}));
       if (!response.ok) {
-        toast.error(data1.message);
-      } 
-     
+        toast.error(data1.message || "Unable to create payment order");
+        setIsPaymentLoading(false);
+        return;
+      }
 
+      const { orderId, currency, amount } = data1;
+      if (!orderId || !currency || amount == null) {
+        toast.error("Invalid payment order response");
+        setIsPaymentLoading(false);
+        return;
+      }
 
-      var options = {
-        key: process.env.KEY,
+      const options = {
+        key: razorpayKeyId,
         name: "book Payment",
-        currency: currency,
-        amount: amount,
-        order_id: data1.orderId,
+        currency,
+        amount,
+        order_id: orderId,
         description: "Thank you for purchasing my books",
-        handler: async function (response: any) {
+        handler: async function (paymentResponse: any) {
           const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
-            response;
+            paymentResponse;
           try {
             const validationResponse = await fetch(
-              "https://techeducoder-lrel.onrender.com/api/v1/validateBookOrder",
+              apiUrl("validateBookOrder"),
               {
                 method: "POST",
+                credentials: "include",
                 headers: {
                   "Content-Type": "application/json",
                 },
@@ -103,17 +116,31 @@ const EbookDetails = ({
                 }),
               }
             );
-            const validationData = await validationResponse.json();
-            if (validationData.success) {
-              toast.success("Payment verification successful");
-              refetch(); 
-              setUser({ ...user, book: [...user.books, { _id: data._id }] }); // Update locally without refetching if possible
-            } else {
-              throw new Error("Payment verification failed");
+            const validationData = await validationResponse
+              .json()
+              .catch(() => ({}));
+
+            if (!validationResponse.ok || !validationData.success) {
+              toast.error(
+                validationData.message || "Payment verification failed"
+              );
+              return;
             }
+
+            toast.success("Payment verification successful");
+            refetch();
+            setUser({
+              ...user,
+              books: [...(user?.books ?? []), { bookId: data._id }],
+            });
           } catch (error: any) {
-            toast.error("Error" , error.message);
+            toast.error(error.message || "Payment verification failed");
+          } finally {
+            setIsPaymentLoading(false);
           }
+        },
+        modal: {
+          ondismiss: () => setIsPaymentLoading(false),
         },
         method: {
           netbanking: true,
@@ -123,9 +150,8 @@ const EbookDetails = ({
           paylater: false,
         },
         prefill: {
-          name: "tanwir alam",
-          email: "tanw9004167@gmail.com",
-          contact: "9835471132",
+          name: user?.name || "",
+          email: user?.email || "",
         },
       };
 
@@ -135,28 +161,13 @@ const EbookDetails = ({
       toast.error(
         error.message || "An error occurred during the payment process"
       );
+      setIsPaymentLoading(false);
     }
-  };
-
-  const initializeRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-
-      document.body.appendChild(script);
-    });
   };
 
   const handleOrder = (e: any) => {
     e.preventDefault(); 
-    if (user) {
+    if (user && !isPaymentLoading) {
       handlePayment(); 
     } else {
       setRoute("Login"); 
@@ -168,8 +179,7 @@ const EbookDetails = ({
 
 const discountPercentengePrice = dicountPercentenge.toFixed(0);
 
-  const isPurchased =
-    user && user?.books?.find((item: any) => item._id === data._id);
+  const isPurchased = hasEntitlement(user?.books, data._id);
 
   return (
     <div className=" w-full ">
@@ -254,16 +264,16 @@ const discountPercentengePrice = dicountPercentenge.toFixed(0);
               <div className=" w-full   bg-[#d5e5fd] flex  flex-col  items-center p-12 rounded-t-lg ">
                 <div className=" flex w-full  ">
                   <h3 className=" text-[25px] text-black dark:text-white font-[700] font-poppins mx-3 ">
-                    {data.originalPrice === 0
+                    {data.discountPrice === 0
                       ? "Free"
-                      : "₹" + data.originalPrice}{" "}
+                      : "₹" + data.discountPrice.toFixed(2)}{" "}
                   </h3>
                   <p className="text-[17px] line-through opacity-60 text-red-400 dark:text-white mx-3">
-                    {data.originalPrice === 0 ? " " : "₹" + data.discountPrice.toFixed(2)}
+                    {data.discountPrice === 0 ? " " : "₹" + data.originalPrice}
                   </p>
 
                   <p className="text-[17px] text-[#3539fa] dark:text-white  font-[400] ">
-                    {data.originalPrice === 0
+                    {data.discountPrice === 0
                       ? ""
                       : discountPercentengePrice + "% off"}
                   </p>
@@ -279,11 +289,13 @@ const discountPercentengePrice = dicountPercentenge.toFixed(0);
                     </Link>
                   ) : (
                     <div
-                      className={`${styles.button} !w-full !items-center !justify-center`}
+                      className={`${styles.button} !w-full !items-center !justify-center ${
+                        isPaymentLoading ? "cursor-not-allowed opacity-70" : ""
+                      }`}
                       // className=" rounded-md text-[#ffffff] py-2 px-2 font-[500] font-poppins text-[18px] bg-gradient-to-r  flex justify-center hover:bg-sky-700 hover:text-gradient-to-r from-blue-500 to-[#521088]   hover:bg-gradient-to-br hover:text-white  delay-100 bg-blue-500   duration-200 cursor-pointer"
                       onClick={handleOrder}
                     >
-                      Buy Now
+                      {isPaymentLoading ? "Opening checkout..." : "Buy Now"}
                     </div>
                   )}
                 </div>

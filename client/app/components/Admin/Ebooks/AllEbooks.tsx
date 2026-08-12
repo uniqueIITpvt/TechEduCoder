@@ -10,7 +10,7 @@ import { toast } from "react-hot-toast";
 import Link from "next/link";
 import {
   useDeleteEbookMutation,
-  useGetAllEbooksQuery,
+  useGetAdminAllEbooksQuery,
 } from "@/redux/features/ebook/ebooksApi";
 import { CgDanger } from "react-icons/cg";
 import { pink } from "@mui/material/colors";
@@ -20,7 +20,7 @@ type Props = {};
 const AllEbooks = (props: Props) => {
   const [open, setOpen] = useState(false);
   const [ebookId, setEbookId] = useState("");
-  const { isLoading, data, refetch } = useGetAllEbooksQuery(
+  const { isLoading, data, refetch } = useGetAdminAllEbooksQuery(
     {},
     { refetchOnMountOrArgChange: true }
   );

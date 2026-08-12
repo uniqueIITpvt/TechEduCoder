@@ -12,8 +12,6 @@ import { CLOUDINARY_ASSETS } from "../utils/cloudinaryAssets";
 // import { useSession } from "next-auth/react";
 import {
   useLogOutQuery,
-  useLoginMutation,
-  // useSocialAuthMutation,
 } from "@/redux/features/auth/authApi";
 import { toast } from "react-hot-toast";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
@@ -48,8 +46,6 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     { refetchOnMountOrArgChange: true }
   );
 
-  // const { data } = useSession();
-  const [socialAuth, { isSuccess, error }] = useLoginMutation();
   const [logout, setLogout] = useState(false);
   const {} = useLogOutQuery(undefined, {
     skip: !logout ? true : false,
@@ -57,21 +53,6 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
 
   useEffect(() => {
     if (!isLoading) {
-      // if (!userData) {
-      //   if (data) {
-      //     socialAuth({
-      //       email: data?.user?.email,
-      //       name: data?.user?.name,
-      //       avatar: data.user?.image,
-      //     });
-      //     refetch();
-      //   }
-      // }
-      // if (data === null) {
-      if (isSuccess) {
-        toast.success("Login Successfully");
-      }
-      // }
       if (!isLoading && !userData) {
         setLogout(true);
       }

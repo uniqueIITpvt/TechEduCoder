@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { API_BASE_URL } from "@/app/utils/api";
 import { userLoggedIn } from "../auth/authSlice";
 
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_SERVER_URI,
+    baseUrl: API_BASE_URL,
   }),
   endpoints: (builder) => ({
     refreshToken: builder.query({
@@ -25,7 +26,7 @@ export const apiSlice = createApi({
           const result = await queryFulfilled;
           dispatch(
             userLoggedIn({
-              accessToken: result.data.accessToken,
+              accessToken: "",
               user: result.data.user,
             })
           );

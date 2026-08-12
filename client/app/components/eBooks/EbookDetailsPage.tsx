@@ -15,12 +15,16 @@ const EbookDetailsPage = ({ id }: Props) => {
   const [route, setRoute] = useState("Login");
   const [open, setOpen] = useState(false);
   
- const { data, isLoading } = useGetEbookQuery(id);
+ const { data, isLoading, isError } = useGetEbookQuery(id);
  
   return (
     <>
       {isLoading ? (
         <Loader />
+      ) : isError || !data?.ebook ? (
+        <div className="min-h-screen flex items-center justify-center dark:text-white text-black">
+          Ebook could not be found.
+        </div>
       ) : (
         <div>
           <Heading

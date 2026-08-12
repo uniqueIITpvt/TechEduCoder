@@ -5,10 +5,7 @@ import {
 } from "@/redux/features/notifications/notificationsApi";
 import React, { FC, useEffect, useState } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import socketIO from "socket.io-client";
 import { format } from "timeago.js";
-const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
-const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 type Props = {
   open?: boolean;
@@ -18,21 +15,11 @@ type Props = {
 const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
   const { data, refetch } = useGetAllNotificationsQuery(undefined, {
     refetchOnMountOrArgChange: true,
+    pollingInterval: 30_000,
   });
   const [updateNotificationStatus, { isSuccess }] =
     useUpdateNotificationStatusMutation();
   const [notifications, setNotifications] = useState<any>([]);
-  const [audio] = useState<any>(
-    typeof window !== "undefined" &&
-      new Audio(
-        ""
-      )
-  );
-
-  const playNotificationSound = () => {
-    audio.play();
-  };
-
   useEffect(() => {
     if (data) {
       setNotifications(
@@ -42,15 +29,7 @@ const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
     if (isSuccess) {
       refetch();
     }
-    audio.load();
-  }, [data, isSuccess,audio]);
-
-  useEffect(() => {
-    socketId.on("newNotification", (data) => {
-      refetch();
-      playNotificationSound();
-    });
-  }, []);
+  }, [data, isSuccess, refetch]);
 
   const handleNotificationStatusChange = async (id: string) => {
     await updateNotificationStatus(id);

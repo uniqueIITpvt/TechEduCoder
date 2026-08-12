@@ -102,7 +102,7 @@ const TinyEditor = ({ editorContent, setEditorContent }: TinyEditorProps) => {
     };
   return (
     <Editor
-      apiKey='tdb8dfvchh17ms5tyfsoz5vcqh9ueqde8b4r9n0kmfx7dswf'
+      apiKey={process.env.NEXT_PUBLIC_TINY_API_KEY || "no-api-key"}
       init={{
         plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss',
         toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',

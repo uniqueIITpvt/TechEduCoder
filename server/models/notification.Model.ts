@@ -4,10 +4,14 @@ export interface INotification extends Document{
    title: string;
    message: string;
    status: string;
-   userId: string;
+   user?: mongoose.Types.ObjectId | string;
 }
 
 const notificationSchema = new Schema<INotification>({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+    },
     title:{
         type: String,
         required: true

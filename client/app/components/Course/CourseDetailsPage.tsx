@@ -20,7 +20,7 @@ type Props = {
 const CourseDetailsPage = ({ id }: Props) => {
   const [route, setRoute] = useState("Login");
   const [open, setOpen] = useState(false);
-  const { data, isLoading } = useGetCourseDetailsQuery(id);
+  const { data, isLoading, isError } = useGetCourseDetailsQuery(id);
   
 
 
@@ -28,6 +28,10 @@ const CourseDetailsPage = ({ id }: Props) => {
     <>
       {isLoading ? (
         <Loader />
+      ) : isError || !data?.course ? (
+        <div className="min-h-screen flex items-center justify-center dark:text-white text-black">
+          Course could not be found.
+        </div>
       ) : (
         <div>
           <Heading

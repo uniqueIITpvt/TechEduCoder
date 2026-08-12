@@ -24,9 +24,16 @@ export const ebooksApi = apiSlice.injectEndpoints({
         credentials: "include",
       }),
     }),
+    getEbookContent: builder.query({
+      query: (ebookId) => ({
+        url: `ebook-content/${ebookId}`,
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
     deleteEbook: builder.mutation({
       query: (id) => ({
-        url: `delete-ebook/${id}`,
+        url: `delete-Ebook/${id}`,
         method: "DELETE",
         credentials: "include",
       }),
@@ -41,7 +48,7 @@ export const ebooksApi = apiSlice.injectEndpoints({
     }),
     getAdminAllEbooks: builder.query({
       query: () => ({
-        url: "all-admin-ebooks",
+        url: "get-allEbooks",
         method: "GET",
         credentials: "include",
       }),
@@ -53,6 +60,7 @@ export const {
   useCreateEbookMutation,
   useGetAllEbooksQuery,
   useGetEbookQuery,
+  useGetEbookContentQuery,
   useEditEbookMutation,
   useDeleteEbookMutation,
   useGetAdminAllEbooksQuery,

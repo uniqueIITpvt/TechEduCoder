@@ -2,21 +2,13 @@
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "./Provider";
-import React, { useEffect } from "react";
-import socketIO from "socket.io-client";
-const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
-const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
+import React from "react";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  
-  useEffect(() => {
-    socketId.on("connection", () => {});
-  }, []);
-
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body

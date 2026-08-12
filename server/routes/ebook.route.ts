@@ -6,6 +6,7 @@ import {
   getAdminAllEbooks,
   getAllEbooks,
   getEbookDetails,
+  getEbookContent,
   // add other eBook related controller functions here if you have any
 } from "../controllers/ebook.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
@@ -20,6 +21,7 @@ ebookRouter.get("/all-ebooks", getAllEbooks);
 
 // Route to get details of a specific eBook by ID
 ebookRouter.get("/ebook-details/:id", getEbookDetails);
+ebookRouter.get("/ebook-content/:id", isAutheticated, getEbookContent);
 ebookRouter.put(
   "/edit-ebook/:id",
   isAutheticated,
