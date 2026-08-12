@@ -181,7 +181,7 @@ export const addQuestion = CatchAsyncError(
       const { question, courseId, contentId }: IAddQuestionData = req.body;
       const course = await CourseModel.findById(courseId);
 
-      if (!mongoose.Types.ObjectId.isValid(contentId)) {
+      if (!mongoose.isValidObjectId(contentId)) {
         return next(new ErrorHandler("Invalid content id", 400));
       }
 
@@ -238,7 +238,7 @@ export const addAnwser = CatchAsyncError(
 
       const course = await CourseModel.findById(courseId);
 
-      if (!mongoose.Types.ObjectId.isValid(contentId)) {
+      if (!mongoose.isValidObjectId(contentId)) {
         return next(new ErrorHandler("Invalid content id", 400));
       }
 
